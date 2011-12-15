@@ -42,7 +42,7 @@
     [apiKeyUrl setAllowsEditingTextAttributes: YES];
     [apiKeyUrl setSelectable: YES];
 	
-    NSURL* apiServiceUrl = [NSURL URLWithString:@"http://www.eveonline.com/api/default.asp"];
+    NSURL* apiServiceUrl = [NSURL URLWithString:@"http://support.eveonline.com/api/"];
 	
     NSMutableAttributedString* string = [[NSMutableAttributedString alloc] init];
     [string appendAttributedString: [NSAttributedString hyperlinkFromString:NSLocalizedString(@"Need your API Key? Click here", nil) withURL:apiServiceUrl]];

@@ -1,3 +1,10 @@
+Release 16.19 (16/12/2011)
+	Changed the "Need an API key?" url
+	Fixed preferences
+
+Release 16.18 (15/12/2011)
+	Changed to vCode API
+
 Release 16.17 (22/01/2011)
 	Support incursion character portraits.
 	Incursion 1.1.0 database.
