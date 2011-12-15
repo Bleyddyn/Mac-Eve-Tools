@@ -104,7 +104,7 @@ static Config *sharedSingletonCfg = nil;
 	
 	[str appendFormat:@"%@%@",[[NSUserDefaults standardUserDefaults] stringForKey:UD_API_URL],xmlPage];
 	if(accountId && apiKey){
-		[str appendFormat:@"?userID=%@&apiKey=%@",accountId,apiKey];
+		[str appendFormat:@"?keyID=%@&vCode=%@",accountId,apiKey];
 		if(characterId){
 			[str appendFormat:@"&characterID=%@",characterId];
 		}

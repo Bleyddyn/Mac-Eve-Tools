@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1060</int>
-		<string key="IBDocument.SystemVersion">10F569</string>
-		<string key="IBDocument.InterfaceBuilderVersion">788</string>
-		<string key="IBDocument.AppKitVersion">1038.29</string>
+		<string key="IBDocument.SystemVersion">10K549</string>
+		<string key="IBDocument.InterfaceBuilderVersion">851</string>
+		<string key="IBDocument.AppKitVersion">1038.36</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">788</string>
+			<string key="NS.object.0">851</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -390,7 +390,7 @@
 						<object class="NSTextFieldCell" key="NSCell" id="326798492">
 							<int key="NSCellFlags">68288064</int>
 							<int key="NSCellFlags2">272630784</int>
-							<string key="NSContents">API Key</string>
+							<string key="NSContents">vCode</string>
 							<reference key="NSSupport" ref="1053899692"/>
 							<reference key="NSControlView" ref="891215200"/>
 							<reference key="NSBackgroundColor" ref="739632500"/>
@@ -406,7 +406,7 @@
 						<object class="NSTextFieldCell" key="NSCell" id="806782734">
 							<int key="NSCellFlags">68288064</int>
 							<int key="NSCellFlags2">272630784</int>
-							<string key="NSContents">User ID</string>
+							<string key="NSContents">Key ID</string>
 							<reference key="NSSupport" ref="1053899692"/>
 							<reference key="NSControlView" ref="997624951"/>
 							<reference key="NSBackgroundColor" ref="739632500"/>
@@ -1232,7 +1232,7 @@
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>{{32, 221}, {592, 373}}</string>
+					<string>{{329, 221}, {592, 373}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
