@@ -27,9 +27,9 @@
 @property (readonly,nonatomic) NSInteger itemSkillPreLevel;
 @property (readonly,nonatomic) NSInteger itemCategory;
 
--(METDependSkill*) initWithData:(NSInteger)itemTID 
-					   itemName:(NSString*)iName 
-					skillPreTID:(NSInteger)sPTID 
+-(METDependSkill*) initWithData:(NSInteger)itemTID
+					   itemName:(NSString*)iName
+					skillPreTID:(NSInteger)sPTID
 					skillPLevel:(NSInteger)sPL
 				   itemCategory:(NSInteger)iCat;
 

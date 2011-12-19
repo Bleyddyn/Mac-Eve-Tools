@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -35,7 +35,7 @@
 	[skills release];
 	[skillGroupArray release];
 	[skillSet release];
-	
+
 	[super dealloc];
 }
 
@@ -56,13 +56,13 @@
 	if(st != nil){
 		[st->skillGroups release];
 		[st->skills release];
-		
+
 		st->skillGroups = [skillGroups mutableCopy];
 		st->skills = [skills mutableCopy];
 		st->skillGroupArray = nil;
 		st->skillPointTotal = 0;
 	}
-	
+
 	return st;
 }
 
@@ -80,7 +80,7 @@
 
 -(Skill*) skillForId:(NSNumber*)skillID
 {
-	return [skills objectForKey:skillID]; 
+	return [skills objectForKey:skillID];
 }
 
 -(BOOL) skillExistsForId:(NSInteger)skillID
@@ -98,7 +98,7 @@
 {
 	Skill *s = nil;
 	NSEnumerator *e = [skills objectEnumerator];
-	
+
 	while((s = [e nextObject]) != nil){
 		if([[s skillName]isEqualToString:skillName]){
 			return s;
@@ -143,7 +143,7 @@
 		/*get the skill array, sort them alphabeticly*/
 		skillGroupArray = [[[skillGroups allValues]sortedArrayUsingSelector:@selector(sortByName:)]retain];
 	}
-	
+
 	return [skillGroupArray objectAtIndex:index];
 }
 
@@ -154,13 +154,13 @@
 -(void) addSkillGroup:(SkillGroup*)group
 {
 	[skillGroups setObject:group forKey:[group groupID]];
-	
+
 	/*invalidate the old cached sorted array*/
 	if(skillGroupArray != nil){
 		[skillGroupArray release];
 		skillGroupArray = nil;
 	}
-	
+
 	/* add all the skills to the gobal array?*/
 }
 
@@ -177,11 +177,11 @@
 		NSLog(@"Skill Group %@ does not exist",groupID);
 		return NO;
 	}
-	
+
 	[sg addSkill:skill];
 	[skills setObject:skill forKey:[skill typeID]];
 	skillPointTotal = 0;
-	
+
 	if(skillSet != nil){
 		[skillSet release];
 		skillSet = nil;
@@ -227,17 +227,17 @@
 }
 
 
-- (id)outlineView:(NSOutlineView *)outlineView 
-objectValueForTableColumn:(NSTableColumn *)tableColumn 
+- (id)outlineView:(NSOutlineView *)outlineView
+objectValueForTableColumn:(NSTableColumn *)tableColumn
 		   byItem:(id)item
 {
 	//NSLog(@"%@",[tableColumn identifier] );
-	
+
 	if([item isKindOfClass:[SkillGroup class]]){
 		if([[tableColumn identifier] isEqualToString:COL_SKILL_NAME]){
 			return [item groupName];
 		}else if([[tableColumn identifier] isEqualToString:COL_SKILL_POINTS]){
-			return [NSNumber numberWithInteger:[item groupSPTotal]]; 
+			return [NSNumber numberWithInteger:[item groupSPTotal]];
 		}
 	}else if([item isKindOfClass:[Skill class]]){
 		if([[tableColumn identifier] isEqualToString:COL_SKILL_NAME]){
@@ -250,16 +250,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			return [NSNumber numberWithInteger:[item skillPoints]];
 		}
 	}
-	
+
 	//NSLog(@"id: %@ class %@",[tableColumn identifier],[item class]);
 	return nil;
 }
 
-- (NSString *)outlineView:(NSOutlineView *)ov 
-		   toolTipForCell:(NSCell *)cell 
-					 rect:(NSRectPointer)rect 
-			  tableColumn:(NSTableColumn *)tc 
-					 item:(id)item 
+- (NSString *)outlineView:(NSOutlineView *)ov
+		   toolTipForCell:(NSCell *)cell
+					 rect:(NSRectPointer)rect
+			  tableColumn:(NSTableColumn *)tc
+					 item:(id)item
 			mouseLocation:(NSPoint)mouseLocation
 {
 	if(![item isKindOfClass:[Skill class]]){

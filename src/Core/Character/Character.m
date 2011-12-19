@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -56,13 +56,13 @@
 	[trainingSkill release];
 	[ownedCerts release];
 	[characterFilePath release];
-	
+
 	for(NSInteger i = 0; i < CHAR_ERROR_TOTAL;i++){
 		if(errorMessage[i] == nil){
 			[errorMessage[i] release];
 		}
 	}
-	
+
 	[super dealloc];
 }
 
@@ -70,7 +70,7 @@
 /*don't call init*/
 -(Character*)init
 {
-	[self doesNotRecognizeSelector:_cmd];	
+	[self doesNotRecognizeSelector:_cmd];
 	return nil;
 }
 
@@ -78,22 +78,22 @@
 {
 	if((self = [super init])){
 		data = [[NSMutableDictionary alloc]init];
-		
+
 		characterFilePath = [path retain];
-		
+
 		db = [[CharacterDatabase alloc]initWithPath:[path stringByAppendingString:@"/database.sqlite"]];
 		portrait = [[NSImage alloc]initWithContentsOfFile:[path stringByAppendingString:@"/portrait.jpg"]];
-		
+
 		ownedCerts = [[NSMutableSet alloc]init];
-		
+
 		BOOL rc = [self parseCharacterXml:path];
 		if(!rc){
 			NSLog(@"Failed to parse character sheet");
 		}
-		
+
 		/*if there are no XML sheets in path, then the character cannot be created*/
 	}
-	
+
 	return self;
 }
 
@@ -104,7 +104,7 @@
 	NSString *portraitPath = [characterFilePath stringByAppendingString:@"/portrait.jpg"];
 
 	NSFileManager *fm = [NSFileManager defaultManager];
-	
+
 	if([fm fileExistsAtPath:portraitPath]){
 		[fm removeItemAtPath:portraitPath error:NULL];
 	}
@@ -163,44 +163,44 @@
 	return [[self stringForKey:key]integerValue];
 }
 
--(NSInteger) trainingTimeInSeconds:(NSInteger)primary 
-						 secondary:(NSInteger)secondary 
+-(NSInteger) trainingTimeInSeconds:(NSInteger)primary
+						 secondary:(NSInteger)secondary
 					   skillPoints:(NSInteger)skillPoints
 {
 	CGFloat spPerSecond = (((attributeTotals[primary]) + ((attributeTotals[secondary]) / 2.0)) / 60.0);
-	
+
 	CGFloat trainingTime = ((CGFloat)skillPoints / spPerSecond);
-	
+
 	return xlround(trainingTime);
 }
 
--(NSInteger) trainingTimeInSeconds:(NSNumber*)typeID 
-						 fromLevel:(NSInteger)fromLevel 
+-(NSInteger) trainingTimeInSeconds:(NSNumber*)typeID
+						 fromLevel:(NSInteger)fromLevel
 						   toLevel:(NSInteger)toLevel
 {
-	NSInteger time = [self trainingTimeInSeconds:typeID 
-									   fromLevel:fromLevel 
-										 toLevel:toLevel 
+	NSInteger time = [self trainingTimeInSeconds:typeID
+									   fromLevel:fromLevel
+										 toLevel:toLevel
 						 accountForTrainingSkill:YES];
 	return MAX(time,0);
 }
 
--(NSInteger) trainingTimeInSeconds:(NSNumber*)typeID 
-						 fromLevel:(NSInteger)fromLevel 
-						   toLevel:(NSInteger)toLevel 
+-(NSInteger) trainingTimeInSeconds:(NSNumber*)typeID
+						 fromLevel:(NSInteger)fromLevel
+						   toLevel:(NSInteger)toLevel
 		   accountForTrainingSkill:(BOOL)train
 {
 	if(toLevel > 5){
 		return 0;
 	}
-	
+
 	Skill *s = [skillTree skillForId:typeID];
-	
+
 	NSInteger currentSkillPoints = 0;
 	NSInteger skillRank = 0;
 	NSInteger primaryAttr = 0;
 	NSInteger secondaryAttr = 0;
-	
+
 	if(s == nil){
 		/*character does not have this skill.*/
 		SkillTree *masterSt = [[GlobalData sharedInstance]skillTree];
@@ -214,18 +214,18 @@
 		primaryAttr = [s primaryAttr];
 		secondaryAttr = [s secondaryAttr];
 	}
-	
+
 	NSInteger skillPointDifference = 0;
 
 	/*
 		if we are training from the current level;
 		calculate the training time to get from the current level to the next, as it may have been partially trained
 	 */
-	
+
 	if(fromLevel == [s skillLevel]){
 		/*
 			get the characters total number of skill points, subtract it for the total number of skill points for that level.
-		 
+
 			TODO: this is shit, fix it later.
 		*/
 		if(train && [self isTraining] && ([self integerForKey:CHAR_TRAINING_TYPEID] == [typeID integerValue]) ){
@@ -240,13 +240,13 @@
 			skillPointDifference = skillPointsForLevel(fromLevel+1,skillRank) - difference;
 			fromLevel++;
 		}
-	}	
-	
-	/*given a skill and the level we want to train it to, determine the number of seconds that it will take*/	
+	}
+
+	/*given a skill and the level we want to train it to, determine the number of seconds that it will take*/
 	for(NSInteger i = fromLevel; i < toLevel; i++){
 		skillPointDifference += skillPointsForLevel(i+1,skillRank);
 	}
-	
+
 	return [self trainingTimeInSeconds:primaryAttr secondary:secondaryAttr skillPoints:skillPointDifference];
 }
 
@@ -324,13 +324,13 @@
 -(SkillPlan*) createSkillPlan:(NSString*)planName
 {
 	SkillPlan *plan = [db createPlan:planName forCharacter:self];
-	
+
 	if(plan == nil){
 		return nil;
 	}
-	
+
 	[self addSkillPlan:plan];
-	
+
 	return plan;
 }
 
@@ -341,7 +341,7 @@
 		NSLog(@"Error: attempting to save a skill plan that does not belong to this character");
 		return;
 	}
-	
+
 	[db writeSkillPlan:plan];
 }
 
@@ -352,7 +352,7 @@
 		NSLog(@"Error: attempting to save a skill plan that does not belong to this character");
 		return NO;
 	}
-	
+
 	return [db renameSkillPlan:plan];
 }
 
@@ -384,12 +384,12 @@
 	if(s == nil){
 		return 0.0;
 	}
-	
+
 	NSInteger startPoints = totalSkillPointsForLevel(fromLevel,[s skillRank]);
 	NSInteger finishPoints = totalSkillPointsForLevel(toLevel,[s skillRank]);
-	
+
 	NSInteger currentPoints = [s skillPoints];
-	
+
 	if([self isTraining]){
 		SkillPair *pair = [self currentlyTrainingSkill];
 		if([[pair typeID]isEqualToNumber:typeID]){
@@ -398,13 +398,13 @@
 			}
 		}
 	}
-	
+
 	if(startPoints > currentPoints){
 		return 0.0;
 	}
-	
+
 	return (((CGFloat)(currentPoints - startPoints) / (CGFloat)(finishPoints - startPoints)));
-	
+
 	/*given the start and finish skill point targets, find what percentage we have completed*/
 }
 
@@ -441,11 +441,11 @@
 	for(NSInteger i = 0; i < ATTR_TOTAL; i++){
 		attributeTotals[i] = baseAttributes[i] + implantAttributes[i] + learningTotals[i] + tempBonuses[i];
 	}
-	
+
 	/*Learning. type 3374. +2% per level to all skills*/
 	NSInteger level = [[skillTree skillForIdInteger:3374] skillLevel];
 	CGFloat bonus = (1.0+(0.02 * (level + learningBonus)));
-	
+
 	for(NSInteger i = 0;i < ATTR_TOTAL; i++){
 		attributeTotals[i] *= bonus;
 	}
@@ -455,24 +455,24 @@
 {
 	/*get the start time, the finish time, start SP and calculate the current progress*/
 	NSInteger typeID = [self integerForKey:CHAR_TRAINING_TYPEID];
-	
+
 	Skill *s = [skillTree skillForIdInteger:typeID];
-	
+
 	NSInteger charSheetSP = [s skillPoints]; // The amount of skill points the character sheet says we have.
 	NSInteger trainingSheetXP = [self integerForKey:CHAR_TRAINING_STARTSP];// the amount of skill points the SkillInTraining sheet says we have
-	
+
 	NSInteger startSP = MAX(charSheetSP, trainingSheetXP); //go with the largest
-	
+
 	NSString *startTime = [NSString stringWithFormat:@"%@ +0000",[self stringForKey:CHAR_TRAINING_START]];
 	NSDate *startDate = [NSDate dateWithString:startTime];
-	
+
 	CGFloat difference = xfabs([startDate timeIntervalSinceNow]);//number of seconds since we started training
-	
+
 	/*now, get the current time, SP/hr and calculate the current SP.*/
 	NSInteger sphr = [self spPerHour];
-	
+
 	CGFloat currentSP = ((difference / 3600.0) * sphr) + startSP;
-	
+
 	return xround(currentSP);
 }
 
@@ -508,8 +508,8 @@
 -(NSInteger) skillTrainingFinishSeconds
 {
 	NSInteger toLevel = [self integerForKey:CHAR_TRAINING_LEVEL];
-	
-	return [self trainingTimeInSeconds:[self trainingSkill] 
+
+	return [self trainingTimeInSeconds:[self trainingSkill]
 							 fromLevel:toLevel - 1
 							   toLevel:toLevel];
 }

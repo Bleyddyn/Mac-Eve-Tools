@@ -23,12 +23,12 @@
 -(SkillQueueDatasource*)init
 {
 	self = [super init];
-	
+
 	if(self){
 		plan = nil;
 		character = nil;
 	}
-	
+
 	return self;
 }
 
@@ -52,8 +52,8 @@
 }
 
 
-- (id)tableView:(NSTableView *)aTableView 
-objectValueForTableColumn:(NSTableColumn *)aTableColumn 
+- (id)tableView:(NSTableView *)aTableView
+objectValueForTableColumn:(NSTableColumn *)aTableColumn
 			row:(NSInteger)rowIndex
 {
 	return nil;
@@ -65,9 +65,9 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 }
 
 
-- (void)tableView:(NSTableView *)aTableView 
-  willDisplayCell:(id)aCell 
-   forTableColumn:(NSTableColumn *)aTableColumn 
+- (void)tableView:(NSTableView *)aTableView
+  willDisplayCell:(id)aCell
+   forTableColumn:(NSTableColumn *)aTableColumn
 			  row:(NSInteger)rowIndex
 {
 	if(plan == nil){
@@ -79,15 +79,15 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 	if([aCell isKindOfClass:[MTEveSkillQueueCell class]]){
 		MTEveSkillQueueCell *cell = aCell;
 		SkillPair *pair = [plan skillAtIndex:rowIndex];
-		
+
 		NSNumber *typeID = [pair typeID];
 		NSInteger skillLevel = [pair skillLevel];
-		
+
 		[cell setSkill:[[character skillTree]skillForId:typeID]];
 		[cell setPair:pair];
-		
+
 		NSInteger trainTime;
-		
+
 		if(rowIndex == 0){
 			/*
 			 This is a hack for getting the completion times to line
@@ -95,18 +95,18 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 			 */
 			trainTime = firstSkillCountdown;
 		}else{
-			trainTime = [character trainingTimeInSeconds:typeID 
-											   fromLevel:skillLevel-1 
-												 toLevel:skillLevel 
+			trainTime = [character trainingTimeInSeconds:typeID
+											   fromLevel:skillLevel-1
+												 toLevel:skillLevel
 								 accountForTrainingSkill:YES];
 		}
 		[cell setTimeLeft:trainTime];
-		
+
 		if(rowIndex == 0){
 			CGFloat progress = [character percentCompleted:[pair typeID] fromLevel:skillLevel-1 toLevel:skillLevel];
 			[cell setPercentCompleted:progress];
 		}else{
-			
+
 			Skill *s = [[character skillTree]skillForId:typeID];
 			if(s == nil){
 				[cell setPercentCompleted:0];
@@ -124,8 +124,8 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 	return NO;
 }
 
-- (BOOL)tableView:(NSTableView *)aTableView 
-shouldEditTableColumn:(NSTableColumn *)aTableColumn 
+- (BOOL)tableView:(NSTableView *)aTableView
+shouldEditTableColumn:(NSTableColumn *)aTableColumn
 			  row:(NSInteger)rowIndex
 {
 	return NO;

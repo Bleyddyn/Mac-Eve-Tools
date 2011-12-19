@@ -15,7 +15,7 @@
 
 - (id)init {
 	[self doesNotRecognizeSelector:_cmd];
-	
+
 	return self;
 }
 
@@ -38,8 +38,8 @@
 	return 5;
 }
 
-- (id)tableView:(NSTableView *)aTableView 
-objectValueForTableColumn:(NSTableColumn *)aTableColumn 
+- (id)tableView:(NSTableView *)aTableView
+objectValueForTableColumn:(NSTableColumn *)aTableColumn
 			row:(NSInteger)rowIndex
 {
 	if([[aTableColumn identifier]isEqualToString:SD_LEVEL]){
@@ -48,7 +48,7 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 		return [NSNumber numberWithInteger:[skill totalSkillPointsForLevel:rowIndex + 1]];
 	}else if([[aTableColumn identifier]isEqualToString:SD_SP_DIFF]){
 		return [NSNumber numberWithInteger:
-				[skill totalSkillPointsForLevel:rowIndex+1] - 
+				[skill totalSkillPointsForLevel:rowIndex+1] -
 				[skill totalSkillPointsForLevel:rowIndex]];
 	}
 	return nil;

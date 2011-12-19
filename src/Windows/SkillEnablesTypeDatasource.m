@@ -18,19 +18,19 @@
 {
 	if((self = [super init])){
 		skillTypeID = typeID;
-		
+
 		CCPDatabase *db = [[GlobalData sharedInstance] database];
-		
+
 		enabledTypes = [[db dependenciesForSkillByCategory:typeID]retain];
-		
+
 		if(enabledTypes != nil){
 			NSInteger count = [enabledTypes count];
 			dependSkillArray = malloc(sizeof(NSArray*) * count);
 			categoryNameArray = malloc(sizeof(NSString*) * count);
-			
+
 			[enabledTypes getObjects:dependSkillArray andKeys:categoryNameArray];
 		}
-		
+
 		character = [ch retain];
 	}
 	return self;
@@ -42,35 +42,35 @@
 	free(categoryNameArray);
 	[enabledTypes release];
 	[character release];
-	
+
 	[super dealloc];
 }
 
 // Datasource methods
-- (NSInteger)outlineView:(NSOutlineView *)outlineView 
+- (NSInteger)outlineView:(NSOutlineView *)outlineView
   numberOfChildrenOfItem:(id)item
 {
 	if(item == nil){
 		return [enabledTypes count];
 	}
-	
+
 	if([item isKindOfClass:[METDependSkill class]]){
 		return 0;
 	}
-	
+
 	NSInteger index = [item integerValue];
 	NSArray *ary = dependSkillArray[index];
 	return [ary count];
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView 
-			child:(NSInteger)index 
+- (id)outlineView:(NSOutlineView *)outlineView
+			child:(NSInteger)index
 		   ofItem:(id)item
 {
 	if(item == nil){
 		return [NSNumber numberWithInteger:index];
 	}
-	
+
 	NSInteger parentIndex = [item integerValue];
 	NSArray *dskill = dependSkillArray[parentIndex];
 	return [dskill objectAtIndex:index];
@@ -82,13 +82,13 @@
 	if(item == nil){
 		return [enabledTypes count];
 	}
-	
+
 	return [item count];
-	
+
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView 
-objectValueForTableColumn:(NSTableColumn *)tableColumn 
+- (id)outlineView:(NSOutlineView *)outlineView
+objectValueForTableColumn:(NSTableColumn *)tableColumn
 		   byItem:(id)item
 {
 	if([item isKindOfClass:[NSNumber class]]){
@@ -96,7 +96,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			return categoryNameArray[[item integerValue]];
 		}
 	}
-	
+
 	if([item isKindOfClass:[METDependSkill class]]){
 		if([[tableColumn identifier]isEqualToString:COL_DEP_NAME]){
 			return [item itemName];
@@ -104,11 +104,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			return [NSNumber numberWithInteger:[item itemSkillPreLevel]];
 		}
 	}
-	
+
 	return nil;
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView 
+- (BOOL)outlineView:(NSOutlineView *)outlineView
    isItemExpandable:(id)item
 {
 	if([item isKindOfClass:[METDependSkill class]]){

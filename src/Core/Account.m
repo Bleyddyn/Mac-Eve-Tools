@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -66,9 +66,9 @@
 		NSLog(@"error parsing XML document");
 		return NO;
 	}
-	
+
 	[self.characters removeAllObjects];
-	
+
 	for(xmlNode *cur_node = rowset->children;
 		cur_node != NULL;
 		cur_node = cur_node->next)
@@ -76,48 +76,48 @@
 		if(cur_node->type != XML_ELEMENT_NODE){
 			continue;
 		}
-		
+
 		NSString *name = findAttribute(cur_node,(xmlChar*)"name");
 		NSString *characterID = findAttribute(cur_node,(xmlChar*)"characterID");
-		
+
 		CharacterTemplate *template;
 		template = [[CharacterTemplate alloc]
-					initWithDetails:name 
+					initWithDetails:name
 					accountId:self.accountID
-					apiKey:self.apiKey 
-					charId:characterID 
-					active:NO 
+					apiKey:self.apiKey
+					charId:characterID
+					active:NO
 					primary:NO];
-		
+
 		[characters addObject:template];
 		[template release];
 
 	}
-	
+
 	return YES;
 }
 
 -(void) downloadXml:(BOOL)modalDelegate
 {
 	XmlFetcher *f = [[XmlFetcher alloc]initWithDelegate:self];
-	
-	NSString *apiUrl = [Config getApiUrl:XMLAPI_CHAR_LIST 
-							   accountID:self.accountID 
+
+	NSString *apiUrl = [Config getApiUrl:XMLAPI_CHAR_LIST
+							   accountID:self.accountID
 								  apiKey:self.apiKey
 								  charId:nil];
-	
+
 	if(modalDelegate){
 		[f saveXmlDocument:apiUrl
 				   docName:XMLAPI_CHAR_LIST
 				  savePath:[self savePath]
 			   runLoopMode:NSModalPanelRunLoopMode];
-		
+
 	}else{
 		[f saveXmlDocument:apiUrl
 			   docName:XMLAPI_CHAR_LIST
 			  savePath:[self savePath]];
 	}
-	[f release];	
+	[f release];
 }
 
 -(void) downloadXml
@@ -127,17 +127,17 @@
 
 -(BOOL)loadXmlDocument
 {
-	xmlDoc *doc = xmlReadFile([[self savePath] fileSystemRepresentation],NULL, 0);	
-	
+	xmlDoc *doc = xmlReadFile([[self savePath] fileSystemRepresentation],NULL, 0);
+
 	if(doc == NULL){
 		NSLog(@"Failed to read %@",[self savePath]);
 		return NO;
 	}
-	
+
 	BOOL rc = [self parseXmlDocument:doc];
-	
+
 	xmlFreeDoc(doc);
-	
+
 	return rc;
 }
 
@@ -148,9 +148,9 @@
 		[delegate accountDidUpdate:self didSucceed:NO];
 		return;
 	}
-	
+
 	BOOL rc = [self loadXmlDocument];
-	
+
 	[delegate accountDidUpdate:self didSucceed:rc];
 }
 
@@ -158,17 +158,17 @@
 {
 	BOOL rc = YES;
 	const char *bytes = [xmlData bytes];
-	
+
 	xmlDoc *doc = xmlReadMemory(bytes,(int)[xmlData length], NULL, NULL, 0);
-	
+
 	xmlNode *root_node = xmlDocGetRootElement(doc);
 	xmlNode *result = findChildNode(root_node,(xmlChar*)"error");
-	
+
 	if(result != NULL){
 		NSLog(@"%@",getNodeText(result));
 		rc = NO;
 	}
-	
+
 	xmlFreeDoc(doc);
 	return rc;
 }
@@ -176,7 +176,7 @@
 -(void) xmlDidFailWithError:(NSError*)xmlErrorMessage xmlPath:(NSString*)path xmlDocName:(NSString*)docName
 {
 	NSLog(@"Connection failed! (%@)",[xmlErrorMessage localizedDescription]);
-	
+
 	NSRunAlertPanel(@"Error Account XML",[xmlErrorMessage localizedDescription],@"Close",nil,nil);
 }
 
@@ -219,7 +219,7 @@
 #ifdef MACEVEAPI_DEBUG
 	[self loadAccount:del runForModalWindow:NO];
 #else
-	[self loadAccount:del runForModalWindow:YES];	
+	[self loadAccount:del runForModalWindow:YES];
 #endif
 }
 
@@ -260,7 +260,7 @@
 		self.accountID = [acctID retain];
 		self.apiKey = [key retain];
 	}
-	
+
 	return self;
 }
 
@@ -280,17 +280,17 @@
 	return [characters count];
 }
 
-- (id)tableView:(NSTableView *)aTableView 
-objectValueForTableColumn:(NSTableColumn *)aTableColumn 
+- (id)tableView:(NSTableView *)aTableView
+objectValueForTableColumn:(NSTableColumn *)aTableColumn
 			row:(NSInteger)rowIndex
 {
 	CharacterTemplate *template = [characters objectAtIndex:rowIndex];
-	
+
 	if([[aTableColumn identifier]isEqualToString:@"NAME"]){
 		return [template characterName];
 	}if([[aTableColumn identifier]isEqualToString:@"ACTIVE"]){
 		BOOL active = [template active];
-		
+
 		if(active){
 			return [NSNumber numberWithInteger:NSOnState];
 		}else{

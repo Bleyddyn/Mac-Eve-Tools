@@ -31,26 +31,26 @@
 -(void) showVersion
 {
 	CCPDatabase *db;
-	
+
 	NSString *path = [[NSUserDefaults standardUserDefaults] stringForKey:UD_ITEM_DB_PATH];
 	NSFileManager *fm = [NSFileManager defaultManager];
-	
+
 	if([fm fileExistsAtPath:path]){
 		db = [[CCPDatabase alloc]initWithPath:path];
-		
+
 		NSString *verName = [db dbName];
 			//NSInteger verNum = [db dbVersion];
-		
+
 		[db release];
 		[dbVersionLabel setStringValue:verName];
 		[dbVersionLabel sizeToFit];
-		
+
 		NSDictionary *dict = [fm attributesOfItemAtPath:path error:NULL];
 		NSNumber *szNum = [dict valueForKey:NSFileSize];
 		unsigned long long sz = [szNum unsignedLongLongValue];
-		
+
 		double szF = (double)sz / (double)(1024 * 1024);
-		
+
 		NSString *fileSzStr = [NSString stringWithFormat:@"%.2f MB",szF];
 		[dbSize setStringValue:fileSzStr];
 		[dbSize sizeToFit];
@@ -66,24 +66,24 @@
 {
 	NSMenu *menu = [[[NSMenu alloc]initWithTitle:@"Menu"]autorelease];
 	NSMenuItem *item;
-	
+
 	enum DatabaseLanguage lang = [[NSUserDefaults standardUserDefaults]integerForKey:UD_DATABASE_LANG];
-	
+
 	item = [[NSMenuItem alloc]initWithTitle:languageForId(l_EN) action:NULL keyEquivalent:@""];
 	[item setTag:l_EN];
 	[menu addItem:item];
 	[item release];
-	
+
 	item = [[NSMenuItem alloc]initWithTitle:languageForId(l_DE) action:NULL keyEquivalent:@""];
 	[item setTag:l_DE];
 	[menu addItem:item];
 	[item release];
-	
+
 	item = [[NSMenuItem alloc]initWithTitle:languageForId(l_RU) action:NULL keyEquivalent:@""];
 	[item setTag:l_RU];
 	[menu addItem:item];
 	[item release];
-	
+
 	[langSelector setMenu:menu];
 	[langSelector selectItemWithTag:lang];
 }

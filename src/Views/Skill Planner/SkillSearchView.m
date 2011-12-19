@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -42,7 +42,7 @@
 -(void) addSearchType:(id<SkillSearchDatasource>)data
 {
 	NSInteger segmentCount = [skillSearchCategories segmentCount];
-	
+
 	if(segmentCount == 1){
 		if([[skillSearchCategories cell] tagForSegment:segmentCount-1] == 99){
 			/*special case cos apple is retarded*/
@@ -54,7 +54,7 @@
 			return;
 		}
 	}
-	
+
 	[skillSearchCategories setSegmentCount:segmentCount+1];
 	[skillSearchCategories setLabel:[data skillSearchName] forSegment:segmentCount];
 	[[skillSearchCategories cell]setTag:segmentCount forSegment:segmentCount];
@@ -82,7 +82,7 @@
 		datasources = [[NSMutableArray alloc]init];
 		[skillSearchCategories setSegmentCount:0];
 	}
-	
+
 	return self;
 }
 
@@ -103,17 +103,17 @@
 {
 	//NSLog(@"%@ awakeFromNib",[self className]);
 	[skillList setDelegate:self];
-	
+
 	[skillList setTarget:self];
 	[skillList setDoubleAction:@selector(planViewDoubleClick:)];
 	[skillList setAction:@selector(skillTreeSingleClick:)];
-	
+
 	[skillList setIndentationMarkerFollowsCell:YES];
-	
+
 	[search setAction:@selector(skillSearchFilter:)];
 	[search setTarget:self];
 	[[search cell]setSendsSearchStringImmediately:YES];
-	
+
 }
 
 -(id<SkillSearchDelegate>) delegate
@@ -149,7 +149,7 @@
 
 -(IBAction) skillGroupsClick:(id)sender
 {
-	
+
 }
 
 -(void) reloadDatasource:(id<SkillSearchDatasource>)ds
@@ -158,13 +158,13 @@
 	if(data == ds){
 		[skillList reloadData];
 	}
-	
+
 //	[skillList collapseItem:nil collapseChildren:YES];
 //	[skillList reloadItem:nil reloadChildren:YES];
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView 
-shouldEditTableColumn:(NSTableColumn *)tableColumn 
+- (BOOL)outlineView:(NSOutlineView *)outlineView
+shouldEditTableColumn:(NSTableColumn *)tableColumn
 			   item:(id)item
 {
 	return NO;
@@ -191,17 +191,17 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 -(void) displayItemAtRow:(NSInteger)row
 {
 	id item = [skillList itemAtRow:row];
-	
+
 	if([item isKindOfClass:[Skill class]]){
 		/*
 		Skill *s = [[((Character*)[delegate character])st]skillForId:[item typeID]]; //ignore this warning
-		
+
 		SkillDetailsWindowController *wc = [[SkillDetailsWindowController alloc]init];
 		[wc setSkill:s ? s : item forCharacter:[delegate character]];
 		[[wc window]makeKeyAndOrderFront:self];
 		return;
 		 */
-		[SkillDetailsWindowController displayWindowForTypeID:[item typeID] 
+		[SkillDetailsWindowController displayWindowForTypeID:[item typeID]
 												forCharacter:[delegate character]];
 
 	}else if([item isKindOfClass:[CCPType class]]){
@@ -217,11 +217,11 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 {
 	id item = [sender representedObject];
 	NSInteger row = [skillList rowForItem:item];
-	
+
 	if(row == -1){
 		return;
 	}
-	
+
 	[self displayItemAtRow:row];
 }
 
@@ -242,7 +242,7 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 	if(row == -1){
 		return;
 	}
-	
+
 	[self displayItemAtRow:row];
 }
 
@@ -268,18 +268,18 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 	display a tooltip
 	Forward this on to the datasource.
  */
-- (NSString *)outlineView:(NSOutlineView *)ov 
-		   toolTipForCell:(NSCell *)cell 
-					 rect:(NSRectPointer)rect 
-			  tableColumn:(NSTableColumn *)tc 
-					 item:(id)item 
+- (NSString *)outlineView:(NSOutlineView *)ov
+		   toolTipForCell:(NSCell *)cell
+					 rect:(NSRectPointer)rect
+			  tableColumn:(NSTableColumn *)tc
+					 item:(id)item
 			mouseLocation:(NSPoint)mouseLocation
 {
 	return [[skillList dataSource]outlineView:ov
-						toolTipForCell:cell rect:rect 
+						toolTipForCell:cell rect:rect
 						   tableColumn:tc item:item
 						 mouseLocation:mouseLocation];
 }
 
-	 
+
 @end

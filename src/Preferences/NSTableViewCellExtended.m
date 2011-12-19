@@ -15,7 +15,7 @@
 
 - (void)textDidEndEditing:(NSNotification *)aNotification {
 	[super textDidEndEditing:aNotification];
-	
+
 	[controller accountNameDidChanged];
 }
 

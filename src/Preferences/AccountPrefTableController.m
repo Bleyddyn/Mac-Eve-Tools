@@ -23,7 +23,7 @@
 }
 
 - (void) dealloc
-{	
+{
 	self.accounts = NULL;
 	[super dealloc];
 }
@@ -35,12 +35,12 @@
 		NSData *archive = [NSKeyedArchiver archivedDataWithRootObject:self.accounts];
 		[defaults setObject:archive forKey:UD_ACCOUNTS];
 		[defaults synchronize];
-		
+
 		[[Config sharedInstance] clearAccounts];
 		for(Account *acct in self.accounts){
 			[[Config sharedInstance] addAccount:acct];
 		}
-		[[Config sharedInstance] readConfig];		
+		[[Config sharedInstance] readConfig];
 	}
 }
 
@@ -52,20 +52,20 @@
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSData *archive = [defaults objectForKey:UD_ACCOUNTS];
 	NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:archive];
-	
+
 	if (self.accounts == nil) {
 		self.accounts = [[NSMutableArray alloc] init];
 	}
 	else {
 		[self.accounts removeAllObjects];
 	}
-	
+
 	[self.accounts addObjectsFromArray:array];
 	[self.accountTable reloadData];
 	[self.removeAccount setEnabled:NO];
-	
+
 	if ([self.accounts count] > 0) {
-		[self.accountTable selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:TRUE];		
+		[self.accountTable selectRowIndexes:[NSIndexSet indexSetWithIndex:0] byExtendingSelection:TRUE];
 		[self tableViewSelectionDidChange:nil];
 	}
 }
@@ -118,7 +118,7 @@
 	[self.accountTable deselectAll:self];
     [self.accounts removeObjectsAtIndexes:index];
 	[self.accountTable noteNumberOfRowsChanged];
-	self.accountDetailController.account = NULL;	
+	self.accountDetailController.account = NULL;
 }
 
 @end

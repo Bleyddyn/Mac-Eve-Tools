@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -44,20 +44,20 @@
 {
 	[ship release];
 	[character release];
-	
+
 	@synchronized(self){
 		if(down != nil){
 			[down cancel];
 			[down release];
 		}
 	}
-	
+
 	[shipPrerequisites setDataSource:nil];
 	[shipAttributes setDataSource:nil];
-	
+
 	[shipPreDS release];
 	[shipAttrDS release];
-	
+
 	[super dealloc];
 }
 
@@ -67,7 +67,7 @@
 		ship = [type retain];
 		character = [ch retain];
 		down = nil;
-		
+
 		//I think the compiler is on crack.  the warning given here makes no sense.
 		shipAttrDS = [[ShipAttributeDatasource alloc]initWithShip:ship forCharacter:character];
 		shipPreDS = [[SkillPrerequisiteDatasource alloc]initWithSkill:[ship prereqs] forCharacter:character];
@@ -78,7 +78,7 @@
 +(void) displayShip:(CCPType*)type forCharacter:(Character*)ch
 {
 	ShipDetailsWindowController *wc = [[ShipDetailsWindowController alloc]initWithType:type forCharacter:ch];
-	
+
 	[[wc window]makeKeyAndOrderFront:nil];
 }
 
@@ -86,30 +86,30 @@
 {
 	[shipName setStringValue:[ship typeName]];
 	[shipName sizeToFit];
-	
+
 	[shipDescription setString:[ship typeDescription]];
 }
 
 -(BOOL) displayImage
 {
 	NSString *imagePath = [[Config sharedInstance] pathForImageType:[ship typeID]];
-	
+
 	NSFileManager *fm = [NSFileManager defaultManager];
-		
+
 	if(![fm fileExistsAtPath:[imagePath stringByDeletingLastPathComponent]]){
 		[fm createDirectoryAtPath:[imagePath stringByDeletingLastPathComponent]
 	  withIntermediateDirectories:YES
 					   attributes:nil
 							error:NULL];
 	}
-	
+
 	if([fm fileExistsAtPath:imagePath]){
 		NSImage *image = [[NSImage alloc]initWithContentsOfFile:imagePath];
 		[shipView setImage:image];
 		[image release];
 		return YES;
 	}
-	
+
 	return NO;
 }
 
@@ -119,25 +119,25 @@
 	if([self displayImage]){
 		return;
 	}
-	
+
 	NSString *imageUrl = [[Config sharedInstance] urlForImageType:[ship typeID]] ;
 	NSString *filePath = [[Config sharedInstance] pathForImageType:[ship typeID]];
-	
+
 	NSLog(@"Downloading %@ to %@",imageUrl,filePath);
-	
+
 	/*image does not exist. download it and display it when it's done.*/
 	NSURL *url = [NSURL URLWithString:imageUrl];
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
 	NSURLDownload *download = [[NSURLDownload alloc]initWithRequest:request delegate:self];
 	[download setDestination:filePath allowOverwrite:NO];
-	
+
 	down = download;
 }
 
 -(void) addAttribute:(NSInteger)attr toArray:(NSMutableArray*)ary
 {
 	CCPTypeAttribute *ta = [ship attributeForID:attr];
-	
+
 	if(ta != nil){
 		[ary addObject:ta];
 	}
@@ -149,11 +149,11 @@
 	//want to save this plan
 	SkillPlan *plan = [[SkillPlan alloc]initWithName:@"--TEST--" character:character];
 	[plan addSkillArrayToPlan:[ship prereqs]];
-	
+
 	NSInteger timeToTrain = [plan trainingTime];
-	
+
 	[plan release];
-	
+
 	if(timeToTrain == 0){
 		//Can use this ship now.
 		[trainingTime setStringValue:
@@ -162,13 +162,13 @@
 		  [character characterName]]];
 	}else{
 		NSString *timeToTrainString = stringTrainingTime(timeToTrain);
-		
+
 		[trainingTime setStringValue:
 		 [NSString stringWithFormat:
 		  NSLocalizedString(@"%@ could fly this ship in %@",@"<@CharacterName>"),
 		  [character characterName],timeToTrainString]];
 	}
-	
+
 	[miniPortrait setImage:[character portrait]];
 }
 
@@ -177,22 +177,22 @@
 -(void) windowDidLoad
 {
 	[[self window]setTitle:[NSString stringWithFormat:@"%@ - %@",[[self window]title],[ship typeName]]];
-	
-	[[NSNotificationCenter defaultCenter] 
+
+	[[NSNotificationCenter defaultCenter]
 	 addObserver:self
 	 selector:@selector(windowWillClose:)
 	 name:NSWindowWillCloseNotification
 	 object:[self window]];
-	
+
 	[self testImage];
-	
+
 	[self setLabels];
-	
+
 	[self calculateTimeToTrain];
-	
+
 	[shipPrerequisites setDataSource:shipPreDS];
 	[shipPrerequisites expandItem:nil expandChildren:YES];
-	
+
 	[shipAttributes setDataSource:shipAttrDS];
 	[shipAttributes expandItem:nil expandChildren:YES];
 }
@@ -205,15 +205,15 @@
 
 #pragma mark Delegates for the attributes
 
-- (BOOL)tableView:(NSTableView *)aTableView 
-shouldEditTableColumn:(NSTableColumn *)aTableColumn 
+- (BOOL)tableView:(NSTableView *)aTableView
+shouldEditTableColumn:(NSTableColumn *)aTableColumn
 			  row:(NSInteger)rowIndex
 {
 	return NO;
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView 
-shouldEditTableColumn:(NSTableColumn *)tableColumn 
+- (BOOL)outlineView:(NSOutlineView *)outlineView
+shouldEditTableColumn:(NSTableColumn *)tableColumn
 			   item:(id)item
 {
 	return NO;
@@ -226,12 +226,12 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 /*
  Armor:
  Armour amount (265)
- Damage Resist 
+ Damage Resist
  EM (267)
  Explosive (268)
  Kenetic (269)
  Thermal (270)
- 
+
  Shield:
  Sheild amount (263)
  Shield recharg time (479)
@@ -241,7 +241,7 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
  Kenetic (273)
  Thermal (274)
  Capacitor:
- Capacity (482) 
+ Capacity (482)
  Recharge time (55)
  Targeting:
  Max targeting range (75)
@@ -254,15 +254,15 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
  Propulsion
  Max Velocity (37)
  Ship warp speed
- 
+
  */
- 
+
 #pragma mark NSURLDownload delegate
 
 -(void) downloadDidFinish:(NSURLDownload *)download
 {
 	[self displayImage];
-	
+
 	@synchronized(self){
 		[down release];
 		down = nil;
@@ -272,7 +272,7 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 -(void) download:(NSURLDownload *)download didFailWithError:(NSError *)error
 {
 	NSLog(@"Error downloading image (%@): %@",[[download request]URL], error);
-	
+
 	@synchronized(self){
 		[down release];
 		down = nil;

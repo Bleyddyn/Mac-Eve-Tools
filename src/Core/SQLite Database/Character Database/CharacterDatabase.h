@@ -17,7 +17,7 @@ typedef struct sqlite3_stmt sqlite3_stmt;
 
 @interface CharacterDatabase : SqliteDatabase {
 
-	
+
 }
 
 -(CharacterDatabase*) initWithPath:(NSString*)dbPath;
@@ -42,7 +42,7 @@ typedef struct sqlite3_stmt sqlite3_stmt;
 /*
  This is the only method you should use to create a plan. DO NOT create a skill plan
  using the alloc init methods.
- 
+
  SkillPlan is returned autoreleased
  */
 -(SkillPlan*) createPlan:(NSString*)planName forCharacter:(Character*)ch;

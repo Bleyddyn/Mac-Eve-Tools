@@ -37,7 +37,7 @@
 		character = [ch retain];
 		certDS = [[CertPrerequisiteDatasource alloc]initWithCert:cert forCharacter:character];
 	}
-	
+
 	return self;
 }
 
@@ -80,11 +80,11 @@
 {
 	//Normally skill plans should be created using the character object, but we don't
 	//want to save this plan
-	
+
 	NSString *text;
-	
+
 	[miniPortrait setImage:[character portrait]];
-	
+
 	if([character hasCert:[cert certID]]){
 		text = [NSString stringWithFormat:
 				NSLocalizedString(@"%@ has this certificate",@"<@CharacterName> has this cert"),
@@ -92,11 +92,11 @@
 	}else {
 		SkillPlan *plan = [[SkillPlan alloc]initWithName:@"--TEST--" character:character];
 		[plan addSkillArrayToPlan:[cert certChainPrereqs]];
-		
+
 		NSInteger timeToTrain = [plan trainingTime];
-		
+
 		[plan release];
-		
+
 		if(timeToTrain == 0){
 			text = [NSString stringWithFormat:
 					NSLocalizedString(@"%@ has not claimed this certificate",@"<@CharacterName> has not claimed this cert"),
@@ -108,18 +108,18 @@
 					[character characterName],timeToTrainString];
 		}
 	}
-	
+
 	[trainingTime setStringValue:text];
 }
 
 -(void) windowDidLoad
 {
-	[[NSNotificationCenter defaultCenter] 
+	[[NSNotificationCenter defaultCenter]
 	 addObserver:self
 	 selector:@selector(windowWillClose:)
 	 name:NSWindowWillCloseNotification
 	 object:[self window]];
-	
+
 	[self calculateTimeToTrain];
 	[self setLabels];
 	[self setDatasource];

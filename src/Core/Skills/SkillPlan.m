@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -64,7 +64,7 @@
 			[skillPlan insertObject:trainingSkill atIndex:0];
 		}
 		[trainingSkill release];
-	}	
+	}
 }
 
 -(void) removeSkillFromPlan:(SkillPair*)pair
@@ -90,7 +90,7 @@
 /*
  Helper functions for the recursive skill plan builder.  These check the character or the plan
  to see if the same skill exists at the required level to add the new skill.
- 
+
  these two functions are a bit nasty. optimise this if it starts to get slow
  */
 -(NSInteger) hasPrerequisiteSkillQueued:(NSNumber*)typeID beforeIndex:(NSInteger)index inPlan:(NSArray*)plan
@@ -132,7 +132,7 @@
 			return [s skillLevel];
 		}
 	}
-	
+
 	return level;
 }
 
@@ -183,7 +183,7 @@
 	[skillPlan release];
 	[skillDates release];
 	[spHrArray release];
-	
+
 	[planName release];
 
 	[super dealloc];
@@ -208,8 +208,8 @@ static NSDictionary *masterSkillSet = nil;;
 	return self;
 }
 
--(SkillPlan*) initWithName:(NSString*)name 
-			  forCharacter:(Character*)ch 
+-(SkillPlan*) initWithName:(NSString*)name
+			  forCharacter:(Character*)ch
 					withId:(NSInteger)pId
 {
 	if(self = [self init]){
@@ -231,17 +231,17 @@ static NSDictionary *masterSkillSet = nil;;
 	return self;
 }
 
-/* 
+/*
  Recursive function to build up a skill plan for a given skill.
- 
+
  Algorithm:
- 
+
  Check to see if there are any prerequisites.
 	If there are
 		Add the prerequisite skills to the right level (if not already met).
 	End if
  Add the skill
- 
+
  */
 -(NSInteger) privateAddSkillToPlan:(NSNumber*)skillID level:(NSInteger)skillLevel
 {
@@ -251,7 +251,7 @@ static NSDictionary *masterSkillSet = nil;;
 	/*check to see if the characer has the skill, and at what level*/
 	NSInteger skillsAdded = 0;
 	NSInteger currentLevel = [self hasPrerequisiteSkill:skillID];
-	
+
 	/*we need to find all of the prerequisite skills for the skillID that has been passed in*/
 	Skill *s = [masterSkillSet objectForKey:skillID];
 	NSArray *prereqs = [s prerequisites];
@@ -268,9 +268,9 @@ static NSDictionary *masterSkillSet = nil;;
 			}
 		}
 	}
-	
+
 	//NSInteger level = [[character skillSet]objectForKey:[skillID]];
-	
+
 	/*prerequisites have been satisfied. add skill at level*/
 	for(NSInteger i = currentLevel + 1; i <= skillLevel; i++){
 		[self addSkillToQueue:skillID level:i];
@@ -312,14 +312,14 @@ static NSDictionary *masterSkillSet = nil;;
 
 /*
  Iterate over this plan, if the skills are in an order that matches all prerequisites then the plan is valid.
- 
- 
+
+
  Algorithm.
- 
+
  Are the prerequisites for this skill met?
 	if no, return NO;
 	if yes, continue
- 
+
  return YES.
  */
 
@@ -328,18 +328,18 @@ static NSDictionary *masterSkillSet = nil;;
 {
 	SkillTree *masterTree = [[GlobalData sharedInstance]skillTree];
 	NSInteger i = 0;
-	
+
 	for(SkillPair *pair in proposedPlan){
 		Skill *s = [masterTree skillForId:[pair typeID]];
-		
+
 		NSArray *prerequisites = [s prerequisites];
-		
+
 		NSInteger currentLevel = [self hasPrerequisiteSkill:[pair typeID] beforeIndex:i-1 inPlan:proposedPlan];
-		
+
 		if(currentLevel < ([pair skillLevel] - 1)){
 			return NO;
 		}
-		
+
 		for(SkillPair *pre in prerequisites){
 			NSInteger preCurrentLevel = [self hasPrerequisiteSkill:[pre typeID] beforeIndex:i-1 inPlan:proposedPlan];
 			if([pre skillLevel] > preCurrentLevel){
@@ -356,13 +356,13 @@ static NSDictionary *masterSkillSet = nil;;
 {
 	/*returns the skill level of the a prerequisite*/
 	NSInteger fromOffset = 0;
-	
+
 	NSMutableArray *newPlan = [skillPlan mutableCopy];
-	
+
 	NSInteger toOffset = 0;
 	for(NSNumber *fromIndex in fromIndexArray){
 		SkillPair *skillToMove = [skillPlan objectAtIndex:([fromIndex integerValue] + fromOffset)];
-		
+
 		if([newPlan count] == (NSUInteger)(toIndex + toOffset)){
 			[newPlan addObject:skillToMove];
 			toOffset++;
@@ -370,18 +370,18 @@ static NSDictionary *masterSkillSet = nil;;
 			[newPlan insertObject:skillToMove atIndex:toIndex + toOffset++];
 		}
 	}
-	
+
 	NSInteger removeOffset = 0;
 	if(toIndex < ([[fromIndexArray objectAtIndex:0]integerValue] + fromOffset)){
 		removeOffset += [fromIndexArray count];
 	}
-	
+
 	for(NSNumber *fromIndex in fromIndexArray){
 		[newPlan removeObjectAtIndex:([fromIndex integerValue] + fromOffset) + removeOffset--];
 	}
-	
+
 	BOOL rc = [self validatePlan:newPlan];
-	
+
 	if(rc){
 //		NSLog(@"New plan is OK");
 //		NSLog(@"%@",newPlan);
@@ -392,7 +392,7 @@ static NSDictionary *masterSkillSet = nil;;
 //		NSLog(@"new plan is invalid");
 		[newPlan release];
 	}
-	
+
 	return rc;
 }
 
@@ -404,7 +404,7 @@ static NSDictionary *masterSkillSet = nil;;
 -(BOOL) moveSkill:(NSArray*)fromIndexArray to:(NSInteger)toIndex
 {
 	BOOL rc;
-	
+
 	rc = [self privateMoveSkill:fromIndexArray to:toIndex];
 
 	return rc;
@@ -420,12 +420,12 @@ static NSDictionary *masterSkillSet = nil;;
 /*
 	If a skill is removed from a plan, then everying in the plan that has that skill as a prerequisite
 	must also be removed.
-	
+
 	therefore, we must calculate what skills in the plan have the supplied skill as a prerequisite.
-	
+
 	for a skill, ([skill skillLevel] + 1) is a prerequisite and must be removed
 	if any skill has [skill skillLevel] as a prerequisite, it must be removed also.
- 
+
 	Capital Ships 1
 	Capital Ships 2
 	Capital Ships 3
@@ -439,14 +439,14 @@ static NSDictionary *masterSkillSet = nil;;
 	Titan 3
 	Titan 4
 	Titan 5
- 
+
 	in the above plan, battleship and leadership are not prerequisites of capital ships, but of titan
  */
 
 // is sp a prerequisite of (typeID,skillLevel) ?
--(BOOL) isPrerequsite:(SkillPair*)sp 
-			   ofType:(NSNumber*)typeID 
-			  atLevel:(NSInteger)skillLevel 
+-(BOOL) isPrerequsite:(SkillPair*)sp
+			   ofType:(NSNumber*)typeID
+			  atLevel:(NSInteger)skillLevel
 			 antiPlan:(NSMutableArray*)antiPlan
 {
 	/*is it already in the antiplan? if so, return.*/
@@ -460,11 +460,11 @@ static NSDictionary *masterSkillSet = nil;;
 	//is SP a prerequisite of type?
 	Skill *s = [[[GlobalData sharedInstance]skillTree] skillForId:[sp typeID]]; /*get the prereqs of sp*/
 	NSArray *ary = [s prerequisites];
-	
+
 	if(ary == nil){
 		return NO;
 	}
-	
+
 	for(SkillPair *pre in ary){
 		if([[pre typeID]isEqualToNumber:typeID]){//if typeID is a prerequisite of sp
 			if([pre skillLevel] >= skillLevel){
@@ -472,23 +472,23 @@ static NSDictionary *masterSkillSet = nil;;
 			}
 		}
 	}
-	
+
 	return NO;
 }
 
--(void) constructAntiPlan2:(NSNumber*)typeID 
-					 level:(NSInteger)skillLevel 
+-(void) constructAntiPlan2:(NSNumber*)typeID
+					 level:(NSInteger)skillLevel
 				  antiPlan:(NSMutableArray*)antiPlan
 {
 	/*
 	 remove any prereq from the plan that matches typeID and has a skillLevel higher than skillLevel
 	 remove anything from the plan that depends on typeID at skillLevel
 	 */
-	
-/*	
+
+/*
 	Skill *s = [[Config GetInstance]->st skillForId:typeID];
 	NSLog(@"Removing %@ at level %ld", [s skillName],skillLevel);
-*/	
+*/
 	for(SkillPair *sp in skillPlan){
 		/*does this object require typeID at skillLevel as a prerequisite? if so, remove*/
 /*
@@ -519,7 +519,7 @@ static NSDictionary *masterSkillSet = nil;;
 {
 	SkillPair *skillToRemove = [skillPlan objectAtIndex:skillIndex];
 	NSMutableArray *antiPlan = [[[NSMutableArray alloc]init]autorelease];
-	
+
 	[self constructAntiPlan2:[skillToRemove typeID] level:[skillToRemove skillLevel] antiPlan:antiPlan];
 	/*
 	SkillTree *st = [Config GetInstance]->st;
@@ -534,12 +534,12 @@ static NSDictionary *masterSkillSet = nil;;
 
 /*
  remove multiple indexes from the array. perhaps alter this to take an index set if i use it in any other locations?
- another edge case where the 
+ another edge case where the
  */
 -(NSArray*) constructAntiPlan:(NSUInteger*)skillIndex arrayLength:(NSUInteger)arrayLength
 {
 	NSMutableArray *antiPlan = [[[NSMutableArray alloc]init]autorelease];
-		
+
 	for(NSUInteger i = 0; i < arrayLength; i++){
 		SkillPair *skillToRemove = [skillPlan objectAtIndex:skillIndex[i]];
 		[self constructAntiPlan2:[skillToRemove typeID] level:[skillToRemove skillLevel] antiPlan:antiPlan];
@@ -552,39 +552,39 @@ static NSDictionary *masterSkillSet = nil;;
 {
 	NSInteger trainingTime = 0;
 	SkillPair *pair;
-	
+
 	[skillDates removeAllObjects];
 	[spHrArray removeAllObjects];
-	
+
 	[character resetTempAttrBonus];
 	[character processAttributeSkills];
-	
+
 	SkillTree *st = [[GlobalData sharedInstance]skillTree];
 	NSNumber *learning = [NSNumber numberWithInteger:GROUP_LEARNING];
-	
+
 	//Starting date (Now)
 	NSDate *date = [[[NSDate alloc]init]autorelease];
-	
-	NSEnumerator *e = [skillPlan objectEnumerator];	
+
+	NSEnumerator *e = [skillPlan objectEnumerator];
 	while((pair = [e nextObject]) != nil){
-		[skillDates addObject:date];		
-		
+		[skillDates addObject:date];
+
 		/*this should take into account amount completed?*/
 		trainingTime = [character trainingTimeInSeconds:[pair typeID] fromLevel:[pair skillLevel]-1 toLevel:[pair skillLevel]];
-		
+
 		/*
-		 Is the skill we are training a learning skill? 
+		 Is the skill we are training a learning skill?
 		 if so we must modify the character object to save the old attributes and store the new ones
 		 we apply the bonus after we have trained the skill in the queue
-		 
+
 		 Note that this modifies the characters internal attribute data. it must be reset
 		 when we are done.
 		 */
 		Skill *s = [st skillForId:[pair typeID]];
 		if([[s groupID]isEqualToNumber:learning]){
-			
+
 			/*check to see what learning attribute bonus is applying here.*/
-			
+
 			if([s attributeForID:BONUS_LEARNING] != nil){
 				[character modifyLearning:1];
 			}else if([s attributeForID:BONUS_INTELLIGENCE] != nil){
@@ -598,19 +598,19 @@ static NSDictionary *masterSkillSet = nil;;
 			}else if([s attributeForID:BONUS_MEMORY] != nil){
 				[character modifyAttribute:ATTR_MEMORY byLevel:1];
 			}
-			
+
 			[character processAttributeSkills]; //calculate the new attribute total
 		}
-		
-		NSInteger spPerHour = [character spPerHour:[s primaryAttr] 
+
+		NSInteger spPerHour = [character spPerHour:[s primaryAttr]
 										 secondary:[s secondaryAttr]];
-		
+
 		[spHrArray addObject:[NSNumber numberWithInteger:spPerHour]];
-		
+
 		date = [[[NSDate alloc]initWithTimeInterval:trainingTime sinceDate:date]autorelease];
 		[skillDates addObject:date];
 	}
-	
+
 	//Reset the character attributes, as the character may have been modified
 	[character resetTempAttrBonus];
 	[character processAttributeSkills];
@@ -621,7 +621,7 @@ static NSDictionary *masterSkillSet = nil;;
 {
 	SkillTree *st = [character skillTree];
 	NSMutableIndexSet *index = [[NSMutableIndexSet alloc]init];
-	
+
 	NSInteger i = 0;
 	for(SkillPair *pair in skillPlan){
 		Skill *s = [st skillForId:[pair typeID]];
@@ -638,9 +638,9 @@ static NSDictionary *masterSkillSet = nil;;
 		NSLog(@"remove %ld completed skills from plan",[index count]);
 		[self savePlan];
 	}
-	
+
 	[index release];
-	
+
 	return i;
 }
 
@@ -650,11 +650,11 @@ static NSDictionary *masterSkillSet = nil;;
 	if([skillDates count] == 0){
 		[self buildTrainingTimeList];
 	}
-	
+
 	if((NSUInteger)skillIndex >= [skillPlan count]){
 		NSLog(@"Error: %ld is out of bounds (%ld)",skillIndex,[skillPlan count]);
 	}
-	
+
 	return [skillDates objectAtIndex:skillIndex * 2];
 }
 
@@ -663,11 +663,11 @@ static NSDictionary *masterSkillSet = nil;;
 	if([skillDates count] == 0){
 		[self buildTrainingTimeList];
 	}
-	
+
 	if((NSUInteger)skillIndex >= [skillPlan count]){
 		NSLog(@"Error: %ld is out of bounds (%ld)",skillIndex,[skillPlan count]);
 	}
-	
+
 	return [skillDates objectAtIndex:(skillIndex*2)+1];
 }
 
@@ -689,25 +689,25 @@ static NSDictionary *masterSkillSet = nil;;
 	if(planTrainingTime != 0){
 		return planTrainingTime;
 	}
-	
+
 	if([skillPlan count] == 0){
 		return 0;
 	}
-	
+
 	planTrainingTime = (NSInteger)[[self skillTrainingFinish:[self skillCount]-1]timeIntervalSinceDate:[self skillTrainingStart:0]];
-	
+
 	return planTrainingTime;
 }
 
 
 -(NSInteger) trainingTimeFromDate:(NSDate*)now
-{	
+{
 	if([skillPlan count] == 0){
 		return 0;
 	}
-	
+
 	NSInteger time = (NSInteger) [[self skillTrainingFinish:[self skillCount]-1]timeIntervalSinceDate:now];
-	
+
 	return MAX(time,0);
 }
 
@@ -716,9 +716,9 @@ static NSDictionary *masterSkillSet = nil;;
 	if([skillPlan count] == 0){
 		return 0;
 	}
-	
+
 	NSInteger time = (NSInteger) [[self skillTrainingFinish:skillIndex]timeIntervalSinceDate:now];
-	
+
 	return MAX(time,0);
 }
 
@@ -730,14 +730,14 @@ static NSDictionary *masterSkillSet = nil;;
 
 -(SkillPair*) skillAtIndex:(NSInteger)index
 {
-	return [skillPlan objectAtIndex:index]; 
+	return [skillPlan objectAtIndex:index];
 }
 
 -(NSInteger) maxLevelForSkill:(NSNumber*)typeId atIndex:(NSInteger*)index;
 {
 	NSInteger level = 0;
 	NSInteger i = 0;
-	
+
 	for(SkillPair *pair in skillPlan){
 		if([[pair typeID]isEqualToNumber:typeId]){
 			if([pair skillLevel] > level){
@@ -765,29 +765,29 @@ static NSDictionary *masterSkillSet = nil;;
 	NSInteger curIndex;
 	NSInteger curMaxLevel = [self maxLevelForSkill:[pair typeID] atIndex:&curIndex];
 	NSInteger increaseToLevel = [pair skillLevel];
-	
+
 	if(curMaxLevel == 0){
 		return NO;
 	}
-	
+
 	NSMutableArray *newPlan = [skillPlan mutableCopy];
-	
+
 	curIndex++; //Current index where we are inserting.  move to one beyond the skill.
-	
+
 	for(NSInteger i = curMaxLevel + 1; i <= increaseToLevel; i++){
-		
+
 		SkillPair *newPair = [[SkillPair alloc]initWithSkill:[pair typeID] level:i];
-		
+
 		if(curIndex >= [newPlan count]){
 			[newPlan addObject:newPair];
 		}else{
 			[newPlan insertObject:newPair atIndex:curIndex];
 		}
-		
+
 		[newPair release];
 		curIndex++;
 	}
-	
+
 	if([self validatePlan:newPlan]){
 		[skillPlan release];
 		skillPlan = newPlan;
@@ -798,19 +798,19 @@ static NSDictionary *masterSkillSet = nil;;
 		[newPlan release];
 		return NO;
 	}
-	
+
 }
 
 -(BOOL) addSkill:(SkillPair*)pair atIndex:(NSInteger)index
-{	
+{
 	NSMutableArray *newPlan = [skillPlan mutableCopy];
-	
+
 	if(index >= [newPlan count]){
 		[newPlan addObject:pair];
 	}else{
 		[newPlan insertObject:pair atIndex:index];
 	}
-	
+
 	if([self validatePlan:newPlan]){
 		[skillPlan release];
 		skillPlan = newPlan;
@@ -821,14 +821,14 @@ static NSDictionary *masterSkillSet = nil;;
 		[newPlan release];
 		return NO;
 	}
-	
+
 	return NO;
 }
 
 -(void) removeSkillAtIndex:(NSInteger)index
 {
 	NSArray *ary = [self constructAntiPlan:index];
-	
+
 	[self removeSkillArrayFromPlan:ary];
 }
 

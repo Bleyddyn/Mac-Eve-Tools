@@ -16,21 +16,21 @@
 
 @interface CCPTypeAttribute : NSObject {
 	NSInteger attributeID;
-	
+
 	NSString *attributeName;
-	
+
 	NSString *displayName;
 	NSString *unitDisplay;
-	
+
 	NSInteger graphicID;
-	
+
 	NSInteger valueInt;
 	CGFloat valueFloat;
-	
+
 	BOOL isInt;
 }
 
-+(CCPTypeAttribute*) createTypeAttribute:(NSInteger)attributeId 
++(CCPTypeAttribute*) createTypeAttribute:(NSInteger)attributeId
 								dispName:(NSString*)dispName
 							 unitDisplay:(NSString*)unitDisp
 							   graphicId:(NSInteger)gID

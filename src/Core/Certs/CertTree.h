@@ -13,7 +13,7 @@
 
 @interface CertTree : NSObject {
 	NSMutableArray *certCategories;
-	
+
 	NSMutableDictionary *allCerts;
 }
 

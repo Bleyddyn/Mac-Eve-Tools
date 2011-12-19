@@ -14,7 +14,7 @@
 /*
 -(MainViewController*) init
 {
-	
+
 }
 */
 
@@ -28,7 +28,7 @@
 
 -(void) setCharacter:(Character*)c  //the user has changed the actively selected character
 {
-	[self doesNotRecognizeSelector:_cmd];	
+	[self doesNotRecognizeSelector:_cmd];
 }
 
 -(void) viewIsActive
@@ -37,11 +37,11 @@
 }
 -(void) viewIsInactive
 {
-	[self doesNotRecognizeSelector:_cmd]; 
+	[self doesNotRecognizeSelector:_cmd];
 }
 -(void) viewWillBeDeactivated
 {
-	[self doesNotRecognizeSelector:_cmd]; 
+	[self doesNotRecognizeSelector:_cmd];
 }
 -(void) viewWillBeActivated
 {

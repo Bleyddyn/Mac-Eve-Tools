@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -44,7 +44,7 @@
 		[xmlData release];
 		xmlData = nil;
 	}
-	
+
 	if(docName != nil){
 		[docName release];
 		docName = nil;
@@ -64,10 +64,10 @@
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
 	NSLog(@"Conection failed with error %@!",[error localizedDescription]);
-	
+
 	[delegate xmlDidFailWithError:error xmlPath:savePath xmlDocName:docName];
 	[delegate xmlDocumentFinished:NO xmlPath:nil xmlDocName:docName];
-	
+
 	[self finishedCleanup];
 	[connection autorelease];
 }
@@ -75,7 +75,7 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
 	BOOL rc = NO;
-	
+
 	NSLog(@"Validating (%@)",savePath);
 	if([delegate xmlValidateData:xmlData xmlPath:savePath xmlDocName:docName]){
 		rc = [self writeData:xmlData toFile:savePath];
@@ -84,7 +84,7 @@
 		NSLog(@"Validation failed (%@)",savePath);
 	}
 	[delegate xmlDocumentFinished:rc xmlPath:savePath xmlDocName:docName];
-	
+
 	[self finishedCleanup];
 	[connection autorelease];
 }
@@ -100,16 +100,16 @@
 			NSLog(@"Created directory %@",[file stringByDeletingLastPathComponent]);
 		}
 	}
-	
+
 	/*write the data to the file*/
 	BOOL rc = [data writeToFile:file atomically:NO];
-	
+
 	if(!rc){
 		NSLog(@"Failed to write file %@",file);
 	}else{
 		NSLog(@"Wrote %lu bytes to %@",[data length],file);
 	}
-	
+
 	return rc;
 }
 
@@ -129,9 +129,9 @@
 -(XmlFetcher*) init
 {
 	if(self = [super init]){
-		
+
 	}
-	
+
 	return self;
 }
 
@@ -149,16 +149,16 @@
 {
 	docName = [name retain];
 	savePath = [path retain];
-	
+
 	xmlData = [[NSMutableData alloc]init];
-	
+
 	//NSLog(@"Requesting URL %@",fullDocUrl);
-	
+
 	NSURLRequest *apiRequest = [NSURLRequest requestWithURL: [ NSURL URLWithString: fullDocUrl]
 												cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:30.0];
-	
+
 	NSURLConnection *apiConnection = [[NSURLConnection alloc] initWithRequest:apiRequest delegate:self startImmediately:NO];
-	
+
 	[apiConnection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:mode];
 	[apiConnection start];
 }
@@ -181,19 +181,19 @@
 	NSMutableURLRequest *request;
 	NSError *err = nil;
 	NSURLResponse *resp = nil;
-	
+
 	request = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:fullDocUrl]];
 	[request autorelease];
-	
+
 	data = [NSURLConnection sendSynchronousRequest:request returningResponse:&resp error:&err];
-	
+
 	if(err != nil){
 		NSLog(@"Error downloading (%@) %@",fullDocUrl,[err localizedDescription]);
 		return NO;
 	}
-	
+
 	[self writeData:data toFile:path];
-	
+
 	return YES;
 }
 

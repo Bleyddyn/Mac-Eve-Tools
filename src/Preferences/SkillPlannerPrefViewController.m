@@ -64,32 +64,32 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
      toPasteboard:(NSPasteboard*)pboard
 {
 	NSUInteger row = [rowIndexes firstIndex];
-	
+
 	id<NSCoding> object = [self.columnList objectAtIndex:row];
-	
+
 	NSArray *pBoardTypes = [NSArray arrayWithObject:PLAN_CONFIG_TYPE];
 	[pboard declareTypes:pBoardTypes owner:self];
-	
+
 	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object];
-	
+
 	[pboard setData:data forType:PLAN_CONFIG_TYPE];
-	
+
 	return YES;
 }
 
-- (BOOL)tableView:(NSTableView *)aTableView 
-	   acceptDrop:(id < NSDraggingInfo >)info 
-			  row:(NSInteger)row 
+- (BOOL)tableView:(NSTableView *)aTableView
+	   acceptDrop:(id < NSDraggingInfo >)info
+			  row:(NSInteger)row
 	dropOperation:(NSTableViewDropOperation)operation
 {
 	if(operation != NSTableViewDropOn){
 		return NO;
 	}
-	
+
 	PlannerColumn *object = [NSKeyedUnarchiver unarchiveObjectWithData:
 							 [[info draggingPasteboard]dataForType:PLAN_CONFIG_TYPE]];
-	
-	
+
+
 		//remove the old row
 	NSInteger i = 0;
 	NSInteger removeRow = -1;
@@ -100,27 +100,27 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 		}
 		i++;
 	}
-	
+
 	if(removeRow != -1){
 		[self.columnList removeObjectAtIndex:removeRow];
 	}
-	
-	
+
+
 		//insert the new row
 	if(row >= [columnList count]){
 		[self.columnList addObject:object];
 	}else{
 		[self.columnList insertObject:object atIndex:row];
 	}
-	
+
 	[aTableView reloadData];
-	
+
 	return YES;
 }
 
-- (NSDragOperation)tableView:(NSTableView *)aTableView 
-				validateDrop:(id < NSDraggingInfo >)info 
-				 proposedRow:(NSInteger)row 
+- (NSDragOperation)tableView:(NSTableView *)aTableView
+				validateDrop:(id < NSDraggingInfo >)info
+				 proposedRow:(NSInteger)row
 	   proposedDropOperation:(NSTableViewDropOperation)operation
 {
 	[aTableView setDropRow:row dropOperation:NSTableViewDropOn];
@@ -133,12 +133,12 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
 	PlannerColumn *column = [self.columnList objectAtIndex:row];
-	
+
 	if([[tableColumn identifier]isEqualToString:@"NAME"]){
 		return column.columnName;
 	}
-	
-	if([[tableColumn identifier]isEqualToString:@"ACTIVE"]){		
+
+	if([[tableColumn identifier]isEqualToString:@"ACTIVE"]){
 		if(column.active){
 			return [NSNumber numberWithInteger:NSOnState];
 		}else{
@@ -152,11 +152,11 @@ writeRowsWithIndexes:(NSIndexSet *)rowIndexes
 {
 	ColumnConfigManager *manager = [ColumnConfigManager manager];
 	[manager resetConfig];
-	
+
 		//[self buildColumnList];
 	[self.columnList removeAllObjects];
 	[self.columnList addObjectsFromArray:[manager columns]];
-	
+
 	[self.columnTable reloadData];
 }
 

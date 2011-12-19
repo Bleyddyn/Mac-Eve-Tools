@@ -13,7 +13,7 @@
 @interface CertCategory : NSObject {
 	NSInteger categoryID;
 	NSString *catName;
-	
+
 	NSArray *classArray;
 }
 

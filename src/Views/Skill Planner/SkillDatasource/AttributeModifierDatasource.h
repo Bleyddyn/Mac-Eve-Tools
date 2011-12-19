@@ -17,7 +17,7 @@
 	SkillPointAttributeQueue *attrQueue;
 }
 
--(AttributeModifierDatasource*) initWithQueue:(SkillPointAttributeQueue*)queue 
+-(AttributeModifierDatasource*) initWithQueue:(SkillPointAttributeQueue*)queue
 								 forCharacter:(Character*)ch;
 
 

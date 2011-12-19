@@ -10,7 +10,7 @@
 
 
 @interface MTSkillLevelCell : NSCell {
-	
+
 }
 
 @end

@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -27,8 +27,8 @@
 
 /*
 	the skillPlan array is an array of SkillPrerequisite objects.
-	
-	the array must always be in the correct prerequsite order, so that the skill plan can be 
+
+	the array must always be in the correct prerequsite order, so that the skill plan can be
 	trained from beginning to end
 */
 @class Character;
@@ -42,11 +42,11 @@
 	NSMutableArray *spHrArray;
 	/*this should be kept somewhere else*/
 	Character *character; //the character that created this object. NOT RETAINED.
-	
+
 	NSString *planName;
 	NSInteger planTrainingTime;
 	NSInteger planId;
-	BOOL dirty;	
+	BOOL dirty;
 }
 
 @property (readwrite,retain,nonatomic) NSString* planName;
@@ -56,7 +56,7 @@
 /*name of the plan, and the skillset that the character has.*/
 
 // deprecated. don't use anymore
--(SkillPlan*) initWithName:(NSString*)name 
+-(SkillPlan*) initWithName:(NSString*)name
 				 character:(Character*)ch;
 
 
@@ -64,14 +64,14 @@
 	create a skill plan through the character object, don't
 	call this directly
  */
--(SkillPlan*) initWithName:(NSString*)name 
-			  forCharacter:(Character*)ch 
+-(SkillPlan*) initWithName:(NSString*)name
+			  forCharacter:(Character*)ch
 					withId:(NSInteger)pId;
 
 
-/* 
+/*
  If the skill can be added, it and any prerequisites will be added in the required order.
- 
+
  Returns the number of skills added
  */
 -(NSInteger) addSkillToPlan:(NSNumber*)skillID level:(NSInteger)skillLevel;

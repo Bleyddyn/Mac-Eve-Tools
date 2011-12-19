@@ -16,7 +16,7 @@
 @interface SkillPrerequisiteDatasource : NSObject <NSOutlineViewDataSource>{
 	NSArray *skills;
 	Character *character;
-	
+
 	SkillTree *tree; //NOT RETAINED
 }
 

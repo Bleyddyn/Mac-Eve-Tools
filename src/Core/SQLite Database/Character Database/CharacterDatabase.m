@@ -19,7 +19,7 @@
 
 /*
 	main table
- 
+
  int version ;database schema version
  varchar character_name ; name of the character
 
@@ -27,13 +27,13 @@
 
  int plan_id; plan id
  varchar plan_name;
- 
+
 	skill plan table
  int plan_id; the plan this skill belongs to
  int type_order; the order of this skill in the plan
  int type_id; the skills typeid (as used by the eve skill list xml sheet)
  int level; the rank we are training to
- 
+
  */
 
 
@@ -48,55 +48,55 @@
 	char *strbuf;
 	const char createMasterTable[] = "CREATE TABLE master (version INTEGER, character_name VARCHAR(32));";
 	const char populateMasterTable[] = "INSERT INTO master (version,character_name) VALUES (%d,%Q);";
-	const char createSkillPlanOverviewTable[] = 
+	const char createSkillPlanOverviewTable[] =
 			"CREATE TABLE skill_plan_overview (plan_id INTEGER PRIMARY KEY, plan_name VARCHAR(64), UNIQUE(plan_name));";
 	const char createSkillPlanTable[] =
 			"CREATE TABLE skill_plan (plan_id INTEGER, type_order INTEGER, type_id INTEGER, level INTEGER);";
 	int rc;
-	
+
 	[self beginTransaction];
-	
+
 	rc = sqlite3_exec(db,createMasterTable,NULL,NULL,&errmsg);
 	if(rc != SQLITE_OK){
 		[self logError:errmsg];
 		[self rollbackTransaction];
 		return NO;
 	}
-	
+
 	strbuf = sqlite3_mprintf(populateMasterTable,CURRENT_DB_VERSION,"");
 	rc = sqlite3_exec(db,strbuf,NULL,NULL,&errmsg);
 	sqlite3_free(strbuf);
-	
+
 	if(rc != SQLITE_OK){
 		[self logError:errmsg];
 		[self rollbackTransaction];
 		return NO;
 	}
-	
+
 	rc = sqlite3_exec(db,createSkillPlanTable,NULL,NULL,&errmsg);
 	if(rc != SQLITE_OK){
 		[self logError:errmsg];
 		[self rollbackTransaction];
 		return NO;
 	}
-	
+
 	rc = sqlite3_exec(db,createSkillPlanOverviewTable,NULL,NULL,&errmsg);
 	if(rc != SQLITE_OK){
 		[self logError:errmsg];
 		[self rollbackTransaction];
 		return NO;
 	}
-	
+
 	[self commitTransaction];
 	return YES;
 }
 
--(BOOL) upgradeDatabaseFromVersion:(NSInteger)currentVersion 
+-(BOOL) upgradeDatabaseFromVersion:(NSInteger)currentVersion
 						 toVersion:(NSInteger)toVersion
 {
 	if(currentVersion == 1){
 		const char rename[] = "ALTER TABLE skill_plan_overview RENAME TO skill_plan_overview_old;";
-		const char createSkillPlanOverviewTable2[] = 
+		const char createSkillPlanOverviewTable2[] =
 			"CREATE TABLE skill_plan_overview (plan_id INTEGER PRIMARY KEY, plan_name VARCHAR(64), UNIQUE(plan_name));";
 		const char copySkillPlanTable[] = "INSERT INTO skill_plan_overview SELECT plan_id, plan_name FROM skill_plan_overview_old;";
 		const char dropOldPlanOverview[] = "DROP TABLE skill_plan_overview_old;";
@@ -104,7 +104,7 @@
 		char *error;
 		int rc;
 		[self beginTransaction];
-		
+
 		rc = sqlite3_exec(db,rename,NULL,NULL,&error);
 		if(rc != SQLITE_OK){
 			[self logError:error];
@@ -129,16 +129,16 @@
 			[self rollbackTransaction];
 			return NO;
 		}
-		
+
 		rc = sqlite3_exec(db,updateVersion,NULL,NULL,&error);
 		if(rc != SQLITE_OK){
 			[self logError:error];
 			[self rollbackTransaction];
 			return NO;
 		}
-		
+
 		[self commitTransaction];
-		
+
 		NSLog(@"Succesfully upgraded character database");
 		return YES;
 	}
@@ -155,32 +155,32 @@
 	int rows;
 	int cols;
 	long version;
-	
+
 	rc = sqlite3_get_table(db, existenceTest, &results, &rows, &cols, &errormsg);
-	
+
 	if(rows != 1){
 		NSLog(@"Database does not exist");
 		status = NO;
 		return NO;
 	}
-		
+
 	if(strcmp(results[0],"version") != 0){
 		status = NO;
 	}
-	
+
 	version = strtol(results[1],NULL,10);
-	
+
 	if(version != CURRENT_DB_VERSION){
 		rc = [self upgradeDatabaseFromVersion:version toVersion:CURRENT_DB_VERSION];
 	}
-	
+
 	if(results != NULL){
 		sqlite3_free_table(results);
 	}
 	if(errormsg){
 		[self logError:errormsg];
 	}
-	
+
 	return status;
 }
 
@@ -189,7 +189,7 @@
 	if(self = (CharacterDatabase*)[super initWithPath:dbPath]){
 		[self initDatabase];
 	}
-	
+
 	return self;
 }
 
@@ -201,7 +201,7 @@
 -(BOOL) initDatabase
 {
 	[self openDatabase];
-	
+
 	int rc = [self checkStatus];
 	if(!rc){
 		rc = [self createDatabase];
@@ -211,7 +211,7 @@
 		}
 	}
 	[self closeDatabase];
-	
+
 	return rc;
 }
 
@@ -220,7 +220,7 @@
 	BOOL rc;
 	[self openDatabase];
 	[self beginTransaction];
-	
+
 	for(SkillPlan *sp in plans){
 		if([sp dirty]){
 			rc = [self deleteSkillPlanPrivate:sp];
@@ -234,13 +234,13 @@
 				NSLog(@"error writing skill plan %@",[sp planName]);
 				[self rollbackTransaction];
 				return NO;
-			}			
+			}
 		}
 	}
-	
+
 	rc = [self commitTransaction];
 	[self closeDatabase];
-	
+
 	if(rc){
 		for(SkillPlan *sp in plans){
 			[sp setDirty:NO];
@@ -258,7 +258,7 @@
 	BOOL rc = [self deleteAllSkillPlansPrivate];
 	[self commitTransaction];
 	[self closeDatabase];
-	
+
 	return rc;
 }
 
@@ -267,13 +267,13 @@
 {
 	[self openDatabase];
 	[self beginTransaction];
-	
+
 	if(![self deleteSkillPlanPrivate:plan]){
 		NSLog(@"error deleting plan %@",[plan planName]);
 		[self rollbackTransaction];
 		return NO;
 	}
-	
+
 	[self commitTransaction];
 	[self closeDatabase];
 
@@ -285,14 +285,14 @@
 {
 	[self openDatabase];
 	[self beginTransaction];
-	
+
 	if(![self writeSkillPlanPrivate:plan]){
 		NSLog(@"error writing plan %@",[plan planName]);
 		[self rollbackTransaction];
 		[self closeDatabase];
 		return NO;
 	}
-	
+
 	[self commitTransaction];
 	[plan setDirty:NO];
 	[self closeDatabase];
@@ -302,17 +302,17 @@
 -(BOOL) readSkillPlan:(SkillPlan*)plan planId:(sqlite_int64)planId
 {
 	[self openDatabase];
-	
+
 	[self readSkillPlanPrivate:plan planId:planId];
-	
+
 	[self closeDatabase];
-	
+
 	/*
 	 remove any skills that have been completed
 	 This has the potential to open the database connection, so make sure we close the old one first
 	 */
 	[plan purgeCompletedSkills];
-	
+
 	return YES;
 }
 
@@ -323,9 +323,9 @@
 	const char select_skill_plan_overview[] = "SELECT plan_id, plan_name FROM skill_plan_overview;";
 	sqlite3_stmt *read_overview_stmt;
 	int rc;
-	
+
 	[self openDatabase];
-	
+
 	rc = sqlite3_prepare_v2(db, select_skill_plan_overview,(int)sizeof(select_skill_plan_overview)
 							,&read_overview_stmt, NULL);
 	if(rc != SQLITE_OK){
@@ -336,7 +336,7 @@
 		[self closeDatabase];
 		return nil;
 	}
-	
+
 	skillPlans = [[[NSMutableArray alloc]init]autorelease];
 
 	while((rc = sqlite3_step(read_overview_stmt)) == SQLITE_ROW){
@@ -351,34 +351,34 @@
 						 initWithName:[NSString stringWithUTF8String:(const char*)planName]
 						 forCharacter:character
 						 withId:(NSInteger)planId];
-		
+
 		[self readSkillPlanPrivate:sp planId:planId];
 		[skillPlans addObject:sp];
 		[sp release];
 	}
-		
+
 	sqlite3_finalize(read_overview_stmt);
-	
+
 	[self closeDatabase];
-	
+
 	return skillPlans;
 }
 
 -(SkillPlan*) createPlan:(NSString*)planName forCharacter:(Character*)ch
 {
 	[self openDatabase];
-	
+
 	sqlite_int64 planId = [self createSkillPlan:planName];
-	
+
 	[self closeDatabase];
-	
+
 	if(planId == -1){
 		NSLog(@"Duplicate plan name %@",planName);
 		return nil;
 	}
-	
+
 	SkillPlan *sp = [[[SkillPlan alloc]initWithName:planName forCharacter:ch withId:(NSInteger)planId]autorelease];
-	
+
 	return sp;
 }
 
@@ -386,17 +386,17 @@
 {
 	[self openDatabase];
 	[self beginTransaction];
-	
+
 	BOOL rc = [self renameSkillPlanPrivate:plan];
-	
+
 	if(rc){
 		[self commitTransaction];
 	}else{
 		[self rollbackTransaction];
 	}
-	
+
 	[self closeDatabase];
-	
+
 	return rc;
 }
 

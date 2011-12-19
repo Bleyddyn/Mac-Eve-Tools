@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -74,7 +74,7 @@
 		[statusImage setHidden:NO];
 		[statusImage setEnabled:YES];
 	}
-	
+
 	switch (state) {
 		case StatusHidden:
 			[statusImage setHidden:YES];
@@ -120,7 +120,7 @@
 	}
 }
 
--(void) setStatusMessage:(NSString*)message 
+-(void) setStatusMessage:(NSString*)message
 			  imageState:(enum StatusImageState)state
 					time:(NSInteger)seconds
 {
@@ -130,15 +130,15 @@
 			[statusMessageTimer invalidate];
 			statusMessageTimer = nil;
 		}
-	
+
 		//if zero, display forever.
 		if(seconds == 0){
 			[self statusMessage:message];
 			return;
 		}
-		
+
 		[self setStatusImage:state];
-		
+
 		[self statusMessage:message];
 		statusMessageTimer = [NSTimer timerWithTimeInterval:(NSTimeInterval)seconds
 													 target:self
@@ -180,7 +180,7 @@
 
 /*NSApplication delegate*/
 
-- (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication 
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication
 					hasVisibleWindows:(BOOL)flag
 {
 	if (!flag)
@@ -188,7 +188,7 @@
 		[[self window] makeKeyAndOrderFront:self];
 		[[self window] makeMainWindow];
 	}
-	
+
 	return YES;
 }
 
@@ -201,13 +201,13 @@
 
 -(void) appWillTerminate:(NSNotification*)notification
 {
-	NSLog(@"Shutting down");	
-	
+	NSLog(@"Shutting down");
+
 	[monitor stopMonitoring];
 	[[self window]saveFrameUsingName:WINDOW_SAVE_NAME];
-	
+
 	[[NSNotificationCenter defaultCenter]removeObserver:self];
-	
+
 	xmlCleanupParser();
 }
 
@@ -216,29 +216,29 @@
 {
 	NSArray *charArray = [characterManager allCharacters];
 	[charButton removeAllItems];
-	
+
 	if([charArray count] > 0){
 		[charButton setEnabled:YES];
-		
+
 		NSMenu *menu;
 		menu = [[NSMenu alloc] initWithTitle:@""];
 		//NSMenuItem *defaultItem = nil;
-		
+
 		for(Character *c in charArray){
-			
+
 			NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:[c characterName] action:nil keyEquivalent:@""];
 			[item setRepresentedObject:c];
 			[menu addItem:item];
-						
+
 			[item release];
 		}
-		
+
 		[charButton setMenu:menu];
 		[menu release];
 
 //		Select the default item.
 //		[charButton selectItem:defaultItem];
-		
+
 	}else{
 		//No characters enabled. disable the control.
 		[charButton setEnabled:NO];
@@ -250,7 +250,7 @@
 {
 	//returns YES if the delegate will be called
 	BOOL rc = [characterManager setTemplateArray:[[Config sharedInstance] activeCharacters] delegate:self];
-	
+
 	//reload the drawer datasource.
 	if(!rc){
 		//Characters are all on disk. delegaete will not be called.
@@ -268,17 +268,17 @@
 -(void) databaseReadyToCheck:(NSNotification *)notification
 {
 	DBManager *manager = [[[DBManager alloc]init]autorelease];
-	
+
 	if(![manager dbVersionCheck:[[NSUserDefaults standardUserDefaults] integerForKey:UD_DATABASE_MIN_VERSION]]){
 		[manager checkForUpdate2];
-		[[NSNotificationCenter defaultCenter]addObserver:self 
+		[[NSNotificationCenter defaultCenter]addObserver:self
 												selector:@selector(databaseReadyToBuild:)
 													name:NOTE_DATABASE_DOWNLOAD_COMPLETE
 												  object:nil];
 	}else{
 		/*database version is current - launch app normally*/
 		[self performSelector:@selector(launchAppFinal:) withObject:nil];
-	}	
+	}
 }
 
 /*
@@ -290,9 +290,9 @@
 	[[NSNotificationCenter defaultCenter]removeObserver:self
 												   name:NOTE_DATABASE_DOWNLOAD_COMPLETE
 												 object:nil];
-	
+
 	DBManager *manager = [[[DBManager alloc]init]autorelease];
-	
+
 	//check to see if there is a new database ready to be built
 	if([manager databaseReadyToBuild]){
 		//Yes there is.  Build it.
@@ -311,7 +311,7 @@
 		removeObserver:self
 		name:NSApplicationDidBecomeActiveNotification
 	 object:NSApp];
-	
+
 	xmlInitParser(); //Init libxml2
 
 	/*
@@ -319,7 +319,7 @@
 	 The Database is now a mandatory download
 	 Mac Eve Tools cannot function without it.
 	 */
-	
+
 	[self databaseReadyToCheck:nil];
 }
 
@@ -327,59 +327,59 @@
  Launch the application proper, display the window to the user.
  */
 -(void) launchAppFinal:(id)obj
-{	
-	
+{
+
 	Config *cfg = [Config sharedInstance];
-	
+
 	////////////// ---- THIS BLOCK MUST EXECUTE BEFORE ANY OTHER CODE ---- \\\\\\\\\\\\\\\\
 	[[GlobalData sharedInstance]skillTree];
 	[[GlobalData sharedInstance]certTree];
 	////////////// ---- BLOCK END ---- \\\\\\\\\\\\\\\\
 
-	
+
 	/*init the views that will be used by this window*/
-	
+
 	[[self window] makeKeyAndOrderFront:self];
-	
+
 	id<METPluggableView> mvc;
 	mvc = [[CharacterSheetController alloc]init];
 	[mvc view];//trigger the awakeFromNib
 	[mvc setInstance:self];
 	[viewControllers addObject:mvc];
 	[(NSObject*)mvc release];
-	
+
 	/*
-	 
+
 	Menu Item for importing evemon plans.  This doesn't work properly yet and shouldn't be included.
-	 
+
 	id<METPluggableView> view = [viewControllers objectAtIndex:1];
 	NSMenuItem *menuItem = [view menuItems];
 	if(menuItem != nil){
 		[[NSApp mainMenu]insertItem:menuItem atIndex:1];
 	}
 	*/
-	
+
 	/*because of the threading and preloading the skill planner will awake early*/
 
-	
+
 	mvc = [[SkillPlanController alloc]init];
 	[mvc view];//trigger the awakeFromNib
 	[mvc setInstance:self];
 	[viewControllers addObject:mvc];
 	[(NSObject*)mvc release];
-	
-	
+
+
 	[[self window] makeMainWindow];
 	[[self window] setDelegate:self];
 	[NSApp setDelegate:self];
-		
+
 #ifdef HAVE_SPARKLE
 	SUUpdater *updater = [SUUpdater sharedUpdater];
 	[updater setAutomaticallyChecksForUpdates:NO];
 	[updater setFeedURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] stringForKey:UD_UPDATE_FEED_URL]]];
-	[updater setSendsSystemProfile:[[NSUserDefaults standardUserDefaults] boolForKey:UD_SUBMIT_STATS]];	
+	[updater setSendsSystemProfile:[[NSUserDefaults standardUserDefaults] boolForKey:UD_SUBMIT_STATS]];
 #endif
-	
+
 	if([[cfg accounts] count] == 0){
 		[NSApp beginSheet:noCharsPanel
 		   modalForWindow:[self window]
@@ -394,30 +394,30 @@
 		}
 	}
 #endif
-	
+
 	//Set the character sheet as the active view.
 	mvc = [viewControllers objectAtIndex:VIEW_CHARSHEET];
 	[self setAsActiveView:mvc];
 	[toolbar setSelectedItemIdentifier:[charSheetButton itemIdentifier]];
-	
+
 	// init the character manager object.
 	characterManager = [[CharacterManager alloc]init];
 	[characterManager setTemplateArray:[cfg activeCharacters] delegate:self];
-	
+
 	[overviewTableView setDataSource:characterManager];
 	[overviewTableView setDelegate:characterManager];
 	[overviewTableView reloadData];
-	
-	[self performSelector:@selector(setCurrentCharacter:) 
+
+	[self performSelector:@selector(setCurrentCharacter:)
 			   withObject:[characterManager defaultCharacter]];
-	
+
 	[self updatePopupButton];
-		
+
 	/*check to see if the server is up*/
 	[self serverStatus:ServerUnknown];
 	[monitor startMonitoring];
 		//[self fetchCharButtonClick:nil];
-	
+
 	if ([characterManager defaultCharacter] != NULL) {
 		[self fetchCharButtonClick:nil];
 	}
@@ -428,7 +428,7 @@
 	if(mvc == currentController){
 		return;
 	}
-	
+
 	id<METPluggableView> old = currentController;
 	currentController = mvc;
 	[old viewWillBeDeactivated];
@@ -451,10 +451,10 @@
 	//[[Config sharedInstance] clearAccounts];
 	[self reloadAllCharacters];
 	[overviewTableView reloadData];
-	
-	[self performSelector:@selector(setCurrentCharacter:) 
+
+	[self performSelector:@selector(setCurrentCharacter:)
 			   withObject:[characterManager defaultCharacter]];
-	
+
 	[self fetchCharButtonClick:nil];
 	[self updatePopupButton];
 }
@@ -473,28 +473,28 @@
 {
 	if((self = [super initWithWindowNibName:@"MainMenu"])){
 		viewControllers = [[NSMutableArray alloc]init];
-				
+
 		/*Some notifications that we want to listen to*/
 		[[NSNotificationCenter defaultCenter]
-		 addObserver:self 
-		 selector:@selector(appIsActive:) 
-		 name:NSApplicationDidBecomeActiveNotification 
-		 object:NSApp];	
-		
-		[[NSNotificationCenter defaultCenter]
-		 addObserver:self 
-		 selector:@selector(appWillTerminate:) 
-		 name:NSApplicationWillTerminateNotification 
+		 addObserver:self
+		 selector:@selector(appIsActive:)
+		 name:NSApplicationDidBecomeActiveNotification
 		 object:NSApp];
-		
+
+		[[NSNotificationCenter defaultCenter]
+		 addObserver:self
+		 selector:@selector(appWillTerminate:)
+		 name:NSApplicationWillTerminateNotification
+		 object:NSApp];
+
 		monitor = [[ServerMonitor alloc]init];
 		[[NSNotificationCenter defaultCenter]
-		 addObserver:self 
-		 selector:@selector(serverStatusUpdate:) 
-		 name:SERVER_STATUS_NOTIFICATION 
+		 addObserver:self
+		 selector:@selector(serverStatusUpdate:)
+		 name:SERVER_STATUS_NOTIFICATION
 		 object:monitor];
 	}
-	
+
 	return self;
 }
 
@@ -502,45 +502,45 @@
 -(void) awakeFromNib
 {
 	NSLog(@"Awoken from nib");
-	
+
 	[NSDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehavior10_4];
-	
+
 	/* setting default preferences values */
-		
+
 	NSMutableDictionary *prefDefaults = [[NSMutableDictionary alloc] init];
-	
+
 		//NSData *data = ;
 	[prefDefaults setObject:[NSNumber numberWithBool:YES] forKey:UD_SUBMIT_STATS];
 	[prefDefaults setObject:[NSNumber numberWithBool:YES] forKey:UD_CHECK_FOR_UPDATES];
 	[prefDefaults setObject:[NSNumber numberWithInt:l_EN] forKey:UD_DATABASE_LANG];
-	
+
 	[prefDefaults setObject:[@"~/Library/Application Support/MacEveApi" stringByExpandingTildeInPath] forKey:UD_ROOT_PATH];
 	[prefDefaults setObject:[[@"~/Library/Application Support/MacEveApi" stringByExpandingTildeInPath] stringByAppendingFormat:@"/database.sqlite"] forKey:UD_ITEM_DB_PATH];
 	[prefDefaults setObject:@"http://api.eve-online.com" forKey:UD_API_URL];
 	[prefDefaults setObject:@"http://image.eveonline.com/Character/" forKey:UD_PICTURE_URL];
-	
+
 	[prefDefaults setObject:@"http://mtyson.id.au/MacEveApi-appcast.xml" forKey:UD_UPDATE_FEED_URL];
 	[prefDefaults setObject:@"http://www.mtyson.id.au/MacEveApi/MacEveApi-database.xml" forKey:UD_DB_UPDATE_URL];
 	[prefDefaults setObject:@"http://www.mtyson.id.au/MacEveApi/database.sql.bz2" forKey:UD_DB_SQL_URL];
 	[prefDefaults setObject:@"http://www.mtyson.id.au/MacEveApi/images" forKey:UD_IMAGE_URL];
 	[prefDefaults setObject:[NSNumber numberWithInt:8] forKey:UD_DATABASE_MIN_VERSION];
-	 	
+
 	[[NSUserDefaults standardUserDefaults] registerDefaults:prefDefaults];
 	[prefDefaults release];
-	
+
 
 	/* Init window */
-	
+
 	NSWindow *window = [self window];
 	[window setRepresentedFilename:WINDOW_SAVE_NAME];
 	[window setFrameAutosaveName:WINDOW_SAVE_NAME];
-		
+
 	[noCharsPanel setDefaultButtonCell:[noCharsButton cell]]; //alert if you don't have an account set up
-	
+
 	[window setContentBorderThickness:30.0 forEdge:NSMinYEdge];
 	[[serverName cell] setBackgroundStyle:NSBackgroundStyleRaised];
 	[[statusString cell] setBackgroundStyle:NSBackgroundStyleRaised];
-	
+
 	/*add the menu item*/
 	/*
 	for(id<METPluggableView> v in viewControllers){
@@ -550,24 +550,24 @@
 			//[[NSApp mainMenu]addItem:menuItem];
 		}
 	}*/
-	
-	
+
+
 	/* initialization of the new preferences window */
-	
+
 	AccountPrefViewController *accounts = [[AccountPrefViewController alloc] initWithNibName:@"AccountPrefView" bundle:nil];
 	GeneralPrefViewController *general = [[GeneralPrefViewController alloc] initWithNibName:@"GeneralPrefView" bundle:nil];
 	DatabasePrefViewController *database = [[DatabasePrefViewController alloc] initWithNibName:@"DatabasePrefView" bundle:nil];
 	SkillPlannerPrefViewController *skillPlanner = [[SkillPlannerPrefViewController alloc] initWithNibName:@"SkillPlannerPrefView" bundle:nil];
-	
+
 	[[MBPreferencesController sharedController] setWindowModules:[NSArray arrayWithObjects:general, accounts, skillPlanner, database, nil]];
 	[accounts release];
 	[general release];
 	[skillPlanner release];
 	[database release];
-	
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(prefWindowWillClose:) name:NSWindowWillCloseNotification object:[[MBPreferencesController sharedController] window]];
 
-		
+
 	/*
 		notify when the selection of the overview tableview has changed.
 	 */
@@ -576,7 +576,7 @@
 	 selector:@selector(charOverviewSelection:)
 	 name:NSTableViewSelectionDidChangeNotification
 	 object:overviewTableView];
-	
+
 	statusMessageTimer = nil;
 	[loadingCycle setHidden:YES];
 	[loadingCycle stopAnimation:nil];
@@ -590,27 +590,27 @@
 	if(currentCharacter != nil){
 		[currentCharacter release];
 	}
-	
+
 	currentCharacter = [character retain];
-	
+
 	[charButton selectItemWithTitle:[character characterName]];
-	
+
 	[characterButton setImage:[character portrait]];
 	[characterButton setLabel:[character characterName]];
-	
+
 	if(currentController != nil){
 		[currentController setCharacter:currentCharacter];
 	}
-	
+
 	NSLog(@"Current character is %@",[currentCharacter characterName]);
-	
+
 	[[self window]setTitle:[NSString stringWithFormat:@"Mac Eve Tools - %@",[currentCharacter characterName]]];
 }
 
 -(IBAction)charSelectorClick:(id)sender
 {
 	NSMenuItem *item = [(NSPopUpButton*)sender selectedItem];
-	
+
 	[self setCurrentCharacter:[item representedObject]];
 }
 
@@ -632,36 +632,36 @@
 {
 	// All characters have been updated.
 	NSLog(@"Finished batch update operation");
-	
-	
+
+
 	[statusString setHidden:YES];
 	[fetchCharButton setEnabled:YES];
 	[charButton setEnabled:YES];
 	[loadingCycle stopAnimation:nil];
 	[loadingCycle setHidden:YES];
-	
+
 	/*
 	 replace this with a new message that says update completed
 	 and then have a timer that will clear the message after X seconds.
 	 Need to be careful with race conditions, however.
-	 
+
 	 Ideally we want to be able to provide a simple error message here,
 	 however this may not be possible because we are updating a bunch of
 	 characters, each with possibly a different error message.
 	*/
 	[self statusMessage:nil];
-	
+
 	if(errors != nil){
 		[self setStatusMessage:NSLocalizedString(@"Error updating characters", nil) imageState:StatusRed time:5];
 	}else{
 		[self setStatusMessage:NSLocalizedString(@"Update Completed", nil) imageState:StatusGreen time:5];
 	}
-	
+
 	//reload the datasource for the character overview.
 	[overviewTableView reloadData];
-	
+
 	//now we need to present the new character object to the active view.
-	
+
 	[self updateActiveCharacter];
 }
 
@@ -689,12 +689,12 @@
 	/*if(prefPanel == nil){
 		prefPanel = [[PreferenceController alloc]init];
 		[[NSNotificationCenter defaultCenter]
-		 addObserver:self 
+		 addObserver:self
 			selector:@selector(prefWindowWillClose:)
-				name:NSWindowWillCloseNotification 
+				name:NSWindowWillCloseNotification
 		 object:[prefPanel window]];
 	}*/
-	
+
 	//NSLog(@"Opening pref pane %@",[self window]);
 #ifdef MACEVEAPI_DEBUG
 		//[prefPanel showWindow:self]; //if it crashes in a modal window it's impossible to debug
@@ -711,20 +711,20 @@
 		[overviewDrawer toggle:self];
 		return;
 	}
-	
+
 	id<METPluggableView> mvc = [viewControllers objectAtIndex:[sender tag]];
-	
+
 	NSMenuItem *item;
-	
+
 	//Check to see if the current controller has a menu item.
 	item = [currentController menuItems];
 	if(item != nil){
 		[[NSApp mainMenu]removeItemAtIndex:1];
 	}
-	
+
 	[self setStatusMessage:nil imageState:StatusHidden time:0];//clear any toolbar message.
 	[self setAsActiveView:mvc];
-	
+
 	//	remove the old one(if it exists) add the new one.
 	item = [mvc menuItems];
 	if(item != nil){
@@ -735,9 +735,9 @@
 -(IBAction) viewSelectorClick:(id)sender
 {
 	NSMenuItem *item = [sender selectedItem];
-	
+
 	id<METPluggableView> mvc = [item representedObject];
-	 
+
 	[self setAsActiveView:mvc];
 }
 
@@ -761,16 +761,16 @@
 {
 	if(!status){
 		NSRunAlertPanel(@"Database is up to date",
-						@"You have the lastest database version", 
+						@"You have the lastest database version",
 						@"Close",nil,nil);
 		return;
 	}
 	NSInteger result = NSRunAlertPanel(@"New database available",
-								 @"Do you wish to download the new item database?", 
+								 @"Do you wish to download the new item database?",
 								 @"Download",
-								 @"Ignore", 
+								 @"Ignore",
 								 nil);
-	
+
 	switch (result) {
 		case NSAlertDefaultReturn:
 		//	[dbManager downloadDatabase:[self window]];
@@ -797,7 +797,7 @@
 	if(row == -1){
 		return;
 	}
-	
+
 	[self setCurrentCharacter:[(CharacterManager*)[sender dataSource]characterAtIndex:row]];
 }
 
@@ -809,7 +809,7 @@
 -(void) setToolbarMessage:(NSString *)message
 {
 	//Set a permanat message
-	[self setStatusMessage:message 
+	[self setStatusMessage:message
 				imageState:StatusHidden
 					  time:0];
 }
