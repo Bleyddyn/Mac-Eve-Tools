@@ -24,7 +24,7 @@
 	rc = sqlite3_prepare_v2(db,select_skill_plan,(int)sizeof(select_skill_plan),&read_skill_stmt,NULL);
 	if(rc != SQLITE_OK){
 		
-		NSLog(@"sqlite error\n");
+		//NSLog(@"sqlite error\n");
 		if(read_skill_stmt != NULL){
 			sqlite3_finalize(read_skill_stmt);
 		}
@@ -122,14 +122,14 @@
 	
 	if(planId == -1){
 		/*something is fucked*/
-		NSLog(@"Error inserting skill plan %@",[plan planName]);
+		//NSLog(@"Error inserting skill plan %@",[plan planName]);
 		return NO;
 	}
 	
 	rc = [self deleteSkillPlanOverviewById:planId];
 	
 	if(!rc){
-		NSLog(@"failed to delete skill plan overview for id %lld",planId);
+		//NSLog(@"failed to delete skill plan overview for id %lld",planId);
 		return NO;
 	}
 	
@@ -208,13 +208,13 @@
 	planId = [self findSkillPlanId:plan];
 	
 	if(planId == -1){
-		NSLog(@"Plan '%@' does not exist - creating a new plan!",[plan planName]);
+		//NSLog(@"Plan '%@' does not exist - creating a new plan!",[plan planName]);
 		planId = [self createSkillPlan:[plan planName]];
 	}
 	
 	if(planId == -1){
 		/*something is fucked*/
-		NSLog(@"Error inserting skill plan %@",[plan planName]);
+		//NSLog(@"Error inserting skill plan %@",[plan planName]);
 		return NO;
 	}
 	
@@ -246,7 +246,7 @@
 		rc = sqlite3_bind_nsint(insert_skill_stmt,4,[sp skillLevel]);
 		
 		if((rc = sqlite3_step(insert_skill_stmt)) != SQLITE_DONE){
-			NSLog(@"sqlite error inserting skill plan");
+			//NSLog(@"sqlite error inserting skill plan");
 			success = NO;
 			break;
 		}
@@ -275,7 +275,7 @@
 	rc = sqlite3_bind_nsint(rename_stmt,2,[plan planId]);
 	
 	if((rc = sqlite3_step(rename_stmt)) != SQLITE_DONE){
-		NSLog(@"Error renaming skill plan");
+		//NSLog(@"Error renaming skill plan");
 		success = NO;
 	}
 	

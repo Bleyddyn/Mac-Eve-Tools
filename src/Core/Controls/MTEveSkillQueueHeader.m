@@ -245,7 +245,7 @@
 {
 	//NSString *str = stringTrainingTime2([plan trainingTime:YES],TTF_All);	
 	NSString *str = stringTrainingTime2(planTrainingTime, TTF_All);
-//	NSLog(@"%@",str);
+//	//NSLog(@"%@",str);
 	NSAttributedString *astr = [[NSAttributedString alloc]initWithString:str];
 	
 	[self drawStringEndingAtPoint:endPoint text:astr];

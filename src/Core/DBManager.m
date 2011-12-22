@@ -109,9 +109,12 @@
 					xmlPath:(NSString*)path 
 				 xmlDocName:(NSString*)docName
 {
+	//NSLog([docName isEqualToString:UPDATE_FILE]);
 	if([docName isEqualToString:UPDATE_FILE]){
 		/*parse the file, determine if there is a new version available*/
 		[self parseDBXmlVersion:path];
+		//NSLog(availableVersion);
+		//NSLog([self currentVersion]);
 		BOOL update = (availableVersion > [self currentVersion]);
 		if(delegate != nil){
 			[delegate newDatabaseAvailable:self status:update];
@@ -123,7 +126,7 @@
 					xmlPath:(NSString*)path 
 				 xmlDocName:(NSString*)docName
 {
-	NSLog(@"Connection failed! (%@)",[xmlErrorMessage localizedDescription]);
+	//NSLog(@"Connection failed! (%@)",[xmlErrorMessage localizedDescription]);
 	
 	NSRunAlertPanel(@"Error Account XML",[xmlErrorMessage localizedDescription],@"Close",nil,nil);
 }
@@ -234,7 +237,7 @@
 		currentVersion = strtol(results[1],NULL,10);
 	}
 	
-	NSLog(@"Database current version: %ld",currentVersion);
+	//NSLog(@"Database current version: %ld",currentVersion);
 	
 	sqlite3_free_table(results);
 	sqlite3_close(db);
@@ -403,13 +406,13 @@
 	if(![[NSFileManager defaultManager]
 		 fileExistsAtPath:str])
 	{
-		NSLog(@"Can't find new database archive. aborting");
+		//NSLog(@"Can't find new database archive. aborting");
 		goto _finish_cleanup;
 	}
 	
 	fin = fopen([str fileSystemRepresentation],"rb");
 	if(fin == NULL){
-		NSLog(@"Couldn't open database archive");
+		//NSLog(@"Couldn't open database archive");
 		goto _finish_cleanup;
 	}
 	
@@ -434,7 +437,7 @@
 	
 	if(![sha1_bzip isEqualToString:[NSString stringWithUTF8String:(const char*)buffer]]){
 		/*SHA1 Digest failed!*/
-		NSLog(@"SHA1 bz2 hashing failed ('%@' != '%s')",sha1_bzip,buffer);
+		//NSLog(@"SHA1 bz2 hashing failed ('%@' != '%s')",sha1_bzip,buffer);
 		[self logProgressThread:@"Tarball verification failed"];
 		fclose(fin);
 		free(buffer);
@@ -452,7 +455,7 @@
 		fclose(fin);
 		fclose(fout);
 		free(buffer);
-		NSLog(@"Couldn't open output file");
+		//NSLog(@"Couldn't open output file");
 		goto _finish_cleanup;
 	}
 	
@@ -463,7 +466,7 @@
 	BZFILE *compress = BZ2_bzReadOpen(&bzerror,fin,0,0,NULL,0);
 	if(bzerror != BZ_OK){
 		[self logProgressThread:@"Decompression error"];
-		NSLog(@"Bzip2 error!");
+		//NSLog(@"Bzip2 error!");
 		free(buffer);
 		fclose(fin);
 		fclose(fout);
@@ -488,7 +491,7 @@
 	
 	if(![sha1_dec isEqualToString:[NSString stringWithUTF8String:(char*)buffer]]){
 		/*SHA1 Digest failed!*/
-		NSLog(@"SHA1 sql hashing failed ('%@' != '%s')",sha1_dec,buffer);
+		//NSLog(@"SHA1 sql hashing failed ('%@' != '%s')",sha1_dec,buffer);
 		[self logProgressThread:@"SQL verification failed"];
 		fclose(fin);
 		free(buffer);
@@ -535,7 +538,7 @@
 	
 	[self progressThread:7.0];
 	
-	NSLog(@"Database successfully built!");
+	//NSLog(@"Database successfully built!");
 	
 	/*remove the old database*/
 	str = [Config buildPathSingle:DATABASE_SQLITE];
@@ -675,7 +678,7 @@ _finish_cleanup:
 	NSString *path = [[NSUserDefaults standardUserDefaults] stringForKey:UD_ITEM_DB_PATH];
 	
 	if(![[NSFileManager defaultManager]fileExistsAtPath:path]){
-		NSLog(@"Database does not exist!");
+		//NSLog(@"Database does not exist!");
 		return NO;
 	}
 	

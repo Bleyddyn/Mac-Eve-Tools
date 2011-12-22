@@ -602,7 +602,7 @@
 	//Skill name and rank
 	NSString *skillName = [skill skillName];
 	if(skillName == nil){
-		NSLog(@"nil skill name");
+		//NSLog(@"nil skill name");
 	}
 	str = [NSString stringWithFormat:@"%@ (%ldx)",[skill skillName],[skill skillRank]];
 	astr = [[[NSMutableAttributedString alloc]initWithString:str]autorelease];

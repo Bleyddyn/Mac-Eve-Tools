@@ -330,12 +330,12 @@
 	[[pvDatasource currentPlan]savePlan];
 	[self refreshPlanView];
 	
-	NSLog(@"Minus button click %ld",row);
+	//NSLog(@"Minus button click %ld",row);
 }
 -(void) cellNotesButtonClick:(id)sender
 {
 	NSInteger row = [sender clickedRow];
-	NSLog(@"Notes button click row %ld",row);
+	//NSLog(@"Notes button click row %ld",row);
 }
 
 
@@ -551,7 +551,7 @@
 	
 	SkillPlan *plan = [delegate createNewPlan:planName];
 	if(plan == nil){
-		NSLog(@"Failed to create plan %@",planName);
+		//NSLog(@"Failed to create plan %@",planName);
 		return;
 	}
 	
@@ -563,7 +563,7 @@
 	[pio release];
 	
 	if(!rc){
-		NSLog(@"Failed to read plan!");
+		//NSLog(@"Failed to read plan!");
 		[character removeSkillPlan:plan];
 
 		NSAlert *alert = [[NSAlert alloc]init];
@@ -662,7 +662,7 @@
 	Skill *s = [sender representedObject];
 	
 	if(s == nil){
-		NSLog(@"Error: Skill is nil!");
+		//NSLog(@"Error: Skill is nil!");
 		return;
 	}
 	
@@ -766,7 +766,7 @@ shouldEditTableColumn:(NSTableColumn *)aTableColumn
 - (void)tableViewColumnDidResize:(NSNotification *)aNotification
 {
 	NSTableColumn *col = [[aNotification userInfo]objectForKey:@"NSTableColumn"];
-	NSLog(@"resized %@ to %.2f",[col identifier],(double)[col width]);
+	//NSLog(@"resized %@ to %.2f",[col identifier],(double)[col width]);
 	
 	/*write out the new column width.*/
 	ColumnConfigManager *ccm = [[ColumnConfigManager alloc]init];	

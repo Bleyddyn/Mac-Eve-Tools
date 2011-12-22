@@ -96,7 +96,7 @@
 
 -(void) planViewAction:(id)sender
 {
-	NSLog(@"action %@",sender);
+	//NSLog(@"action %@",sender);
 }
 
 -(void) awakeFromNib

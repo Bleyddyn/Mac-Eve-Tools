@@ -136,7 +136,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: sqlite error\n",__func__);
+		//NSLog(@"%s: sqlite error\n",__func__);
 		return nil;
 	}
 	
@@ -177,7 +177,7 @@
 
 -(NSInteger) groupCount:(NSInteger)categoryID
 {
-	NSLog(@"Insert code here");
+	//NSLog(@"Insert code here");
 	return 0;
 }
 
@@ -191,7 +191,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: sqlite error\n",__func__);
+		//NSLog(@"%s: sqlite error\n",__func__);
 		return nil;
 	}
 	
@@ -241,7 +241,7 @@
 	if((rc == SQLITE_DONE) || (rc == SQLITE_ROW)){
 		result = sqlite3_column_nsstr(tran_stmt,0); //returns an empty string on failure.
 	}else{
-		NSLog(@"Sqlite error - %s",__func__);
+		//NSLog(@"Sqlite error - %s",__func__);
 	}
 	
 	sqlite3_reset(tran_stmt);
@@ -261,7 +261,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: sqlite error\n",__func__);
+		//NSLog(@"%s: sqlite error\n",__func__);
 		return nil;
 	}
 	
@@ -303,13 +303,13 @@
 -(NSInteger) typeCount:(NSInteger)groupID
 {
 	//const char query[] = "SELECT COUNT(*) FROM invTypes WHERE typeID = ?;";
-	NSLog(@"Insert code here");
+	//NSLog(@"Insert code here");
 	return 0;
 }
 
 -(CCPType*) type:(NSInteger)typeID
 {
-	NSLog(@"Insert code here");
+	//NSLog(@"Insert code here");
 	return nil;
 }
 
@@ -359,7 +359,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: sqlite error\n",__func__);
+		//NSLog(@"%s: sqlite error\n",__func__);
 		return nil;
 	}
 	
@@ -383,7 +383,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: sqlite error\n",__func__);
+		//NSLog(@"%s: sqlite error\n",__func__);
 		return nil;
 	}
 	
@@ -415,7 +415,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: sqlite error\n",__func__);
+		//NSLog(@"%s: sqlite error\n",__func__);
 		return NO;
 	}
 	
@@ -445,7 +445,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: sqlite error\n",__func__);
+		//NSLog(@"%s: sqlite error\n",__func__);
 		return -1;
 	}
 	
@@ -471,7 +471,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query), &read_stmt, NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: sqlite error\n",__func__);
+		//NSLog(@"%s: sqlite error\n",__func__);
 		return -1;
 	}
 	
@@ -500,7 +500,7 @@
 	
 	rc = sqlite3_prepare_v2(db, query, (int)sizeof(query), &read_stmt, NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: SQLite error",__func__);
+		//NSLog(@"%s: SQLite error",__func__);
 		return nil;
 	}
 	
@@ -579,7 +579,7 @@
 	
 	rc = sqlite3_prepare_v2(db, query, (int)sizeof(query), &read_stmt, NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: query error",__func__);
+		//NSLog(@"%s: query error",__func__);
 		return nil;
 	}
 	
@@ -649,7 +649,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: Query error",__func__);
+		//NSLog(@"%s: Query error",__func__);
 		return nil;
 	}
 	
@@ -703,7 +703,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: Query error",__func__);
+		//NSLog(@"%s: Query error",__func__);
 		return nil;
 	}
 	
@@ -747,7 +747,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: Query error",__func__);
+		//NSLog(@"%s: Query error",__func__);
 		return nil;
 	}
 	
@@ -810,7 +810,7 @@
 	
 	rc = sqlite3_prepare_v2(db, query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: Query error",__func__);
+		//NSLog(@"%s: Query error",__func__);
 		return nil;
 	}
 	
@@ -859,7 +859,7 @@
 	
 	rc = sqlite3_prepare_v2(db, query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: Query error",__func__);
+		//NSLog(@"%s: Query error",__func__);
 		return nil;
 	}
 	
@@ -938,20 +938,20 @@
 	
 	rc = sqlite3_prepare_v2(db,skill_query,(int)sizeof(skill_query),&skill_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: Query error",__func__);
+		//NSLog(@"%s: Query error",__func__);
 		return NO;
 	}
 	
 	rc = sqlite3_prepare_v2(db,skill_attr_query,(int)sizeof(skill_attr_query),&skillattr_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: Query error",__func__);
+		//NSLog(@"%s: Query error",__func__);
 		sqlite3_finalize(skillattr_stmt);
 		return NO;
 	}
 	
 	rc = sqlite3_prepare_v2(db, attr_query, (int)sizeof(attr_query), &attr_stmt, NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: Query error",__func__);
+		//NSLog(@"%s: Query error",__func__);
 		sqlite3_finalize(skillattr_stmt);
 		sqlite3_finalize(skill_stmt);
 		return NO;
@@ -1071,7 +1071,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: Query error",__func__);
+		//NSLog(@"%s: Query error",__func__);
 		return nil;
 	}
 	
@@ -1114,7 +1114,7 @@
 	
 	rc = sqlite3_prepare_v2(db, query, (int)sizeof(query), &read_stmt, NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: Query error - %s",__func__,sqlite3_errmsg(db));
+		//NSLog(@"%s: Query error - %s",__func__,sqlite3_errmsg(db));
 		return nil;
 	}
 	
@@ -1175,7 +1175,7 @@
 	
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: Query error",__func__);
+		//NSLog(@"%s: Query error",__func__);
 		return nil;
 	}
 	

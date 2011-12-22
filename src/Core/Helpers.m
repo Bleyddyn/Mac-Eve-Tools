@@ -121,9 +121,9 @@ BOOL createDirectory(NSString *path)
 	
 	if(! [fm fileExistsAtPath:path isDirectory:nil]){
 		if(![fm createDirectoryAtPath:path  withIntermediateDirectories:YES attributes:nil error:nil]){
-			NSLog(@"Could not create directory %@",path);
+			//NSLog(@"Could not create directory %@",path);
 		}else{
-			NSLog(@"Created directory %@",path);
+			//NSLog(@"Created directory %@",path);
 			rc = YES;
 		}
 	}

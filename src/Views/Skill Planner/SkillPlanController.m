@@ -286,7 +286,7 @@
 {
 	SkillPlan *sp = [activeCharacter skillPlanAtIndex:planId];
 	if(sp == nil){
-		NSLog(@"SkillPlan %ld not found in character %@",planId,[activeCharacter characterName]);
+		//NSLog(@"SkillPlan %ld not found in character %@",planId,[activeCharacter characterName]);
 		return NO;
 	}
 	

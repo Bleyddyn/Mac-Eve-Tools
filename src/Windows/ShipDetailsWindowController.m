@@ -123,7 +123,7 @@
 	NSString *imageUrl = [[Config sharedInstance] urlForImageType:[ship typeID]] ;
 	NSString *filePath = [[Config sharedInstance] pathForImageType:[ship typeID]];
 	
-	NSLog(@"Downloading %@ to %@",imageUrl,filePath);
+	//NSLog(@"Downloading %@ to %@",imageUrl,filePath);
 	
 	/*image does not exist. download it and display it when it's done.*/
 	NSURL *url = [NSURL URLWithString:imageUrl];
@@ -271,7 +271,7 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 
 -(void) download:(NSURLDownload *)download didFailWithError:(NSError *)error
 {
-	NSLog(@"Error downloading image (%@): %@",[[download request]URL], error);
+	//NSLog(@"Error downloading image (%@): %@",[[download request]URL], error);
 	
 	@synchronized(self){
 		[down release];

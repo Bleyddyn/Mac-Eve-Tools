@@ -68,7 +68,7 @@
 
 -(SkillTree*) initWithXml:(NSString*)xmlPath
 {
-	NSLog(@"Skill Tree from XML has been removed. use the DB Export");
+	//NSLog(@"Skill Tree from XML has been removed. use the DB Export");
 	[self doesNotRecognizeSelector:_cmd];
 	return nil;
 }
@@ -174,7 +174,7 @@
 {
 	SkillGroup *sg = [skillGroups objectForKey:groupID];
 	if(sg == nil){
-		NSLog(@"Skill Group %@ does not exist",groupID);
+		//NSLog(@"Skill Group %@ does not exist",groupID);
 		return NO;
 	}
 	

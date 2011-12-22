@@ -187,7 +187,7 @@
 		Skill *s = [[[GlobalData sharedInstance]skillTree] skillForId:key];
 		
 		if(s == nil){
-			NSLog(@"Skill was null for skill id %@",key);
+			//NSLog(@"Skill was null for skill id %@",key);
 			return;
 		}
 	
@@ -239,7 +239,7 @@
 	
 	if([docPath isEqualToString:XMLAPI_CHAR_SHEET]){
 		if(!success){
-			NSLog(@"Error fetching character data for %@",[character characterName]);
+			//NSLog(@"Error fetching character data for %@",[character characterName]);
 			[self clearCharDetails];
 			return;
 		}
@@ -252,14 +252,14 @@
 		}
 	}else if([docPath isEqualToString:XMLAPI_CHAR_TRAINING]){
 		if(!success){
-			NSLog(@"Error fetching character training data for %@",[character characterName]);
+			//NSLog(@"Error fetching character training data for %@",[character characterName]);
 			[self clearCharTrainingDetails];
 			return;
 		}
 		[self showCharTrainingDetails:character];
 	}else if([docPath isEqualToString:PORTRAIT]){
 		if(!success){
-			NSLog(@"Error fetching character portrait for %@",[character characterName]);
+			//NSLog(@"Error fetching character portrait for %@",[character characterName]);
 			return;
 		}
 		NSImage *pic = [character portrait];
@@ -268,7 +268,7 @@
 		}
 	}else if([docPath isEqualToString:XMLAPI_CHAR_QUEUE]){
 		if(!success){
-			NSLog(@"Error fetching character portrait for %@",[character characterName]);
+			//NSLog(@"Error fetching character portrait for %@",[character characterName]);
 			[self clearCharTrainingQueue];
 			return;
 		
@@ -466,7 +466,7 @@
 
 -(void) deleteCurrentPortrait:(id)notUsed
 {
-	NSLog(@"delete portrait");
+	//NSLog(@"delete portrait");
 	[currentCharacter deletePortrait];
 	NSAlert *alert = [[NSAlert alloc]init];
 	[alert setMessageText:

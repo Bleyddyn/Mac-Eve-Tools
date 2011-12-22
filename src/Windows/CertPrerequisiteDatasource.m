@@ -99,7 +99,7 @@
 		return [[s prerequisites]objectAtIndex:index];
 	}
 	
-	NSLog(@"%@",[item className]);
+	//NSLog(@"%@",[item className]);
 	
 	return nil;
 }

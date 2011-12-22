@@ -164,7 +164,7 @@
 			return pcol;
 		}
 	}
-	NSLog(@"%@ not found in columnList",identifier);
+	//NSLog(@"%@ not found in columnList",identifier);
 	return nil;
 }
 

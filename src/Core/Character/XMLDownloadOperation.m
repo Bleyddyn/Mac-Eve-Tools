@@ -37,10 +37,10 @@
 	
 	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
 	
-	NSLog(@"Downloading %@",url);
+	//NSLog(@"Downloading %@",url);
 	
 	if(data == nil){
-		NSLog(@"Error downloading %@.  %@",fullDocUrl,[error description]);
+		//NSLog(@"Error downloading %@.  %@",fullDocUrl,[error description]);
 		xmlDownloadError = [error retain];
 		return NO;
 	}
@@ -61,9 +61,9 @@
 	BOOL rc = [xmlData writeToFile:savePath atomically:NO];
 	
 	if(!rc){
-		NSLog(@"Failed to write XML document %@",savePath);
+		//NSLog(@"Failed to write XML document %@",savePath);
 	}else{
-		NSLog(@"Wrote %lu bytes to %@",[xmlData length], savePath);
+		//NSLog(@"Wrote %lu bytes to %@",[xmlData length], savePath);
 	}
 	
 	return rc;
@@ -76,7 +76,7 @@
 	rc = [self downloadXmlData:xmlDocUrl];
 	
 	if(!rc){
-		NSLog(@"Downloading error");
+		//NSLog(@"Downloading error");
 		return;
 	}
 	

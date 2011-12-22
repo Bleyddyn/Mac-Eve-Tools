@@ -57,12 +57,12 @@ static GlobalData *_privateDataSingleton = nil;
 	CertTree *ct = [database buildCertTree];
 	
 	if(st == nil){
-		NSLog(@"Error: Failed to construct skill tree");
+		//NSLog(@"Error: Failed to construct skill tree");
 		return nil;
 	}
 	
 	if(ct == nil){
-		NSLog(@"Error: Failed to construct cert tree");
+		//NSLog(@"Error: Failed to construct cert tree");
 		return nil;
 	}
 		

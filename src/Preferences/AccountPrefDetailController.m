@@ -90,7 +90,7 @@
 {
 	[updatingIndicator stopAnimation:self];
 	[updatingIndicator setHidden:YES];
-	NSLog(@"account update finished");
+	//NSLog(@"account update finished");
 	[self updateAllControls];
 }
 
@@ -117,7 +117,7 @@
 }
 
 - (void) controlTextDidEndEditing:(NSNotification *)obj {
-	NSLog(@"Editing end");
+	//NSLog(@"Editing end");
 	[self updateDataFromControls:[obj object] withValue:[[obj object] stringValue]];
 }
 
@@ -125,7 +125,7 @@
 #pragma mark Table methods
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-	NSLog(@"found %ld chars",[self.account.characters count]);
+	//NSLog(@"found %ld chars",[self.account.characters count]);
 	return [self.account.characters count];
 }
 

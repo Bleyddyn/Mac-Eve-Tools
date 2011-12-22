@@ -125,10 +125,10 @@
 	if(! [fm fileExistsAtPath:pendingDir isDirectory:nil]){
 		if(![fm createDirectoryAtPath: pendingDir
 		  withIntermediateDirectories:YES attributes:nil error:nil]){
-			NSLog(@"Could not create directory %@",pendingDir);
+			//NSLog(@"Could not create directory %@",pendingDir);
 			return nil;
 		}else{
-			NSLog(@"Created directory %@",pendingDir);
+			//NSLog(@"Created directory %@",pendingDir);
 		}
 	}
 	
@@ -236,7 +236,7 @@
 {
 	[self buildCharacterDict];
 	
-	NSLog(@"Finished downloading characters");
+	//NSLog(@"Finished downloading characters");
 	if(sortedArray != nil){
 		[sortedArray release];
 	}
@@ -361,7 +361,7 @@
 	
 	/*fallback, find the first active character*/
 	
-	NSLog(@"Primary character not set, finding first active");
+	//NSLog(@"Primary character not set, finding first active");
 	
 	for(CharacterTemplate *t in templateArray){
 		if([t active]){
@@ -385,7 +385,7 @@
 			}
 		}
 	}
-	NSLog(@"Character %lu not found",characterId);
+	//NSLog(@"Character %lu not found",characterId);
 	return nil;
 }
 
@@ -433,7 +433,7 @@
 		return;
 	}
 	
-	NSLog(@"Deleting portrait %@",path);
+	//NSLog(@"Deleting portrait %@",path);
 	
 	[[NSFileManager defaultManager]removeItemAtPath:path error:NULL];
 

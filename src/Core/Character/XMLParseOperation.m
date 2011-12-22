@@ -108,14 +108,14 @@
 	
 	doc = xmlReadFile([xmlSheet fileSystemRepresentation],NULL,0);
 	if(doc == NULL){
-		NSLog(@"Error: could not read %@",xmlSheet);
+		//NSLog(@"Error: could not read %@",xmlSheet);
 		return NO;
 	}
 	
 	root_node = xmlDocGetRootElement(doc);
 	if(root_node == NULL){
 		xmlFreeDoc(doc);
-		NSLog(@"No root element for document %@",xmlSheet);
+		//NSLog(@"No root element for document %@",xmlSheet);
 		return NO;
 	}
 	
@@ -131,7 +131,7 @@
 													 xmlSheet:[xmlSheet lastPathComponent]];
 			[*error autorelease];
 			
-			NSLog(@"EVE XML error: %@",errorString);
+			//NSLog(@"EVE XML error: %@",errorString);
 		}		
 		rc = NO;
 	}
@@ -142,7 +142,7 @@
 -(BOOL) validateXmlFile:(NSString*)xmlDocFile error:(CharacterParseError**)error
 {
 	if(![[NSFileManager defaultManager] fileExistsAtPath:xmlDocFile]){
-		NSLog(@"%@ does not exist. cannot process",xmlDocFile);
+		//NSLog(@"%@ does not exist. cannot process",xmlDocFile);
 		*error = [[CharacterParseError alloc]initWithError:@"Download error" 
 													  code:-1 
 												  xmlSheet:[xmlDocFile lastPathComponent]];
@@ -153,7 +153,7 @@
 	/*now we need to parse it to see if it errored*/
 	BOOL isXmlValid = [self didXmlSheetError:xmlDocFile error:error];
 	if(!isXmlValid){
-		NSLog(@"Validation for %@ failed!",xmlDocFile);
+		//NSLog(@"Validation for %@ failed!",xmlDocFile);
 		return NO;
 	}
 	
@@ -201,7 +201,7 @@
 		BOOL isValid = [self validateXmlFile:pendingFile error:&error];
 		
 		if(!isValid){
-			NSLog(@"Failed to validate %@",pendingFile);
+			//NSLog(@"Failed to validate %@",pendingFile);
 			/*
 			Failed to validate this particular XML file. don't process it
 			This should extract the type of error (file does not exist, XML api server error)
@@ -230,15 +230,15 @@
 			if([manager fileExistsAtPath:toDir]){
 				//Remove the old file
 				if(![manager removeItemAtPath:toDir error:&error]){
-					NSLog(@"ERROR: Failed to remove %@ (%@)",toDir,[error localizedDescription]);
+					//NSLog(@"ERROR: Failed to remove %@ (%@)",toDir,[error localizedDescription]);
 				}
 			}
 			
 			if(![manager moveItemAtPath:fromDir toPath:toDir error:&error]){
-				NSLog(@"ERROR: Failed to move %@! (%@)",fileName,[error localizedDescription]);
+				//NSLog(@"ERROR: Failed to move %@! (%@)",fileName,[error localizedDescription]);
 			}
 			
-			NSLog(@"Validated %@",pendingFile);
+			//NSLog(@"Validated %@",pendingFile);
 		}
 	}
 	
@@ -248,7 +248,7 @@
 		NSString *pendingDir = [[pair characterDir] stringByAppendingString:@"/pending"];
 		if([manager fileExistsAtPath:pendingDir]){
 			if(![manager removeItemAtPath:pendingDir error:&error]){
-				NSLog(@"Failed to delete '%@' (%@)",pendingDir,[error localizedDescription]);
+				//NSLog(@"Failed to delete '%@' (%@)",pendingDir,[error localizedDescription]);
 			}
 		}
 	}

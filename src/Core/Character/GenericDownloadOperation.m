@@ -42,14 +42,14 @@
 	
 	NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url];
 	
-	NSLog(@"Downloading %@",urlPath);
+	//NSLog(@"Downloading %@",urlPath);
 	NSData *data = [NSURLConnection sendSynchronousRequest:request 
 										 returningResponse:&response
 													 error:&error];
 	[request release];
 	
 	if(data == nil){
-		NSLog(@"Error downloading %@.  %@",urlPath,[error localizedDescription]);
+		//NSLog(@"Error downloading %@.  %@",urlPath,[error localizedDescription]);
 		return;
 	}
 	

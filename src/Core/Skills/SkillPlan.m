@@ -171,11 +171,11 @@
 -(void) printPlan
 {
 	SkillTree *st = [[GlobalData sharedInstance]skillTree];
-	NSLog(@"Printing plan");
+	//NSLog(@"Printing plan");
 	for(SkillPair *p in skillPlan){
-		NSLog(@"%@ level %ld",[[st skillForId:[p typeID]]skillName], [p skillLevel]);
+		//NSLog(@"%@ level %ld",[[st skillForId:[p typeID]]skillName], [p skillLevel]);
 	}
-	NSLog(@"Done printing plan");
+	//NSLog(@"Done printing plan");
 }
 
 -(void) dealloc
@@ -383,13 +383,13 @@ static NSDictionary *masterSkillSet = nil;;
 	BOOL rc = [self validatePlan:newPlan];
 	
 	if(rc){
-//		NSLog(@"New plan is OK");
-//		NSLog(@"%@",newPlan);
+//		//NSLog(@"New plan is OK");
+//		//NSLog(@"%@",newPlan);
 		[skillPlan release];
 		skillPlan = newPlan;
 		[self resetCache];
 	}else{
-//		NSLog(@"new plan is invalid");
+//		//NSLog(@"new plan is invalid");
 		[newPlan release];
 	}
 	
@@ -487,12 +487,12 @@ static NSDictionary *masterSkillSet = nil;;
 	
 /*	
 	Skill *s = [[Config GetInstance]->st skillForId:typeID];
-	NSLog(@"Removing %@ at level %ld", [s skillName],skillLevel);
+	//NSLog(@"Removing %@ at level %ld", [s skillName],skillLevel);
 */	
 	for(SkillPair *sp in skillPlan){
 		/*does this object require typeID at skillLevel as a prerequisite? if so, remove*/
 /*
-		NSLog(@"Is (%@,%ld) a prerequisite for (%@,%ld)",
+		//NSLog(@"Is (%@,%ld) a prerequisite for (%@,%ld)",
 			[[Config GetInstance]->st skillForId:typeID],skillLevel,
 			[[Config GetInstance]->st skillForId:[sp typeID]],[sp skillLevel]);
 */
@@ -523,11 +523,11 @@ static NSDictionary *masterSkillSet = nil;;
 	[self constructAntiPlan2:[skillToRemove typeID] level:[skillToRemove skillLevel] antiPlan:antiPlan];
 	/*
 	SkillTree *st = [Config GetInstance]->st;
-	NSLog(@"Skills to remove");
+	//NSLog(@"Skills to remove");
 	for(SkillPair *sp in antiPlan){
-		NSLog(@"%@ %ld",[st skillForId:[sp typeID]], [sp skillLevel]);
+		//NSLog(@"%@ %ld",[st skillForId:[sp typeID]], [sp skillLevel]);
 	}
-	NSLog(@"Done");
+	//NSLog(@"Done");
 	*/
 	return antiPlan;
 }
@@ -635,7 +635,7 @@ static NSDictionary *masterSkillSet = nil;;
 	}
 	if((i = [index count]) > 0){
 		[skillPlan removeObjectsAtIndexes:index];
-		NSLog(@"remove %ld completed skills from plan",[index count]);
+		//NSLog(@"remove %ld completed skills from plan",[index count]);
 		[self savePlan];
 	}
 	
@@ -652,7 +652,7 @@ static NSDictionary *masterSkillSet = nil;;
 	}
 	
 	if((NSUInteger)skillIndex >= [skillPlan count]){
-		NSLog(@"Error: %ld is out of bounds (%ld)",skillIndex,[skillPlan count]);
+		//NSLog(@"Error: %ld is out of bounds (%ld)",skillIndex,[skillPlan count]);
 	}
 	
 	return [skillDates objectAtIndex:skillIndex * 2];
@@ -665,7 +665,7 @@ static NSDictionary *masterSkillSet = nil;;
 	}
 	
 	if((NSUInteger)skillIndex >= [skillPlan count]){
-		NSLog(@"Error: %ld is out of bounds (%ld)",skillIndex,[skillPlan count]);
+		//NSLog(@"Error: %ld is out of bounds (%ld)",skillIndex,[skillPlan count]);
 	}
 	
 	return [skillDates objectAtIndex:(skillIndex*2)+1];

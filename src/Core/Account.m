@@ -53,17 +53,17 @@
 {
 	xmlNode *root = xmlDocGetRootElement(doc);
 	if(root == NULL){
-		NSLog(@"error parsing XML document");
+		//NSLog(@"error parsing XML document");
 		return NO;
 	}
 	xmlNode *result = findChildNode(root,(xmlChar*)"result");
 	if(result == NULL){
-		NSLog(@"error parsing XML document");
+		//NSLog(@"error parsing XML document");
 		return NO;
 	}
 	xmlNode *rowset = findChildNode(result,(xmlChar*)"rowset");
 	if(rowset == NULL){
-		NSLog(@"error parsing XML document");
+		//NSLog(@"error parsing XML document");
 		return NO;
 	}
 	
@@ -130,7 +130,7 @@
 	xmlDoc *doc = xmlReadFile([[self savePath] fileSystemRepresentation],NULL, 0);	
 	
 	if(doc == NULL){
-		NSLog(@"Failed to read %@",[self savePath]);
+		//NSLog(@"Failed to read %@",[self savePath]);
 		return NO;
 	}
 	
@@ -144,7 +144,7 @@
 -(void) xmlDocumentFinished:(BOOL)status xmlPath:(NSString*)path xmlDocName:(NSString*)docName
 {
 	if(status == NO){
-		NSLog(@"Failed to download %@ to %@",docName,path);
+		//NSLog(@"Failed to download %@ to %@",docName,path);
 		[delegate accountDidUpdate:self didSucceed:NO];
 		return;
 	}
@@ -165,7 +165,7 @@
 	xmlNode *result = findChildNode(root_node,(xmlChar*)"error");
 	
 	if(result != NULL){
-		NSLog(@"%@",getNodeText(result));
+		//NSLog(@"%@",getNodeText(result));
 		rc = NO;
 	}
 	
@@ -175,7 +175,7 @@
 
 -(void) xmlDidFailWithError:(NSError*)xmlErrorMessage xmlPath:(NSString*)path xmlDocName:(NSString*)docName
 {
-	NSLog(@"Connection failed! (%@)",[xmlErrorMessage localizedDescription]);
+	//NSLog(@"Connection failed! (%@)",[xmlErrorMessage localizedDescription]);
 	
 	NSRunAlertPanel(@"Error Account XML",[xmlErrorMessage localizedDescription],@"Close",nil,nil);
 }
@@ -276,7 +276,7 @@
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
-	NSLog(@"found %ld chars",[characters count]);
+	//NSLog(@"found %ld chars",[characters count]);
 	return [characters count];
 }
 

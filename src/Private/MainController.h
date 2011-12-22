@@ -86,6 +86,6 @@
 -(IBAction) noCharsButtonClick:(id)sender;
 -(IBAction) toolbarButtonClick:(id)sender;
 -(IBAction) checkForUpdates:(id)sender;
--(IBAction) checkForDatabase:(id)sender;
+-(IBAction) rebuildDatabase:(id)sender;
 
 @end

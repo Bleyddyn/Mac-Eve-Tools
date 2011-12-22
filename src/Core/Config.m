@@ -110,7 +110,7 @@ static Config *sharedSingletonCfg = nil;
 		}
 	}
 	
-//	NSLog(@"Generated URL (%@)",str);
+//	//NSLog(@"Generated URL (%@)",str);
 	
 	return str;
 	
@@ -179,7 +179,7 @@ static Config *sharedSingletonCfg = nil;
 	doc = xmlReadFile([path fileSystemRepresentation],NULL,0);
 	
 	if(doc == NULL){
-		NSLog(@"NULL pointer for xmlFileOpen(%@)",path);
+		//NSLog(@"NULL pointer for xmlFileOpen(%@)",path);
 		return NO;
 	}
 	
@@ -193,7 +193,7 @@ static Config *sharedSingletonCfg = nil;
 	
 	xmlNode *accountRowsetNode = findChildNode(root,(xmlChar*)"rowset");
 	if(accountRowsetNode == NULL){
-		NSLog(@"Could not parse config file");
+		//NSLog(@"Could not parse config file");
 		xmlFreeDoc(doc);		
 		return NO;
 	}
@@ -201,7 +201,7 @@ static Config *sharedSingletonCfg = nil;
 	
 	NSString *rowsetName = findAttribute(accountRowsetNode,(xmlChar*)"name");
 	if(![rowsetName isEqualToString:@"accounts"]){
-		NSLog(@"invalid XML");
+		//NSLog(@"invalid XML");
 		xmlFreeDoc(doc);
 		return NO;
 	}
@@ -232,7 +232,7 @@ static Config *sharedSingletonCfg = nil;
 		
 		xmlNode *charRowsetNode = findChildNode(accountNode,(xmlChar*)"rowset");
 		if(charRowsetNode == NULL){
-			NSLog(@"Rowset node is null for account %@",acctName);
+			//NSLog(@"Rowset node is null for account %@",acctName);
 			[acct release];
 			continue;
 		}
@@ -397,7 +397,7 @@ static Config *sharedSingletonCfg = nil;
 
 -(NSString*) pathForImageType:(NSInteger)typeID
 {
-	NSMutableString *url = [NSString stringWithFormat:@"%@/images/types/256_256/%ld.png", [[NSUserDefaults standardUserDefaults] stringForKey:UD_ROOT_PATH],typeID];
+	NSMutableString *url = [NSString stringWithFormat:@"%@/Render/%ld_256.png", [[NSUserDefaults standardUserDefaults] stringForKey:UD_ROOT_PATH],typeID];
 	
 	return url;
 }
@@ -407,7 +407,7 @@ static Config *sharedSingletonCfg = nil;
 	NSMutableString *url = [NSMutableString string];
 	
 	[url appendFormat:@"%@", [[NSUserDefaults standardUserDefaults] stringForKey:UD_IMAGE_URL]];
-	[url appendFormat:@"/types/256_256/%ld.png",typeID];
+	[url appendFormat:@"/Render/%ld_256.png",typeID];
 	
 	return url;
 }
@@ -417,7 +417,7 @@ static Config *sharedSingletonCfg = nil;
 	NSMutableString *url = [NSMutableString string];
 	
 	[url appendFormat:@"%@", [[NSUserDefaults standardUserDefaults] stringForKey:UD_IMAGE_URL]];
-	[url appendFormat:@"/icons/%d_%d/%s.png",(int)size,(int)size,icon];
+	[url appendFormat:@"/Type/%s_%d.png",icon,(int)size];
 	
 	return url;
 }
