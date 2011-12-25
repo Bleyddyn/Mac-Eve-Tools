@@ -82,12 +82,31 @@
 	[[wc window]makeKeyAndOrderFront:nil];
 }
 
+-(BOOL) isHTMLstring
+{
+	BOOL match = NO;
+	NSString *candidate = [ship typeDescription];
+	NSString *checkRegex = @"<br>";
+	NSPredicate *checkTest = [NSPredicate predicateWithFormat:@"SELF contains[cd] %@", checkRegex];
+	match = match | [checkTest evaluateWithObject:candidate];
+	return match;
+}
+
 -(void) setLabels
 {
 	[shipName setStringValue:[ship typeName]];
 	[shipName sizeToFit];
-	
-	[shipDescription setString:[ship typeDescription]];
+
+	if ([self isHTMLstring]) {
+		NSString *shipDescriptionInitial = [ship typeDescription];
+		NSData *shipDescriptionHtml = [shipDescriptionInitial dataUsingEncoding:NSUTF8StringEncoding];
+		NSAttributedString *textToBeInserted = [[[NSAttributedString alloc]
+												initWithHTML:shipDescriptionHtml documentAttributes:nil] autorelease];
+		[[shipDescription textStorage] setAttributedString:textToBeInserted];
+	}
+	else {
+		[shipDescription setString:[ship typeDescription]];
+	}
 }
 
 -(BOOL) displayImage

@@ -522,7 +522,7 @@
 	[prefDefaults setObject:@"http://dl.dropbox.com/u/612254/EVE/MAT/MacEveApi-database.xml" forKey:UD_DB_UPDATE_URL];
 	[prefDefaults setObject:@"http://dl.dropbox.com/u/612254/EVE/MAT/database.sql.bz2" forKey:UD_DB_SQL_URL];
 	[prefDefaults setObject:@"http://image.eveonline.com/" forKey:UD_IMAGE_URL];
-	[prefDefaults setObject:[NSNumber numberWithInt:8] forKey:UD_DATABASE_MIN_VERSION];
+	[prefDefaults setObject:[NSNumber numberWithInt:9] forKey:UD_DATABASE_MIN_VERSION];
 	 	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:prefDefaults];
 	[prefDefaults release];

@@ -1,3 +1,7 @@
+Release 16.22 (25/12/2011)
+	Fixed HTML descriptions not showing properly (Applied TIC Albul's patch)
+	Fixed Databases not automatically updating (should be, thanks TIC Albul)
+
 Release 16.21 (22/12/2011)
 	ERROR: Database doesn't automatically update.
 	Added "Rebuild database" button in the menu
