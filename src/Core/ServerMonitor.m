@@ -48,6 +48,9 @@
 								   userInfo:nil 
 									repeats:YES];
 	[self checkServerStatus];
+#else
+	// only check once if running in debug
+	[self checkServerStatus];
 #endif
 }
 
