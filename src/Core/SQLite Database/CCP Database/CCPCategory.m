@@ -21,8 +21,6 @@
 #import "CCPCategory.h"
 #import "CCPDatabase.h"
 
-
-
 @implementation CCPCategory
 
 @synthesize categoryID;
@@ -32,7 +30,7 @@
 -(CCPCategory*) init
 {
 	if((self = [super init])){
-		groups = [[NSMutableDictionary alloc]init];
+		groups = [[NSArray alloc]init];
 	}
 	return self;
 }
