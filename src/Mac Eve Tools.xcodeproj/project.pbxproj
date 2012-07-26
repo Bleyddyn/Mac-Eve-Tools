@@ -1328,6 +1328,7 @@
 				GCC_PREFIX_HEADER = Mac_Eve_Tools_Prefix.pch;
 				INFOPLIST_FILE = "Mac_Eve_Tools-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "Mac Eve Tools";
 			};
 			name = Debug;
@@ -1348,6 +1349,7 @@
 				GCC_PREFIX_HEADER = Mac_Eve_Tools_Prefix.pch;
 				INFOPLIST_FILE = "Mac_Eve_Tools-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "Mac Eve Tools";
 			};
 			name = Release;
@@ -1453,6 +1455,7 @@
 				GCC_PREFIX_HEADER = Mac_Eve_Tools_Prefix.pch;
 				INFOPLIST_FILE = "Mac_Eve_Tools-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "Mac Eve Tools";
 			};
 			name = "Test Release";
