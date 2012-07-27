@@ -112,7 +112,7 @@
 	
 	[search setAction:@selector(skillSearchFilter:)];
 	[search setTarget:self];
-	[[search cell]setSendsSearchStringImmediately:YES];
+	[[search cell] setSendsSearchStringImmediately:YES];
 	
 }
 
@@ -163,9 +163,9 @@
 //	[skillList reloadItem:nil reloadChildren:YES];
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView 
-shouldEditTableColumn:(NSTableColumn *)tableColumn 
-			   item:(id)item
+  - (BOOL)outlineView:(NSOutlineView *)outlineView
+shouldEditTableColumn:(NSTableColumn *)tableColumn
+			     item:(id)item
 {
 	return NO;
 }
@@ -275,12 +275,20 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 					 item:(id)item 
 			mouseLocation:(NSPoint)mouseLocation
 {
-	return [[skillList dataSource] outlineView:ov
-                                toolTipForCell:cell
-                                          rect:rect
-                                   tableColumn:tc
-                                          item:item
-                                 mouseLocation:mouseLocation];
+    id retVal;
+    id data = [skillList dataSource];
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:_cmd]];
+    [invocation setTarget:data];
+    [invocation setSelector:_cmd];
+    [invocation setArgument:ov atIndex:2];
+    [invocation setArgument:cell atIndex:3];
+    [invocation setArgument:rect atIndex:4];
+    [invocation setArgument:tc atIndex:5];
+    [invocation setArgument:item atIndex:6];
+    [invocation setArgument:&mouseLocation atIndex:7];
+    [invocation invoke];
+    [invocation getReturnValue:&retVal];
+    return retVal;
 }
 
 	 
