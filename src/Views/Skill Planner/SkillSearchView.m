@@ -275,10 +275,12 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 					 item:(id)item 
 			mouseLocation:(NSPoint)mouseLocation
 {
-	return [[skillList dataSource]outlineView:ov
-						toolTipForCell:cell rect:rect 
-						   tableColumn:tc item:item
-						 mouseLocation:mouseLocation];
+	return [[skillList dataSource] outlineView:ov
+                                toolTipForCell:cell
+                                          rect:rect
+                                   tableColumn:tc
+                                          item:item
+                                 mouseLocation:mouseLocation];
 }
 
 	 
