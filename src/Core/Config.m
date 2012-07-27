@@ -307,10 +307,10 @@ static Config *sharedSingletonCfg = nil;
 		NSData *archive = [defaults objectForKey:UD_ACCOUNTS];
 		NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:archive];
 	
-	/* clearing mutable array and add new array via add method.. 
-	 Init a new Array with the array causes a memory leak
-	 releasing the previous list to fix the leak causes 
-	 EXC_BAD_ACCESS because somewhere is an access to the old released list*/
+        /* clearing mutable array and add new array via add method..
+           Init a new Array with the array causes a memory leak
+           releasing the previous list to fix the leak causes
+           EXC_BAD_ACCESS because somewhere is an access to the old released list */
 		if (self.accounts != NULL) {
 			[self.accounts removeAllObjects];
 		}
