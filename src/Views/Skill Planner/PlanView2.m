@@ -334,8 +334,12 @@
 }
 -(void) cellNotesButtonClick:(id)sender
 {
+    // The following code produces a compiler warning and
+    // does nothing useful, so comment out for now.
+#if 0
 	NSInteger row = [sender clickedRow];
 	//NSLog(@"Notes button click row %ld",row);
+#endif
 }
 
 

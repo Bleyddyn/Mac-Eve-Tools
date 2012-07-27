@@ -201,7 +201,7 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 		[[wc window]makeKeyAndOrderFront:self];
 		return;
 		 */
-		[SkillDetailsWindowController displayWindowForTypeID:[item typeID] 
+		[SkillDetailsWindowController displayWindowForTypeID:[(Skill *) item typeID]
 												forCharacter:[delegate character]];
 
 	}else if([item isKindOfClass:[CCPType class]]){

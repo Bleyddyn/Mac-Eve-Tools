@@ -170,12 +170,16 @@
 
 -(void) printPlan
 {
+    // The following code doesn't actually do anything and
+    // produces a compiler warning, so comment it out for now.
+#if 0
 	SkillTree *st = [[GlobalData sharedInstance]skillTree];
 	//NSLog(@"Printing plan");
 	for(SkillPair *p in skillPlan){
 		//NSLog(@"%@ level %ld",[[st skillForId:[p typeID]]skillName], [p skillLevel]);
 	}
 	//NSLog(@"Done printing plan");
+#endif
 }
 
 -(void) dealloc

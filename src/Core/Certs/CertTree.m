@@ -62,8 +62,8 @@
 				  andDict:(NSDictionary*)dict
 {
 	if((self = [super init])){
-		certCategories = [certCats retain];
-		allCerts = [dict retain];
+		certCategories = [certCats mutableCopy];
+		allCerts = [dict mutableCopy];
 	}
 	return self;
 }
