@@ -167,16 +167,16 @@ NSString* stringTrainingTime2(NSInteger trainingTime , enum TrainingTimeFields t
 	sec = remain - (min * SEC_MINUTE);
 	
 	if(days > 0 && (ttf & TTF_Days)){
-		[str appendFormat:@"%ldd ",days];
+		[str appendFormat:@"%ldd ", (long) days];
 	}
 	if(hours > 0 && (ttf & TTF_Hours)){
-		[str appendFormat:@"%ldh ",hours];
+		[str appendFormat:@"%ldh ", (long) hours];
 	}
 	if(min > 0 && (ttf & TTF_Minutes)){
-		[str appendFormat:@"%ldm ",min];
+		[str appendFormat:@"%ldm ", (long) min];
 	}
 	if(sec > 0 && (ttf & TTF_Seconds)){
-		[str appendFormat:@"%lds",sec];
+		[str appendFormat:@"%lds", (long) sec];
 	}
 	
 	if(!(ttf & TTF_Seconds)){
@@ -195,7 +195,7 @@ NSString* sqlite3_column_nsstr(void *stmt, int col)
 {
 	const unsigned char *str = sqlite3_column_text(stmt,col);
 	if(str == NULL){
-		return [NSString stringWithString:@""];
+		return @"";
 	}else{
 		NSString *newString;
 		newString = [NSString stringWithUTF8String:(const char*)str];
@@ -208,9 +208,8 @@ NSString* sqlite3_column_nsstr(void *stmt, int col)
 		if(newString != NULL){
 			return newString;
 		}
-		
-		newString = [NSString stringWithString:@"If you can see this, then this is a bug. please report it."];
-		return newString;
+        
+        return @"If you can see this, then this is a bug. please report it.";
 	}
 }
 

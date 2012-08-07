@@ -26,7 +26,7 @@
 @class SkillPrerequisiteDatasource;
 @class ShipAttributeDatasource;
 
-@interface ShipDetailsWindowController : NSWindowController {
+@interface ShipDetailsWindowController : NSWindowController <NSURLDownloadDelegate> {
 	IBOutlet NSImageView *shipView;
 	IBOutlet NSTextField *shipName;
 	

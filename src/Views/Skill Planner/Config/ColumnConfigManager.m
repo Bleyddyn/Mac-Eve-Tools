@@ -128,7 +128,7 @@
 		columnList = [ary mutableCopy];
 	}else{
 		//Column list has been built from defaults.
-		columnList = [[self buildDefaultColumnList]retain];
+		columnList = [[self buildDefaultColumnList] mutableCopy];
 	}
 }
 

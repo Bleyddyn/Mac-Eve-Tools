@@ -172,7 +172,7 @@
 {
 	NSString *str = @"Tranquility";
 	if(playerCount > 0){
-		str = [str stringByAppendingFormat:@" (%ld)",playerCount];
+		str = [str stringByAppendingFormat:@" (%ld)", (long) playerCount];
 	}
 	[serverName setStringValue:str];
 }

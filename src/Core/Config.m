@@ -69,12 +69,12 @@ static Config *sharedSingletonCfg = nil;
 }
 
 
--(unsigned long)retainCount {
+-(NSUInteger)retainCount {
     return UINT_MAX;  //denotes an object that cannot be release
 }
 
 
--(void)release {
+-(oneway void)release {
     //do nothing    
 }
 
@@ -307,10 +307,10 @@ static Config *sharedSingletonCfg = nil;
 		NSData *archive = [defaults objectForKey:UD_ACCOUNTS];
 		NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:archive];
 	
-	/* clearing mutable array and add new array via add method.. 
-	 Init a new Array with the array causes a memory leak
-	 releasing the previous list to fix the leak causes 
-	 EXC_BAD_ACCESS because somewhere is an access to the old released list*/
+        /* clearing mutable array and add new array via add method..
+           Init a new Array with the array causes a memory leak
+           releasing the previous list to fix the leak causes
+           EXC_BAD_ACCESS because somewhere is an access to the old released list */
 		if (self.accounts != NULL) {
 			[self.accounts removeAllObjects];
 		}
@@ -397,7 +397,7 @@ static Config *sharedSingletonCfg = nil;
 
 -(NSString*) pathForImageType:(NSInteger)typeID
 {
-	NSMutableString *url = [NSString stringWithFormat:@"%@/Render/%ld_256.png", [[NSUserDefaults standardUserDefaults] stringForKey:UD_ROOT_PATH],typeID];
+	NSMutableString *url = [NSString stringWithFormat:@"%@/Render/%ld_256.png", [[NSUserDefaults standardUserDefaults] stringForKey:UD_ROOT_PATH], (long) typeID];
 	
 	return url;
 }
@@ -407,7 +407,7 @@ static Config *sharedSingletonCfg = nil;
 	NSMutableString *url = [NSMutableString string];
 	
 	[url appendFormat:@"%@", [[NSUserDefaults standardUserDefaults] stringForKey:UD_IMAGE_URL]];
-	[url appendFormat:@"/Render/%ld_256.png",typeID];
+	[url appendFormat:@"/Render/%ld_256.png", (long) typeID];
 	
 	return url;
 }
@@ -417,7 +417,7 @@ static Config *sharedSingletonCfg = nil;
 	NSMutableString *url = [NSMutableString string];
 	
 	[url appendFormat:@"%@", [[NSUserDefaults standardUserDefaults] stringForKey:UD_IMAGE_URL]];
-	[url appendFormat:@"/Type/%s_%d.png",icon,(int)size];
+	[url appendFormat:@"/Type/%@_%d.png",icon,(int)size];
 	
 	return url;
 }
@@ -425,7 +425,7 @@ static Config *sharedSingletonCfg = nil;
 -(enum DatabaseLanguage) dbLanguage
 {
 	/*if no key is set, zero is the default, which is english.*/
-	return [[NSUserDefaults standardUserDefaults] integerForKey:UD_DATABASE_LANG];
+	return (enum DatabaseLanguage) [[NSUserDefaults standardUserDefaults] integerForKey:UD_DATABASE_LANG];
 
 }
 -(void) setDbLanguage:(enum DatabaseLanguage)lang

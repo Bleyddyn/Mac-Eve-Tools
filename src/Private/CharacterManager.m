@@ -291,7 +291,7 @@
 	if(templateArray != nil){
 		[templateArray release];
 	}
-	templateArray = [tarray retain];
+	templateArray = [tarray mutableCopy];
 		
 	NSInteger i = 0;
 	BOOL rc = NO;

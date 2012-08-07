@@ -363,7 +363,7 @@
 		double percentComplete = (bytesReceived / (double)expectedLength) * (double)100.0;
 		[self progressThread:percentComplete];
 	}else{
-		[self logProgress:[NSString stringWithFormat:@"Received %lu bytes",length]];
+		[self logProgress:[NSString stringWithFormat:@"Received %lu bytes", (unsigned long) length]];
 	}
 }
 

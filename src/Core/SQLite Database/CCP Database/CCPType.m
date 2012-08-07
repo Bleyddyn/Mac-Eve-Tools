@@ -116,7 +116,7 @@
 
 -(NSString*) description
 {
-	return [NSString stringWithFormat:@"%ld - %@",typeID,typeName];
+	return [NSString stringWithFormat:@"%ld - %@", (long) typeID, typeName];
 }
 
 -(NSInteger) metaLevel

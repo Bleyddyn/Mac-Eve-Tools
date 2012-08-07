@@ -1,0 +1,2 @@
+src/*.xcodeproj/*
+!src/*.xcodeproj/project.pbxproj
