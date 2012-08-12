@@ -112,7 +112,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			NSMutableString *str = [[[NSMutableString alloc]init]autorelease];
 			
 			if([item valueInt] != NSIntegerMax){
-				[str appendFormat:@"%ld",[item valueInt]];
+				[str appendFormat:@"%ld", (long) [item valueInt]];
 			}else{
 				[str appendFormat:@"%.2f",(double)[item valueFloat]];
 			}

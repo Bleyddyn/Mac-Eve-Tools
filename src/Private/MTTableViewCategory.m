@@ -38,9 +38,16 @@
 			
 			if((row != -1) && (col != -1)){
 				NSTableColumn *tableColumn = [[self tableColumns] objectAtIndex:col];
-				
-				//Maybe redo this to use NSInvocation to get rid of the stupid warning.
-				menu = [data tableView:self menuForTableColumn:tableColumn row:row];
+                
+                NSMethodSignature *signature = [NSMethodSignature signatureWithObjCTypes:"@@:@@l"];
+                NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+                [invocation setTarget:data];
+                [invocation setSelector:@selector(tableView:menuForTableColumn:row:)];
+                [invocation setArgument:self atIndex:2];
+                [invocation setArgument:tableColumn atIndex:3];
+                [invocation setArgument:&row atIndex:4];
+                [invocation invoke];
+                [invocation getReturnValue:&menu];
 			}
 		}
 	}
@@ -49,7 +56,7 @@
 
 -(void) sizeToFitColumns
 {
-	NSInteger rows = [[self dataSource]numberOfRowsInTableView:self];
+	NSInteger rows = [[self dataSource] numberOfRowsInTableView:self];
 	
 	if(rows == 0){
 		return;
@@ -96,7 +103,15 @@
 				NSTableColumn *tableColumn = [[self tableColumns] objectAtIndex:col];
 				
 
-				menu = [data outlineView:self menuForTableColumnItem:tableColumn byItem:[self itemAtRow:row]];
+                NSMethodSignature *signature = [NSMethodSignature signatureWithObjCTypes:"@@:@@@"];
+                NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+                [invocation setTarget:data];
+                [invocation setSelector:@selector(tableView:menuForTableColumn:byItem:)];
+                [invocation setArgument:self atIndex:2];
+                [invocation setArgument:tableColumn atIndex:3];
+                [invocation setArgument:[self itemAtRow:row] atIndex:4];
+                [invocation invoke];
+                [invocation getReturnValue:&menu];
 			}
 		}
 	}

@@ -215,7 +215,7 @@
 		/*this needs the character sheet to calculate, and also needs the training sheet to know if it should be displayed*/
 		if(trainingTimeOfCurrentSkill > 0){
 		NSInteger sphr = [character spPerHour];
-		[trainingRate setStringValue:[NSString stringWithFormat:@"%ld SP/hr",sphr]];
+		[trainingRate setStringValue:[NSString stringWithFormat:@"%ld SP/hr", (long) sphr]];
 		[trainingRate sizeToFit];
 
 		[timeRemaining setVisible:YES];
