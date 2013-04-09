@@ -19,7 +19,7 @@
 	if(self){
 		menu = nil;
 	}
-	
+
 	return self;
 }
 
@@ -31,15 +31,15 @@
 
 - (NSMenu *)menuForEvent:(NSEvent *)theEvent
 {
-	
+
 	if([theEvent type] == NSRightMouseDown){
 		return menu;
-	}else if( ([theEvent type] == NSLeftMouseDown) && 
+	}else if( ([theEvent type] == NSLeftMouseDown) &&
 			 ([theEvent modifierFlags] & NSControlKeyMask))
 	{
 		return menu;
 	}
-	
+
 	return nil;
 }
 

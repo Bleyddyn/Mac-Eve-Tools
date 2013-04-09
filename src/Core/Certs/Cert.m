@@ -50,11 +50,11 @@
 		case 5:
 			grade = @"Elite";
 			break;
-			
+
 		default:
 			grade = @"???";
 	}
-	
+
 	return grade;
 }
 
@@ -64,8 +64,8 @@
 }
 
 
--(Cert*) initWithDetails:(NSInteger)cID 
-				   grade:(NSInteger)cGrade 
+-(Cert*) initWithDetails:(NSInteger)cID
+				   grade:(NSInteger)cGrade
 					text:(NSString*)cDesc
 				skillPre:(NSArray*)sPre
 				 certPre:(NSArray*)cPre
@@ -82,15 +82,15 @@
 	return self;
 }
 
-+(Cert*) createCert:(NSInteger)cID 
-			  grade:(NSInteger)cGrade 
++(Cert*) createCert:(NSInteger)cID
+			  grade:(NSInteger)cGrade
 			   text:(NSString*)cDesc
 		   skillPre:(NSArray*)sPre
 			certPre:(NSArray*)cPre
 		  certClass:(CertClass*)cC
 {
-	Cert *c = [[Cert alloc]initWithDetails:cID 
-									 grade:cGrade 
+	Cert *c = [[Cert alloc]initWithDetails:cID
+									 grade:cGrade
 									  text:cDesc
 								  skillPre:sPre
 								   certPre:cPre
@@ -102,10 +102,10 @@
  recursivley add all the prerequisites for this cert and all the subcerts.
  */
 -(void) certSkillPrereqs:(NSMutableArray*)skillArray  forCert:(Cert*)c
-{	
+{
 	//Do it in order of the most advanced cert first.
 	[skillArray addObjectsFromArray:[c skillPrereqs]];
-	
+
 	for(CertPair *pair in [c certPrereqs]){
 		Cert *preCert = [[[GlobalData sharedInstance]certTree]certForID:[pair certID]];
 		[self certSkillPrereqs:skillArray forCert:preCert];
@@ -115,9 +115,9 @@
 -(NSArray*)certChainPrereqs
 {
 	NSMutableArray *ary = [[[NSMutableArray alloc]init]autorelease];
-	
+
 	[self certSkillPrereqs:ary forCert:self];
-	
+
 	return ary;
 }
 

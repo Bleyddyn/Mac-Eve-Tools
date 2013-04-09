@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -57,13 +57,13 @@
 {
 	[charName setObjectValue:nil];
 	[charRace setObjectValue:nil];
-	
+
 	[charInt setObjectValue:nil];
 	[charPerc setObjectValue:nil];
 	[charChar setObjectValue:nil];
 	[charWill setObjectValue:nil];
 	[charMem setObjectValue:nil];
-	
+
 	[charIsk setObjectValue:nil];
 	[charSP setObjectValue:nil];
 	[charKnownSkills setObjectValue:nil];
@@ -92,7 +92,7 @@
 		return;
 	}
 	SkillPlan *plan = [character trainingQueue];
-	
+
 	[queueHeader setCharacter:character];
 	[queueHeader setSkillPlan:plan];
 	[queueHeader setTimeRemaining:trainingTimeOfCurrentQueue];
@@ -104,51 +104,51 @@
 	if([character charSheetError]){
 		return;
 	}
-	
+
 	[charName setStringValue:[character stringForKey:CHAR_NAME]];
 	[charRace setStringValue:[NSString stringWithFormat:@"%@ %@",
 							  [character stringForKey:CHAR_RACE],
 							  [character stringForKey:CHAR_BLOODLINE]]];
 	[charName sizeToFit];
 	[charRace sizeToFit];
-	
+
 	[charInt setStringValue:[character getAttributeString:ATTR_INTELLIGENCE]];
 	[charPerc setStringValue:[character getAttributeString:ATTR_PERCEPTION]];
 	[charChar setStringValue:[character getAttributeString:ATTR_CHARISMA]];
 	[charWill setStringValue:[character getAttributeString:ATTR_WILLPOWER]];
 	[charMem setStringValue:[character getAttributeString:ATTR_MEMORY]];
-	
+
 	[charInt sizeToFit];
 	[charPerc sizeToFit];
 	[charChar sizeToFit];
 	[charWill sizeToFit];
 	[charMem sizeToFit];
-	
+
 	[charIsk setObjectValue:[NSDecimalNumber decimalNumberWithString:[character stringForKey:CHAR_BALANCE]]];
 	[charIsk sizeToFit];
-	
+
 	NSInteger clonePoints = [character integerForKey:CHAR_CLONE_SP];
 	NSInteger charPoints = [character skillPointTotal];
-	
+
 	NSInteger threshold = (CGFloat)clonePoints * 0.95;
-	
+
 	if((clonePoints < charPoints) || (threshold < charPoints)){
 		//clone is not up to date, make clone SP red to alert the user
 		[cloneSP setTextColor:[NSColor redColor]];
 	}else{
 		[cloneSP setTextColor:[NSColor textColor]];
 	}
-	
+
 	[cloneSP setObjectValue:[NSNumber numberWithInteger:clonePoints]];
 	[cloneSP sizeToFit];
-	
+
 	[charSP setObjectValue:[NSNumber numberWithInteger:charPoints]];
 	[charSP sizeToFit];
-	
+
 	NSString *knownSkills = [NSString stringWithFormat:NSLocalizedString(@"%ld (%ld at V)", nil),[character skillsKnown],[character skillsAtV]];
 	[charKnownSkills setStringValue:knownSkills];
 	[charKnownSkills sizeToFit];
-	
+
 	NSString *formattedSP = [SPFormatter stringFromNumber:[NSNumber numberWithInteger:charPoints]];
 	NSString *headerCell = [NSString stringWithFormat:
 							NSLocalizedString(@"Current skills: %ld  (skill points %@)",@"Cell header for skill sheet"),
@@ -161,9 +161,9 @@
 	if([character trainingSheetError]){
 		return;
 	}
-	
+
 	NSInteger isTraining = [character integerForKey:CHAR_TRAINING_SKILLTRAINING];
-	
+
 	if(isTraining == 0){
 		/*not training.*/
 		[charTraining setStringValue:NSLocalizedString(@"Not Training",@"Character is not training any skills")];
@@ -176,42 +176,42 @@
 		[titleRemaining setHidden:YES];
 		[[skillQueueDisplay enclosingScrollView]setHidden:YES];
 		trainingSkill = nil;
-		
+
 		return;
 	}
-		
+
 
 	if(trainingTimeOfCurrentSkill > 0){
 		NSString *typeID = [character stringForKey:CHAR_TRAINING_TYPEID];
 		NSNumber *key = [NSNumber numberWithInteger:[typeID integerValue]];
 		Skill *s = [[[GlobalData sharedInstance]skillTree] skillForId:key];
-		
+
 		if(s == nil){
 			NSLog(@"Skill was null for skill id %@",key);
 			return;
 		}
-	
+
 		NSString *training = [NSString stringWithFormat:@"%@ %@",[s skillName],
 							  romanForString([character stringForKey:CHAR_TRAINING_LEVEL])];
 		[charTraining setStringValue:training];
 		[charTraining sizeToFit];
 	}
-	
+
 	if([[character trainingQueue]skillCount] > 0){
-		
+
 		/*
 		 this needs to be whatever the skill planner thinks it is to train a single skill, not what the XML sheet says.
 		 The XML sheet sheet gives a different time to what the skill planner says and users will piss and moan if there
 		 is a difference between the two.
-		 
+
 		 we use the trainingTimeOfCurrentSkill / trainingTimeOfCurrentQueue variables to keep the training time
 		 exact across all displays so they are all consistent and tick down at the exact same speed.
 		 */
-		
+
 		[timeRemaining setInterval:trainingTimeOfCurrentSkill];
 		[queueHeader setTimeRemaining:trainingTimeOfCurrentQueue];
 		[skillQueueDatasource setFirstSkillCountdown:trainingTimeOfCurrentSkill];
-			
+
 		/*this needs the character sheet to calculate, and also needs the training sheet to know if it should be displayed*/
 		if(trainingTimeOfCurrentSkill > 0){
 		NSInteger sphr = [character spPerHour];
@@ -236,7 +236,7 @@
 	if(currentCharacter != character){ //if the character being updated is not the current character, return.
 		return;
 	}
-	
+
 	if([docPath isEqualToString:XMLAPI_CHAR_SHEET]){
 		if(!success){
 			NSLog(@"Error fetching character data for %@",[character characterName]);
@@ -245,7 +245,7 @@
 		}
 		[skillTree setDataSource:character];
 		[skillTree reloadData];
-		
+
 		[self showCharDetails:character];
 		if([character isTraining]){
 			[self showCharTrainingQueue:character];
@@ -271,7 +271,7 @@
 			NSLog(@"Error fetching character portrait for %@",[character characterName]);
 			[self clearCharTrainingQueue];
 			return;
-		
+
 		}
 		[self showCharTrainingQueue:character];
 	}
@@ -295,19 +295,19 @@
 	if(currentCharacter == c){
 		return;
 	}
-	
+
 	if(currentCharacter != nil){
 		[currentCharacter release];
 	}
-	
+
 	[self clearCharDetails];
 	[self clearCharTrainingDetails];
 	[self clearCharTrainingQueue];
-	
+
 	currentCharacter = [c retain];
-	
+
 	SkillPlan *skillQueue = [c trainingQueue];
-		
+
 	if([skillQueue skillCount] > 0){
 		NSDate *now = [NSDate date];
 		trainingTimeOfCurrentSkill = [skillQueue trainingTimeOfSkillAtIndex:0 fromDate:now];
@@ -316,15 +316,15 @@
 		trainingTimeOfCurrentSkill = 0;
 		trainingTimeOfCurrentQueue = 0;
 	}
-	
+
 	[skillQueueDatasource setCharacter:currentCharacter];
 	[skillQueueDatasource setPlan:skillQueue];
 	[skillQueueDisplay reloadData];
-	
+
 	[self showCharDetails:currentCharacter];
 	[self showCharTrainingDetails:currentCharacter];
 	[self showCharTrainingQueue:currentCharacter];
-	
+
 	[portrait setImage:[currentCharacter portrait]];
 	[skillTree setDataSource:currentCharacter];
 }
@@ -344,16 +344,16 @@
 {
 	[skillTree setDataSource:nil];
 	[portrait setImage:nil];
-	
+
 	[self clearCharDetails];
 	[self clearCharTrainingDetails];
 	[self clearCharTrainingQueue];
-	
+
 	if(currentCharacter != nil){
 		[currentCharacter release];
 		currentCharacter = nil;
 	}
-	
+
 	//Stop the timer when the user is no longer looking at the charsheet
 	[secondTimer invalidate];
 	secondTimer = nil;
@@ -361,12 +361,12 @@
 
 -(void) viewWillBeDeactivated
 {
-	
+
 }
 
 -(void) viewWillBeActivated
 {
-	
+
 }
 
 /*not implemeted*/
@@ -390,7 +390,7 @@
 	if((self = [super initWithNibName:@"CharacterSheet" bundle:nil])){
 		currentCharacter = nil;
 	}
-	
+
 	return self;
 }
 
@@ -407,7 +407,7 @@
 	[f setNegativeSuffix:@" ISK"];
 	[charIsk setFormatter:f];
 	[f release];
-	
+
 	/*formatter for skill points*/
 	f = [[NSNumberFormatter alloc]init];
 	[f setFormatterBehavior:NSNumberFormatterBehavior10_4];
@@ -416,27 +416,27 @@
 	[charSP setFormatter:f];
 	[cloneSP setFormatter:f];
 	[f release];
-	
+
 	skillQueueDatasource = [[SkillQueueDatasource alloc]init];
 	[skillQueueDisplay setDataSource:skillQueueDatasource];
 	[skillQueueDisplay setDelegate:skillQueueDatasource];
-	
+
 	SPFormatter = [[NSNumberFormatter alloc]init];
 	[SPFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
 	[SPFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-	
+
 	[skillTree setDoubleAction:@selector(skillTreeDoubleClick:)];
 	[skillTree setAction:@selector(skillTreeSingleClick:)];
 	[skillTree setTarget:self];
 	[skillTree setDelegate:self];
-	
+
 	/*set up the cell for drawing skills*/
 	MTEveSkillCell *cell = [[skillTree tableColumnWithIdentifier:COL_SKILL_NAME]dataCell];
 	[cell setTarget:self];
 
 //	[queueHeader setHidden:YES];
 //	[skillQueueDisplay setHidden:YES];
-	
+
 	/*the right-click ->delete popup menu for the character portrait.*/
 	NSMenu *portraitMenu = [[NSMenu alloc]initWithTitle:@"Delete Portrait"];
 	NSMenuItem *menuItem = [[NSMenuItem alloc]initWithTitle:NSLocalizedString(@"Delete Portrait",)
@@ -444,11 +444,11 @@
 											  keyEquivalent:@""];
 	[menuItem setTarget:self];
 	[portraitMenu addItem:menuItem];
-	
+
 	[menuItem release];
 	[portrait setMenu:portraitMenu];
 	[portraitMenu release];
-	
+
 	//timeRemaining = nil;
 }
 
@@ -487,7 +487,7 @@
 	if(![item isKindOfClass:[Skill class]]){
 		return;
 	}
-	
+
 	[SkillDetailsWindowController displayWindowForSkill:item forCharacter:currentCharacter];
 }
 
@@ -512,14 +512,14 @@
 -(void) infoButtonAction:(NSOutlineView*)sender
 {
 	NSInteger row = [sender clickedRow];
-	
+
 	[SkillDetailsWindowController displayWindowForSkill:
 	[sender itemAtRow:row] forCharacter:currentCharacter];
 }
 
-- (void)outlineView:(NSOutlineView *)outlineView 
-willDisplayOutlineCell:(id)cell 
-	 forTableColumn:(NSTableColumn *)tableColumn 
+- (void)outlineView:(NSOutlineView *)outlineView
+willDisplayOutlineCell:(id)cell
+	 forTableColumn:(NSTableColumn *)tableColumn
 			   item:(id)item
 {
 	if(![cell isKindOfClass:[MTEveSkillCell class]]){
@@ -545,13 +545,13 @@ willDisplayOutlineCell:(id)cell
 				 ];
 				/*set the remaining training time*/
 				[eveCell setTimeLeft:
-				[currentCharacter trainingTimeInSeconds:[item typeID] 
-										  fromLevel:skillLevel 
-											toLevel:skillLevel+1 
+				[currentCharacter trainingTimeInSeconds:[item typeID]
+										  fromLevel:skillLevel
+											toLevel:skillLevel+1
 							accountForTrainingSkill:YES]
 				 ];
-				
-				if([currentCharacter isTraining] && 
+
+				if([currentCharacter isTraining] &&
 					[[currentCharacter trainingSkill]isEqualToNumber:[item typeID]])
 				{
 					[eveCell setCurrentSP:[currentCharacter currentSPForTrainingSkill]];
@@ -569,18 +569,18 @@ willDisplayOutlineCell:(id)cell
 
 /*delegate methods for the skill cell display*/
 
-- (void)outlineView:(NSOutlineView *)outlineView 
-	willDisplayCell:(id)cell 
-	 forTableColumn:(NSTableColumn *)tableColumn 
+- (void)outlineView:(NSOutlineView *)outlineView
+	willDisplayCell:(id)cell
+	 forTableColumn:(NSTableColumn *)tableColumn
 			   item:(id)item
 {
-	[self outlineView:outlineView 
-		willDisplayOutlineCell:cell 
-	   forTableColumn:tableColumn 
+	[self outlineView:outlineView
+		willDisplayOutlineCell:cell
+	   forTableColumn:tableColumn
 				 item:item];
 }
 
-- (CGFloat)outlineView:(NSOutlineView *)outlineView 
+- (CGFloat)outlineView:(NSOutlineView *)outlineView
 	 heightOfRowByItem:(id)item
 {
 	if([item isKindOfClass:[Skill class]]){

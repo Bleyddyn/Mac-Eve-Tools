@@ -17,7 +17,7 @@
 	CCPType *ship;
 	CCPDatabase *db;
 	Character *character;
-	
+
 	NSMutableArray *attributes;
 }
 

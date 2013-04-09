@@ -15,7 +15,7 @@
 @interface SkillQueueDatasource : NSObject <NSTableViewDataSource,NSTableViewDelegate> {
 	SkillPlan *plan;
 	Character *character;
-	
+
 	NSInteger firstSkillCountdown;
 }
 

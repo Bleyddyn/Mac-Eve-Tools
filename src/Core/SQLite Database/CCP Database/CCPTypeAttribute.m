@@ -26,7 +26,7 @@
 -(CCPTypeAttribute*) init
 {
 	if((self = [super init])){
-		
+
 	}
 	return self;
 }
@@ -39,7 +39,7 @@
 	[super dealloc];
 }
 
-+(CCPTypeAttribute*) createTypeAttribute:(NSInteger)attributeId 
++(CCPTypeAttribute*) createTypeAttribute:(NSInteger)attributeId
 								dispName:(NSString*)dispName
 							 unitDisplay:(NSString*)unitDisp
 							   graphicId:(NSInteger)gID
@@ -50,18 +50,18 @@
 	if(ta == nil){
 		return nil;
 	}
-	
+
 	ta->attributeID = attributeId;
 	ta->displayName = [dispName retain];
 	ta->unitDisplay = [unitDisp retain];
 	ta->graphicID = gID;
 	ta->valueInt = vInt;
 	ta->valueFloat = vFloat;
-	
+
 	[ta autorelease];
-	
+
 	return ta;
-	
+
 }
 
 @end

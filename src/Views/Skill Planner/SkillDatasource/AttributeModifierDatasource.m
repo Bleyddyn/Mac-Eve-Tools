@@ -20,7 +20,7 @@
 
 @implementation AttributeModifierDatasource
 
--(AttributeModifierDatasource*) initWithQueue:(SkillPointAttributeQueue*)queue 
+-(AttributeModifierDatasource*) initWithQueue:(SkillPointAttributeQueue*)queue
 								 forCharacter:(Character*)ch;
 {
 	self = [super init];
@@ -28,7 +28,7 @@
 		character = [ch retain];
 		attrQueue = [queue retain];
 	}
-	
+
 	return self;
 }
 
@@ -44,8 +44,8 @@
 	return [attrQueue count];
 }
 
--(id) tableView:(NSTableView *)aTableView 
-objectValueForTableColumn:(NSTableColumn *)aTableColumn 
+-(id) tableView:(NSTableView *)aTableView
+objectValueForTableColumn:(NSTableColumn *)aTableColumn
 			row:(NSInteger)rowIndex
 {
 	if([[aTableColumn identifier]isEqualToString:COL_PLAN_TRAINING_TIME]){

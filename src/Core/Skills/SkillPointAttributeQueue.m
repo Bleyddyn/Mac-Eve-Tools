@@ -36,7 +36,7 @@
 	[super dealloc];
 }
 
--(void) addSkillPoints:(NSInteger)skillPoints 
+-(void) addSkillPoints:(NSInteger)skillPoints
 		   primaryAttr:(NSInteger)primary
 		 secondaryAttr:(NSInteger)secondary
 {
@@ -49,7 +49,7 @@
 			}
 		}
 	}
-	
+
 	SkillPointAttributeTotal *total = [[SkillPointAttributeTotal alloc]initWithPrimary:primary
 																		  andSecondary:secondary];
 	[total addSkillPoints:skillPoints];
@@ -60,13 +60,13 @@
 -(NSInteger) calculateTrainingTimeForCharacter:(Character*)character
 {
 	NSInteger trainingTime = 0;
-	
+
 	for(SkillPointAttributeTotal *total in queue){
-		trainingTime += [character trainingTimeInSeconds:[total primary] 
+		trainingTime += [character trainingTimeInSeconds:[total primary]
 											   secondary:[total secondary]
 											 skillPoints:[total skillPoints]];
 	}
-	
+
 	return trainingTime;
 }
 
@@ -78,9 +78,9 @@
 -(NSInteger) trainingTimeForIndex:(NSUInteger)index withCharacter:(Character*)character
 {
 	SkillPointAttributeTotal *total = [queue objectAtIndex:index];
-	
-	return [character trainingTimeInSeconds:[total primary] 
-								  secondary:[total secondary] 
+
+	return [character trainingTimeInSeconds:[total primary]
+								  secondary:[total secondary]
 								skillPoints:[total skillPoints]];
 }
 
@@ -103,17 +103,17 @@
 {
 	NSInteger planLength = [plan skillCount];
 	SkillTree *st = [[GlobalData sharedInstance]skillTree];
-	
+
 	for(NSInteger i = 0; i < planLength; i++){
 		SkillPair *pair = [plan skillAtIndex:i];
-		
+
 		Skill *s = [st skillForId:[pair typeID]];
-		
+
 		[self addSkillPoints:[s skillPointsForLevel:[pair skillLevel]]
 				 primaryAttr:[s primaryAttr]
 			   secondaryAttr:[s secondaryAttr]];
 	}
-	
+
 	[queue sortUsingSelector:@selector(sortBySkillPoints:)];
 }
 

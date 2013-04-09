@@ -26,7 +26,7 @@
 		character = [ch retain];
 		cert = [c retain];
 	}
-	
+
 	return self;
 }
 
@@ -38,30 +38,30 @@
 }
 
 /*
- The cert prerequisite datasource is a special case, as it does cert 
+ The cert prerequisite datasource is a special case, as it does cert
  prerequisites as well as skill prerequisites.
- 
+
  This could maybe be folded in to the SkillPrerequisiteDatasource, by
  ignoring the cert prereqs if none are given.
  */
 
--(NSInteger)outlineView:(NSOutlineView *)outlineView 
+-(NSInteger)outlineView:(NSOutlineView *)outlineView
  numberOfChildrenOfItem:(id)item
 {
 	if(item == nil){
 		return [[cert certPrereqs]count] + [[cert skillPrereqs]count];
 	}
-	
+
 	if([item isKindOfClass:[CertPair class]]){
 		Cert *c = [[[GlobalData sharedInstance]certTree]certForID:[item certID]];
 		return [[c certPrereqs]count] + [[c skillPrereqs]count];
 	}
-	
+
 	if([item isKindOfClass:[SkillPair class]]){
 		Skill *s = [[[GlobalData sharedInstance]skillTree]skillForId:[item typeID]];;
 		return [[s prerequisites]count];
 	}
-	
+
 	return 0;
 }
 
@@ -77,56 +77,56 @@
 	return nil;
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView 
-			child:(NSInteger)index 
+- (id)outlineView:(NSOutlineView *)outlineView
+			child:(NSInteger)index
 		   ofItem:(id)item
 {
 	/*
-	 this is a bit messy, as we need to first count of the cert prerequs, 
+	 this is a bit messy, as we need to first count of the cert prerequs,
 	 then move onto skill prereqs if that is greater than than the cert count.
 	 */
 	if(item == nil){
 		return [self certPairAtIndex:cert index:index];
 	}
-	
+
 	if([item isKindOfClass:[CertPair class]]){
 		Cert *c = [[[GlobalData sharedInstance]certTree]certForID:[item certID]];
 		return [self certPairAtIndex:c index:index];
 	}
-	
+
 	if([item isKindOfClass:[SkillPair class]]){
 		Skill *s = [[[GlobalData sharedInstance]skillTree]skillForId:[item typeID]];
 		return [[s prerequisites]objectAtIndex:index];
 	}
-	
+
 	NSLog(@"%@",[item className]);
-	
+
 	return nil;
 }
 
 -(NSAttributedString*) colouredString:(NSString*)str colour:(NSColor*)colour
 {
-	NSDictionary *dict = [NSDictionary dictionaryWithObject:colour 
+	NSDictionary *dict = [NSDictionary dictionaryWithObject:colour
 													 forKey:NSForegroundColorAttributeName];
 	NSAttributedString *astr = [[NSAttributedString alloc]initWithString:str
 															  attributes:dict];
 	[astr autorelease];
-	
+
 	return astr;
 }
 
-- (id)outlineView:(NSOutlineView *)outlineView 
-objectValueForTableColumn:(NSTableColumn *)tableColumn 
+- (id)outlineView:(NSOutlineView *)outlineView
+objectValueForTableColumn:(NSTableColumn *)tableColumn
 		   byItem:(id)item
 {
 	if(item == nil){
 		return @"nil";
 	}
-	
+
 	if([item isKindOfClass:[SkillPair class]]){
-		
+
 		Skill *s = [[character skillTree]skillForId:[(SkillPair*)item typeID]];
-		
+
 		NSColor *colour;
 		if(s == nil){
 			colour = [NSColor redColor];
@@ -135,24 +135,24 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		}else{
 			colour = [NSColor blueColor];
 		}
-		
+
 		return [self colouredString:[item roman] colour:colour];
 	}
-	
+
 	if([item isKindOfClass:[CertPair class]]){
 		Cert *c = [[[GlobalData sharedInstance]certTree]certForID:[item certID]];
-		
+
 		if([character hasCert:[item certID]]){
 			return [self colouredString:[c fullCertName] colour:[NSColor blueColor]];
 		}
-		
+
 		return [c fullCertName];
 	}
-	
+
 	return [item className];
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView 
+- (BOOL)outlineView:(NSOutlineView *)outlineView
    isItemExpandable:(id)item
 {
 	if([item isKindOfClass:[SkillPair class]]){
@@ -161,7 +161,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			return YES;
 		}
 	}
-	
+
 	if([item isKindOfClass:[CertPair class]]){
 		Cert *c = [[[GlobalData sharedInstance]certTree]certForID:[item certID]];
 		if([[c certPrereqs]count] > 0){
@@ -171,7 +171,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			return YES;
 		}
 	}
-	
+
 	return NO;
 }
 

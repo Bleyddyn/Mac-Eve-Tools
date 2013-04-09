@@ -17,7 +17,7 @@
 @synthesize attributeID;
 
 
--(SkillAttribute*) initWithAttributeID:(NSInteger)attrID 
+-(SkillAttribute*) initWithAttributeID:(NSInteger)attrID
 							  intValue:(NSInteger)valInt
 							floatValue:(CGFloat)valFloat
 							   valType:(BOOL)type
@@ -28,8 +28,8 @@
 		valueFloat = valFloat;
 		isInt = type;
 	}
-	
-	return self;	
+
+	return self;
 }
 
 @end

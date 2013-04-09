@@ -18,7 +18,7 @@
 -(SkillPointAttributeQueue*)init;
 
 
--(void) addSkillPoints:(NSInteger)skillPoints 
+-(void) addSkillPoints:(NSInteger)skillPoints
 		   primaryAttr:(NSInteger)primary
 		 secondaryAttr:(NSInteger)secondary;
 

@@ -15,7 +15,7 @@
 	IBOutlet NSButton *removeAccount;
 	IBOutlet NSTableViewCellExtended *accountTable;
 	IBOutlet AccountPrefDetailController *accountDetailController;
-	
+
 	NSMutableArray *accounts;
 }
 

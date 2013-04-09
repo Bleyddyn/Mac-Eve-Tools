@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -42,7 +42,7 @@
 @end
 
 
-@implementation SkillPlanController (SkillPlanControllerPrivate) 
+@implementation SkillPlanController (SkillPlanControllerPrivate)
 
 - (CGFloat)splitView:(NSSplitView *)sender constrainMinCoordinate:(CGFloat)proposedMin ofSubviewAt:(NSInteger)offset
 {
@@ -64,31 +64,31 @@
 	be a fairly common way to want the view to resize.
  */
 - (void)splitView:(NSSplitView *)sender resizeSubviewsWithOldSize:(NSSize)oldSize
-{	
+{
 	// http://www.wodeveloper.com/omniLists/macosx-dev/2003/May/msg00261.html
 	// http://snipplr.com/view/2452/resize-nssplitview-nicely/
 	// grab the splitviews
     NSView *left = [[sender subviews] objectAtIndex:0];
     NSView *right = [[sender subviews] objectAtIndex:1];
-	
+
 	CGFloat minLeftWidth = [skillSearchView bounds].size.width;
     CGFloat dividerThickness = [sender dividerThickness];
-	
+
 	// get the different frames
     NSRect newFrame = [sender frame];
     NSRect leftFrame = [left frame];
     NSRect rightFrame = [right frame];
-	
+
 	// change in width for this redraw
 	CGFloat	dWidth  = newFrame.size.width - oldSize.width;
-	
+
 	// ratio of the left frame width to the right used for resize speed when both panes are being resized
 	CGFloat rLeftRight = (leftFrame.size.width - minLeftWidth) / rightFrame.size.width;
-	
+
 	// resize the height of the left
     leftFrame.size.height = newFrame.size.height;
     leftFrame.origin = NSMakePoint(0,0);
-	
+
 	// resize the left & right pane equally if we are shrinking the frame
 	// resize the right pane only if we are increasing the frame
 	// when resizing lock at minimum width for the left panel
@@ -100,11 +100,11 @@
 		leftFrame.size.width += dWidth * rLeftRight;
 		rightFrame.size.width += dWidth * (1 - rLeftRight);
 	}
-	
+
 	rightFrame.size.width = newFrame.size.width - leftFrame.size.width - dividerThickness;
 	rightFrame.size.height = newFrame.size.height;
 	rightFrame.origin.x = leftFrame.size.width + dividerThickness;
-	
+
 	[left setFrame:leftFrame];
 	[right setFrame:rightFrame];
 }
@@ -126,7 +126,7 @@
 -(SkillPlanController*) init
 {
 	if((self = [super initWithNibName:@"SkillPlan" bundle:nil])){
-		
+
 	}
 	return self;
 }
@@ -135,33 +135,33 @@
 -(void) awakeFromNib
 {
 	st = [[[GlobalData sharedInstance]skillTree] retain];
-	
+
 	/*Add the subviews. skillSearchView on the left, and the plan view on the right*/
 	[splitView addSubview:skillSearchView];
 	//[splitView addSubview:planTabView];
 	[splitView addSubview:skillView2];
 	[splitView setPosition:([skillSearchView bounds].size.width) ofDividerAtIndex:0];
-	
+
 	[splitView setDelegate:self]; /*to control the resizing*/
 	[skillSearchView setDelegate:self]; /*this class will receive notifications about skills that have been selected*/
-	
+
 	skillCharDatasource = [[SkillSearchCharacterDatasource alloc]init];
 	[skillCharDatasource setSkillTree:st];
 	if(activeCharacter != nil){
 		[skillCharDatasource setCharacter:activeCharacter];
 	}
 	[skillSearchView addDatasource:skillCharDatasource];
-	
+
 	skillCertDatasource = [[SkillSearchCertDatasource alloc]init];
 	if(skillSearchView != nil){
 		[skillSearchView addDatasource:skillCertDatasource];
-	}	
-	
+	}
+
 	skillShipDatasource = [[SkillSearchShipDatasource alloc]initWithCategory:DB_CATEGORY_SHIP];
 	if(skillShipDatasource != nil){
 		[skillSearchView addDatasource:skillShipDatasource];
 	}
-		
+
 	[skillView2 setDelegate:self];
 }
 
@@ -185,9 +185,9 @@
 	}
 
 	[skillView2 setCharacter:c];
-	
+
 	activeCharacter = [c retain];
-	
+
 	[skillCharDatasource setCharacter:c];
 	[skillSearchView reloadDatasource:skillCharDatasource]; /*datasouce has changed.*/
 }
@@ -198,7 +198,7 @@
 }
 
 -(void) viewIsInactive
-{	
+{
 	if(activeCharacter != nil){
 		[activeCharacter release];
 		activeCharacter = nil;
@@ -209,10 +209,10 @@
 {
 	[skillCharDatasource setSkillTree:st];
 	[skillCharDatasource setCharacter:activeCharacter];
-	
+
 	[skillSearchView reloadDatasource:skillCharDatasource];
 	[skillSearchView selectDefaultGroup];
-	
+
 	[skillView2 refreshPlanView];
 }
 
@@ -229,31 +229,31 @@
 	NSMenu *menu;
 	NSMenuItem *topLevel;
 	NSMenuItem *item;
-	
+
 	topLevel = [[NSMenuItem allocWithZone:[NSMenu menuZone]]initWithTitle:@"Planner"
 																   action:NULL
 															keyEquivalent:@""];
 	[topLevel autorelease];
-	
+
 	menu = [[NSMenu allocWithZone:[NSMenu menuZone]]initWithTitle:@"Planner"];
 	[topLevel setSubmenu:menu];
 	[menu release];
-	
-	
-	item = [[NSMenuItem alloc]initWithTitle:@"Import Plan" 
+
+
+	item = [[NSMenuItem alloc]initWithTitle:@"Import Plan"
 									 action:@selector(importEvemonPlan:)
 							  keyEquivalent:@""];
 	[item setTarget:self];
 	[menu addItem:item];
 	[item release];
-	
+
 	item = [[NSMenuItem alloc]initWithTitle:@"Export Plan"
-									 action:@selector(exportEvemonPlan:) 
+									 action:@selector(exportEvemonPlan:)
 							  keyEquivalent:@""];
 	[item setTarget:self];
 	[menu addItem:item];
 	[item release];
-	
+
 	return topLevel;
 }
 
@@ -276,7 +276,7 @@
 -(SkillPlan*) createNewPlan:(NSString*)planName;
 {
 	SkillPlan *plan = [activeCharacter createSkillPlan:planName];
-	
+
 	return plan;
 }
 
@@ -289,7 +289,7 @@
 		NSLog(@"SkillPlan %ld not found in character %@",planId,[activeCharacter characterName]);
 		return NO;
 	}
-	
+
 	[activeCharacter removeSkillPlanAtIndex:planId];
 	return YES;
 }
@@ -308,20 +308,20 @@
 	[op setCanChooseFiles:YES];
 	[op setAllowsMultipleSelection:NO];
 	[op setAllowedFileTypes:[NSArray arrayWithObjects:@"emp",@"xml",nil]];
-	
+
 	if([op runModal] == NSFileHandlingPanelCancelButton){
 		return;
 	}
-	
+
 	if([[op URLs]count] == 0){
 		return;
 	}
-	
+
 	NSURL *url = [[op URLs]objectAtIndex:0];
 	if(url == nil){
 		return;
 	}
-	
+
 	/*
 	 now we import the plan.
 	 the evemon format doesn't have the plan name encoded

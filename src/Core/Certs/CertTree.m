@@ -58,7 +58,7 @@
 	return [allCerts objectForKey:[NSNumber numberWithInteger:certID]];
 }
 
--(CertTree*) initWithCats:(NSArray*)certCats 
+-(CertTree*) initWithCats:(NSArray*)certCats
 				  andDict:(NSDictionary*)dict
 {
 	if((self = [super init])){
@@ -68,7 +68,7 @@
 	return self;
 }
 
-+(CertTree*) createCertTree:(NSArray*)certCats 
++(CertTree*) createCertTree:(NSArray*)certCats
 				   certDict:(NSDictionary*)certs
 {
 	CertTree *tree = [[CertTree alloc]initWithCats:certCats andDict:certs];

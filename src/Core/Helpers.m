@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -66,7 +66,7 @@ NSInteger attrCodeForString(NSString *str)
 NSInteger attrCodeForDBInt(NSInteger dbcode)
 {
 	/*
-	 database 
+	 database
 	 164 - charisma
 	 165 - intelligence
 	 155 - memory
@@ -74,7 +74,7 @@ NSInteger attrCodeForDBInt(NSInteger dbcode)
 	 168 - willpower
 	 */
 	NSInteger code = 0;
-	
+
 	switch (dbcode) {
 		case 164:
 			code = ATTR_CHARISMA;
@@ -118,7 +118,7 @@ BOOL createDirectory(NSString *path)
 {
 	BOOL rc = NO;
 	NSFileManager *fm = [NSFileManager defaultManager];
-	
+
 	if(! [fm fileExistsAtPath:path isDirectory:nil]){
 		if(![fm createDirectoryAtPath:path  withIntermediateDirectories:YES attributes:nil error:nil]){
 			NSLog(@"Could not create directory %@",path);
@@ -150,22 +150,22 @@ NSString* stringTrainingTime(NSInteger trainingTime)
 NSString* stringTrainingTime2(NSInteger trainingTime , enum TrainingTimeFields ttf)
 {
 	NSMutableString *str = [[[NSMutableString alloc]init]autorelease];
-	
+
 	if(trainingTime < 0){
 		trainingTime = -trainingTime;
 		[str appendString:@"-"];
 	}
-	
+
 	NSInteger remain, days, hours , min, sec;
 	days = trainingTime / SEC_DAY;
 	remain = trainingTime - (days * SEC_DAY);
-	
+
 	hours = remain / SEC_HOUR;
 	remain = remain - (hours * SEC_HOUR);
-	
+
 	min = remain / SEC_MINUTE;
 	sec = remain - (min * SEC_MINUTE);
-	
+
 	if(days > 0 && (ttf & TTF_Days)){
 		[str appendFormat:@"%ldd ",days];
 	}
@@ -178,11 +178,11 @@ NSString* stringTrainingTime2(NSInteger trainingTime , enum TrainingTimeFields t
 	if(sec > 0 && (ttf & TTF_Seconds)){
 		[str appendFormat:@"%lds",sec];
 	}
-	
+
 	if(!(ttf & TTF_Seconds)){
 		return [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 	}
-	
+
 	return str;
 }
 
@@ -202,13 +202,13 @@ NSString* sqlite3_column_nsstr(void *stmt, int col)
 		if(newString != NULL){
 			return newString;
 		}
-		
+
 		/*for some reason stringWithUTF8String will return null.  attempt ASCII encoding*/
 		newString = [NSString stringWithCString:(const char*)str encoding:NSASCIIStringEncoding];
 		if(newString != NULL){
 			return newString;
 		}
-		
+
 		newString = [NSString stringWithString:@"If you can see this, then this is a bug. please report it."];
 		return newString;
 	}
@@ -217,7 +217,7 @@ NSString* sqlite3_column_nsstr(void *stmt, int col)
 NSString* languageForId(enum DatabaseLanguage lang)
 {
 	NSString *str;
-	
+
 	switch(lang){
 		case l_EN:
 			str = NSLocalizedString(@"English",@"english language");
@@ -232,7 +232,7 @@ NSString* languageForId(enum DatabaseLanguage lang)
 			str = NSLocalizedString(@"Invalid selection",@"invalid language choice error message");
 			break;
 	}
-	
+
 	return str;
 }
 
@@ -256,7 +256,7 @@ const char* langCodeForId(enum DatabaseLanguage lang)
 		default:
 			code = NULL;
 			break;
-	}	
+	}
 	return code;
 	 */
 }

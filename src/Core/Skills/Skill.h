@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -25,22 +25,22 @@
 	NSString *skillName;
 	NSString *skillDescription;
 	NSInteger skillRank;
-	
+
 	/*
 		Details for a skill if it belongs to a character
 	 */
-	NSInteger skillLevel;	
+	NSInteger skillLevel;
 	NSInteger skillPoints; //Skill points the character has in this skill, not skill points for the level.
-	
+
 	NSInteger primaryAttr;
 	NSInteger secondaryAttr;
-	
+
 	NSMutableArray *skillPrereqs;
-	
+
 	/*internal references*/
 	NSNumber* typeID; /*typeID is the unique skill identifier*/
 	NSNumber* groupID; /*groupID is the skill group that this skill belongs to*/
-	
+
 	NSMutableDictionary *attributes;
 }
 

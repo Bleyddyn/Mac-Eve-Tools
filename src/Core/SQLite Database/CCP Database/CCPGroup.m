@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -42,19 +42,19 @@
 
 -(void) appendTypesToSubgroup:(NSMutableArray*)sub subGroup:(METSubGroup*)group
 {
-	
+
 }
 
 -(void) buildSubGroups:(NSArray*)typeArray
 {
 	/*group each item by faction, and filter by metaGroup*/
-	
+
 	NSMutableArray *caldari = [[[NSMutableArray alloc]init]autorelease];
 	NSMutableArray *amarr = [[[NSMutableArray alloc]init]autorelease];
 	NSMutableArray *minmatar = [[[NSMutableArray alloc]init]autorelease];
 	NSMutableArray *gallente = [[[NSMutableArray alloc]init]autorelease];
 	NSMutableArray *pirate = [[[NSMutableArray alloc]init]autorelease];
-	
+
 	for(CCPType *type in types){
 		if([type isPirateShip]){
 			[pirate addObject:type];
@@ -72,16 +72,16 @@
 				case Minmatar:
 					[minmatar addObject:type];
 					break;
-			}	
+			}
 		}
 	}
-	
+
 	[subGroups release];
 	subGroups = [[NSMutableArray alloc]initWithCapacity:5];
-	
-	
+
+
 	/*this is ugly shit. rewrite this later.*/
-	
+
 	METSubGroup *sg;
 	/*pirate*/
 	if([pirate count] > 0){
@@ -113,7 +113,7 @@
 	[subGroups addObject:sg];
 	[sg release];
 	}
-	
+
 	//amarr
 	if([amarr count] > 0){
 	sg = [[METSubGroup alloc]
@@ -124,7 +124,7 @@
 	[subGroups addObject:sg];
 	[sg release];
 	}
-	
+
 	//Minmatar
 	if([minmatar count] > 0){
 	sg = [[METSubGroup alloc]

@@ -18,7 +18,7 @@
 	IBOutlet NSTextField *apiKey;
 	IBOutlet NSTableView *characterTable;
 	IBOutlet AccountPrefTableController *accountTableController;
-	
+
 	Account *account;
 }
 

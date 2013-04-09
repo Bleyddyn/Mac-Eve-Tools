@@ -18,13 +18,13 @@
 
 	IBOutlet NSOutlineView *certPrerequisites;
 	IBOutlet NSTextField *certDescription;
-	
+
 	IBOutlet NSImageView *miniPortrait;
 	IBOutlet NSTextField *trainingTime;
-	
+
 	Cert *cert;
 	Character *character;
-	
+
 	CertPrerequisiteDatasource *certDS;
 }
 

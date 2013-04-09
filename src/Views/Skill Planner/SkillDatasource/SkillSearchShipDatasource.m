@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -54,21 +54,21 @@
 {
 	if(self = [self init]){
 		NSString *path = [[NSUserDefaults standardUserDefaults] stringForKey:UD_ITEM_DB_PATH];
-		
+
 		if(![[NSFileManager defaultManager]
 			 fileExistsAtPath:path])
 		{
 			[self autorelease];
 			return nil;
 		}
-		
+
 		database = [[CCPDatabase alloc]initWithPath:path];
 		if(database == nil){
 			/*fall back to user directory*/
 			[self autorelease];
 			return nil;
 		}
-		
+
 		category = [[database category:cat]retain];
 	}
 	return self;
@@ -82,22 +82,22 @@
 -(void) skillSearchFilter:(id)sender
 {
 	NSString *searchValue = [[sender cell]stringValue];
-	
+
 	if([searchValue length] == 0){
 		[searchString release];
 		searchString = nil;
 		[searchObjects removeAllObjects];
 		return;
 	}
-	
+
 	[searchObjects removeAllObjects];
 	[searchString release];
 	searchString = [searchValue retain];
-	
+
 	/*this will need to be an array of typeobjects. jesus.*/
-	
+
 	NSInteger groupCount = [category groupCount];
-	
+
 	for(NSInteger i = 0; i < groupCount; i++){
 		CCPGroup *group = [category groupAtIndex:i];
 		NSInteger typeCount = [group typeCount];
@@ -119,15 +119,15 @@
 		}
 		return [category groupCount];
 	}
-	
+
 	if([item isKindOfClass:[CCPGroup class]]){
 		return [item subGroupCount];
 	}
-	
+
 	if([item isKindOfClass:[METSubGroup class]]){
 		return [item typeCount];
 	}
-	
+
 	return 0;
 }
 
@@ -171,50 +171,50 @@
 	return nil;
 }
 
--(NSMenu*) outlineView:(NSOutlineView*)outlineView 
-menuForTableColumnItem:(NSTableColumn*)column 
+-(NSMenu*) outlineView:(NSOutlineView*)outlineView
+menuForTableColumnItem:(NSTableColumn*)column
 				byItem:(id)item
 {
 	if(![item isKindOfClass:[CCPType class]]){
 		return nil;
 	}
-	
+
 	NSArray *skills = [item prereqs];
-	
-	
-	
+
+
+
 	NSMenu *menu = [[[NSMenu alloc]initWithTitle:@"Menu"]autorelease];
-	
+
 	NSMenuItem *menuItem;
-	menuItem = [[NSMenuItem alloc]initWithTitle:[item typeName] 
+	menuItem = [[NSMenuItem alloc]initWithTitle:[item typeName]
 									 action:@selector(displayShipWindow:)
 							  keyEquivalent:@""];
 	[menuItem setRepresentedObject:item];
 	[menu addItem:menuItem];
 	[menuItem release];
-	
+
 	[menu addItem:[NSMenuItem separatorItem]];
-	
+
 	menuItem = [[NSMenuItem alloc]initWithTitle:[NSString stringWithFormat:
 												 NSLocalizedString(@"Add %@ to plan",
 																   @"add a ship to the skill plan"),
-												 [item typeName]] 
-									 action:@selector(menuAddSkillClick:) 
+												 [item typeName]]
+									 action:@selector(menuAddSkillClick:)
 							  keyEquivalent:@""];
-	
+
 	[menuItem setRepresentedObject:skills];
 	[menu addItem:menuItem];
 	[menuItem release];
-	
+
 	return menu;
 }
 
 /*display a tooltip*/
-- (NSString *)outlineView:(NSOutlineView *)ov 
-		   toolTipForCell:(NSCell *)cell 
-					 rect:(NSRectPointer)rect 
-			  tableColumn:(NSTableColumn *)tc 
-					 item:(id)item 
+- (NSString *)outlineView:(NSOutlineView *)ov
+		   toolTipForCell:(NSCell *)cell
+					 rect:(NSRectPointer)rect
+			  tableColumn:(NSTableColumn *)tc
+					 item:(id)item
 			mouseLocation:(NSPoint)mouseLocation
 {
 	return nil;
@@ -222,14 +222,14 @@ menuForTableColumnItem:(NSTableColumn*)column
 
 #pragma mark drag and drop support
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView 
-		 writeItems:(NSArray *)items 
+- (BOOL)outlineView:(NSOutlineView *)outlineView
+		 writeItems:(NSArray *)items
 	   toPasteboard:(NSPasteboard *)pboard
-{			
+{
 	NSMutableArray *array = [[NSMutableArray alloc]init];
-	
+
 	//FIXME: TODO: type could also be a CCPGroup item
-	
+
 	for(CCPType *type in items){
 		if([type isKindOfClass:[CCPType class]]){
 			[array addObjectsFromArray:[type prereqs]];
@@ -237,22 +237,22 @@ menuForTableColumnItem:(NSTableColumn*)column
 			return NO;
 		}
 	}
-	
+
 	[pboard declareTypes:[NSArray arrayWithObject:MTSkillArrayPBoardType] owner:self];
-	
+
 	NSMutableData *data = [[NSMutableData alloc]init];
-	
+
 	NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc]initForWritingWithMutableData:data];
 	[archiver setOutputFormat:NSPropertyListBinaryFormat_v1_0];
 	[archiver encodeObject:array];
 	[archiver finishEncoding];
-	
+
 	[pboard setData:data forType:MTSkillArrayPBoardType];
-	
+
 	[archiver release];
 	[data release];
 	[array release];
-	
+
 	return YES;
 }
 

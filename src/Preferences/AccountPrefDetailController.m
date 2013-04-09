@@ -21,13 +21,13 @@
 	[apiKey setEditable:hasAccount];
 	[updateCharacters setEnabled:hasAccount];
 	[characterTable setEnabled:hasAccount];
-	
+
 	[characterTable reloadData];
 }
 
 - (void) awakeFromNib {
 	[self addObserver:self forKeyPath:@"account" options:0 context:NULL];
-	
+
 	[updatingIndicator setHidden:YES];
 	[self updateAllControls];
 }
@@ -41,7 +41,7 @@
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqualToString:@"account"]) {
-		
+
 		if ([self.account accountName] != nil) {
 			[accountName setStringValue:[self.account accountName]];
 		}
@@ -55,14 +55,14 @@
 		else {
 			[userId setStringValue:@""];
 		}
-		
+
 		if ([self.account apiKey] != nil) {
 			[apiKey setStringValue:[self.account apiKey]];
 		}
 		else {
 			[apiKey setStringValue:@""];
 		}
-		
+
 		[self updateAllControls];
 	}
 }
@@ -71,16 +71,16 @@
 	if (self.account == NULL) {
 		return;
 	}
-	
+
 	if (sender == accountName) {
 		self.account.accountName = value;
 		[accountTableController accountNameDidChanged];
 	}
-	
+
 	if (sender == userId) {
 		self.account.accountID = value;
 	}
-	
+
 	if (sender == apiKey) {
 		self.account.apiKey = value;
 	}
@@ -94,15 +94,15 @@
 	[self updateAllControls];
 }
 
-- (IBAction)updateClicked:(NSButton *)sender {	
-	
+- (IBAction)updateClicked:(NSButton *)sender {
+
 	/* get the latest data from the input controls */
 	[self updateDataFromControls:accountName withValue:[accountName stringValue]];
 	[self updateDataFromControls:userId withValue:[userId stringValue]];
 	[self updateDataFromControls:apiKey withValue:[apiKey stringValue]];
-	
+
 	[self.account loadAccount:self];
-	
+
 	[updatingIndicator setHidden:NO];
 	[updatingIndicator startAnimation:self];
 }
@@ -131,10 +131,10 @@
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
 	CharacterTemplate *template = [self.account.characters objectAtIndex:row];
-	
+
 	if([[tableColumn identifier]isEqualToString:@"NAME"]){
 		return template.characterName;
-	}if([[tableColumn identifier]isEqualToString:@"ACTIVE"]){		
+	}if([[tableColumn identifier]isEqualToString:@"ACTIVE"]){
 		if(template.active){
 			return [NSNumber numberWithInteger:NSOnState];
 		}else{

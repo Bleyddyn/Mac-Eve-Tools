@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -53,20 +53,20 @@
 		skillPrereqs = [[NSMutableArray alloc]init];
 		attributes = [[NSMutableDictionary alloc]init];
 	}
-	
+
 	return self;
 }
 
 -(Skill*) privateInit
 {
 	if(self = [super init]){
-		
+
 	}
 	return self;
 }
 
--(Skill*) initWithDetails:(NSString*)name 
-					group:(NSNumber*)skillGroupID 
+-(Skill*) initWithDetails:(NSString*)name
+					group:(NSNumber*)skillGroupID
 					 type:(NSNumber*)skillTypeID
 {
 	if([self init])
@@ -75,7 +75,7 @@
 		groupID = [skillGroupID retain];
 		skillName = [name retain];
 	}
-	
+
 	return self;
 }
 
@@ -83,7 +83,7 @@
 {
 	Skill *sg = [[Skill allocWithZone:zone]privateInit];
 	if(sg != nil){
-		
+
 		sg->skillName = [self->skillName retain];
 		sg->skillDescription = [self->skillDescription retain];
 		sg->skillRank = self->skillRank;
@@ -98,14 +98,14 @@
 
 		sg->typeID = [self->typeID retain];
 		sg->groupID = [self->groupID retain];
-		
-		/*this maybe should be copied instead of retained, 
-		 however it shouldn't actually ever be changed outside 
+
+		/*this maybe should be copied instead of retained,
+		 however it shouldn't actually ever be changed outside
 		 of the loading routines*/
 		sg->attributes = [self->attributes retain];
 	}
 	return sg;
-	
+
 }
 
 -(NSArray*) prerequisites
@@ -113,7 +113,7 @@
 	if([skillPrereqs count] == 0){
 		return nil;
 	}
-	
+
 	return skillPrereqs;
 }
 
@@ -162,16 +162,16 @@
 }
 
 -(CGFloat) percentCompleted:(NSInteger)fromLevel toLevel:(NSInteger)toLevel
-{	
+{
 	NSInteger startPoints = totalSkillPointsForLevel(fromLevel,skillRank);
 	NSInteger finishPoints = totalSkillPointsForLevel(toLevel,skillRank);
-	
+
 	if(startPoints > skillPoints){
 		return 0.0;
 	}
-	
+
 	return ((CGFloat)(skillPoints - startPoints) / (CGFloat)(finishPoints - startPoints));
-	
+
 	/*given the start and finish skill point targets, find what percentage we have completed*/
 }
 

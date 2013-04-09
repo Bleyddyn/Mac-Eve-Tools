@@ -1,7 +1,7 @@
 Release 16.17 (22/01/2011)
 	Support incursion character portraits.
 	Incursion 1.1.0 database.
-  
+
 Release 16.16 (18/12/2010)
          Incursion 1.0.1
 
@@ -37,7 +37,7 @@ Release 16.8 (08/04/2010)
 Release 16.7 (01/03/2010)
 	German translation provied by eXeler0n
 	All skill and certificate information now comes from
-		the database.  German and Russian language 
+		the database.  German and Russian language
 		support from the database. (see preference screen)
 	Code cleanup
 
@@ -47,7 +47,7 @@ Release 16.6 (29/01/2010)
 	Provide training time estimate in the ship and cert
 	 popup windows.
 	Fixed certificate searching.
-	 
+
 Release 16.5 (27/01/2010)
 	Added certificate support to the skill planner.
 
@@ -78,12 +78,12 @@ Release 16 (12/10/2009)
 Alpha 15.3 (10/9/2009)
 	Fix a crash caused by the server status monitor.
 	Snow Leopard only release.
-	
+
 Alpha 15.1 (31/8/2009)
-	Fix the skill queue (bug introduced in 
+	Fix the skill queue (bug introduced in
 		release 15)
 	Overview now updates when the character  is refreshed
-	Known Issues: Toolbar customization 
+	Known Issues: Toolbar customization
 		fails under leopard (10.5)
 Alpha 15 (30/8/2009)
 	Character overview page.
@@ -111,7 +111,7 @@ Alpha 14.3 (2/8/2009)
 
 Alpha 14.2 (28/7/2009)
 	New Skill queue.
-	
+
 Alpha 14.1 (20/7/2009)
 	Fixed a crash on startup for new users or accounts.
 	Tweaks to the skill cell on the character sheet.
@@ -131,15 +131,15 @@ Alpha 13 (13/7/2009)
 	In the skill prerequisite, display skills that are trained but
 		not to the requried level as orange
 	Fixed a problem caused by closing the skill plan database too soon
-	
+
 Alpha 12 (5/7/2009)
 	Memory leak fixes.
 	Fixed a few stupid bugs.
-	Fixed a bug in the skill plan where some skills would 
+	Fixed a bug in the skill plan where some skills would
 		not be deleted properly, if a prerequisite was deleted.
-	Fixed a bug where the program would freeze up or crash 
-		if there were zero skills in the skill plan. 
-	
+	Fixed a bug where the program would freeze up or crash
+		if there were zero skills in the skill plan.
+
 Alpha 10 (27/6/2009)
 	Fixed a crash caused by double clicking on empty rows.
 	Skill planner now correctly calculates sp/hr adjusted for learning skills.
@@ -150,12 +150,12 @@ Alpha 9
 	Fixed a spelling error in the skill details window.
 	Minor cosmetic changes to the skill details window.
 	BUG: the skill planner does not correctly calculate SP/hr when a learning skill is added to a plan
-	
+
 Alpha 8
 	Added tooltips to the character skill list and the planner skill list.
 	Added support for the training queue.
 	Added a skill info window. accesable by right click->info in the skill planner,
-		or double click on a skill in the character sheet or skill planner. 
+		or double click on a skill in the character sheet or skill planner.
 		(Window idea copied from EveHQ)
 	Single clicking on a row will expand that row (instead of having to click on the triangle)
 
@@ -173,7 +173,7 @@ Alpha 6 (17/6/2009)
 
 Alpha 5
 	Remove a skill plan by right click -> remove
-	Fix a bug where the skill plan didn't always save 
+	Fix a bug where the skill plan didn't always save
 	Add experimental support for reordering skills in a skill plan
 
 Alpha 4

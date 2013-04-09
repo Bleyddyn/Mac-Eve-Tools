@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -50,7 +50,7 @@ This class should display the possible skill choices to the user.
 /*these delegates will be called when the user wants to add a skill to the plan.*/
 
 /*return an NSArray of SkillPrerequisite objects to be added to the plan*/
--(void) planAddSkillArray:(NSArray*)skills; 
+-(void) planAddSkillArray:(NSArray*)skills;
 
 /*the character we are operating on*/
 -(Character*) character;
@@ -62,12 +62,12 @@ This class should display the possible skill choices to the user.
 {
 	IBOutlet NSTextField *filter; /*label*/
 	IBOutlet NSSearchField *search; /**/
-	
+
 	IBOutlet NSSegmentedControl *skillSearchCategories; /*skill, ship etc*/
 	IBOutlet NSSegmentedControl *skillGroups; /*trained, not trained etc*/
-	
+
 	IBOutlet NSOutlineView *skillList; /*list of all skills in the game*/
-	
+
 	NSInteger currentDatasource;
 	NSMutableArray *datasources;
 	id<SkillSearchDelegate> delegate;

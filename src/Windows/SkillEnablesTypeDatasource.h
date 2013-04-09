@@ -14,12 +14,12 @@
 @interface SkillEnablesTypeDatasource : NSObject <NSOutlineViewDataSource> {
 	NSDictionary *enabledTypes;
 	NSInteger skillTypeID; // The skill that we are checking dependicnes for.
-	
+
 	NSInteger categoryCount; //Number of unique Categories.
-	
+
 	id *dependSkillArray;
 	id *categoryNameArray;
-	
+
 	Character *character;
 }
 

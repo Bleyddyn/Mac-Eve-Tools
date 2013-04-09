@@ -10,7 +10,7 @@
 #import "CharacterDatabase.h"
 #import <sqlite3.h>
 
-@interface CharacterDatabase (CharacterDatabasePrivate) 
+@interface CharacterDatabase (CharacterDatabasePrivate)
 
 /*these are private functions that should be called from within a transaction*/
 

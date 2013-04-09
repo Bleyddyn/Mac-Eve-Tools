@@ -1,19 +1,19 @@
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 #import "CharacterDatasoure.h"
@@ -38,14 +38,14 @@
 
 /*prevent editing of the cells*/
 
-- (BOOL)tableView:(NSTableView *)aTableView 
-shouldEditTableColumn:(NSTableColumn *)aTableColumn 
+- (BOOL)tableView:(NSTableView *)aTableView
+shouldEditTableColumn:(NSTableColumn *)aTableColumn
 			  row:(NSInteger)rowIndex
 {
 	return NO;
 }
-- (BOOL)outlineView:(NSOutlineView *)outlineView 
-shouldEditTableColumn:(NSTableColumn *)tableColumn 
+- (BOOL)outlineView:(NSOutlineView *)outlineView
+shouldEditTableColumn:(NSTableColumn *)tableColumn
 			   item:(id)item
 {
 	return NO;
@@ -55,7 +55,7 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 
 -(id) outlineView:(NSOutlineView*)outlineView child:(NSInteger)index ofItem:(id)item
 {
-	return [skillTree outlineView:outlineView child:index ofItem:item]; 
+	return [skillTree outlineView:outlineView child:index ofItem:item];
 }
 -(NSInteger) outlineView:(NSOutlineView*)outlineView numberOfChildrenOfItem:(id)item
 {
@@ -71,11 +71,11 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 	return nil;
 }
 
-- (NSString *)outlineView:(NSOutlineView *)ov 
-		   toolTipForCell:(NSCell *)cell 
-					 rect:(NSRectPointer)rect 
-			  tableColumn:(NSTableColumn *)tc 
-					 item:(id)item 
+- (NSString *)outlineView:(NSOutlineView *)ov
+		   toolTipForCell:(NSCell *)cell
+					 rect:(NSRectPointer)rect
+			  tableColumn:(NSTableColumn *)tc
+					 item:(id)item
 			mouseLocation:(NSPoint)mouseLocation
 {
 	if(![item isKindOfClass:[Skill class]]){
@@ -83,17 +83,17 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 	}
 	NSMutableString *str = [[[NSMutableString alloc]init]autorelease];
 	[str appendFormat:@"%@\n\n",[item skillName]];
-	
-	NSInteger trainingTime = [self trainingTimeInSeconds:[item primaryAttr] 
-											   secondary:[item secondaryAttr] 
+
+	NSInteger trainingTime = [self trainingTimeInSeconds:[item primaryAttr]
+											   secondary:[item secondaryAttr]
 											 skillPoints:skillPointsForLevel([item skillLevel]+1,[item skillRank])];
 	[str appendFormat:@"Attributes: %@/%@\n",strForAttrCode([item primaryAttr]),strForAttrCode([item secondaryAttr])];
-	
+
 	if([item skillLevel]+1 < 5){
 		[str appendFormat:@"Training Time: %@\n",stringTrainingTime(trainingTime)];
 	}
 	[str appendFormat:@"\n%@",[item skillDescription]];
-	
+
 	return str;
 }
 

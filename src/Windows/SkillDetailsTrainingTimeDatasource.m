@@ -38,53 +38,53 @@
 }
 
 
-- (id)tableView:(NSTableView *)aTableView 
-objectValueForTableColumn:(NSTableColumn *)aTableColumn 
+- (id)tableView:(NSTableView *)aTableView
+objectValueForTableColumn:(NSTableColumn *)aTableColumn
 			row:(NSInteger)rowIndex
 {
-	
+
 	if([[aTableColumn identifier]isEqualToString:SD_LEVEL]){
 		return [NSNumber numberWithInteger:rowIndex + 1];
 	}else if([[aTableColumn identifier]isEqualToString:SD_TIME]){
-		
+
 		NSInteger rank = [skill skillRank];
 		NSInteger primaryAttr = [skill primaryAttr];
 		NSInteger secondaryAttr = [skill secondaryAttr];
-		
-		NSInteger totalForLevel = 
+
+		NSInteger totalForLevel =
 		totalSkillPointsForLevel(rowIndex+1,rank) - totalSkillPointsForLevel(rowIndex,rank);
-		
-		NSInteger seconds = [character trainingTimeInSeconds:primaryAttr 
-												   secondary:secondaryAttr 
+
+		NSInteger seconds = [character trainingTimeInSeconds:primaryAttr
+												   secondary:secondaryAttr
 												 skillPoints:totalForLevel];
-		
+
 		return stringTrainingTime(seconds);
-		
+
 	}else if([[aTableColumn identifier]isEqualToString:SD_TOTAL]){
 		NSInteger time = 0;
-		
+
 		for(NSInteger i = 0; i <= rowIndex; i++){
-			
+
 			NSInteger rank = [skill skillRank];
 			NSInteger primaryAttr = [skill primaryAttr];
 			NSInteger secondaryAttr = [skill secondaryAttr];
-			
-			NSInteger totalForLevel = 
+
+			NSInteger totalForLevel =
 			totalSkillPointsForLevel(i+1,rank) - totalSkillPointsForLevel(i,rank);
-			
-			time += [character trainingTimeInSeconds:primaryAttr 
-										   secondary:secondaryAttr 
+
+			time += [character trainingTimeInSeconds:primaryAttr
+										   secondary:secondaryAttr
 										 skillPoints:totalForLevel];
 		}
 		return stringTrainingTime(time);
-		
+
 	}else if([[aTableColumn identifier]isEqualToString:SD_FROM_NOW]){
 		if([skill skillLevel] > rowIndex){
 			return NSLocalizedString(@"Already Trained",
 									 @"skill details window. skill Already Trained to level x");
 		}
 		NSInteger time = 0;
-		
+
 		for(NSInteger i = [skill skillLevel]; i < rowIndex+1; i++){
 			time += [character trainingTimeInSeconds:[skill typeID]
 										   fromLevel:i
@@ -92,7 +92,7 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 							 accountForTrainingSkill:YES];
 		}
 		return stringTrainingTime(time);
-		
+
 	}
 	return nil;
 }

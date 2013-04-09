@@ -1,18 +1,18 @@
 /*
- 
+
  File: ImagePreviewCell.h
- 
+
  Abstract: ImagePreviewCell class declaration.
- 
+
  Version: 1.0
- 
- Disclaimer: IMPORTANT:  This Apple software is supplied to you by 
+
+ Disclaimer: IMPORTANT:  This Apple software is supplied to you by
  Apple Inc. ("Apple") in consideration of your agreement to the
  following terms, and your use, installation, modification or
  redistribution of this Apple software constitutes acceptance of these
  terms.  If you do not agree with these terms, please do not use,
  install, modify or redistribute this Apple software.
- 
+
  In consideration of your agreement to abide by the following terms, and
  subject to these terms, Apple grants you a personal, non-exclusive
  license, under Apple's copyrights in this original Apple software (the
@@ -20,21 +20,21 @@
  Software, with or without modifications, in source and/or binary forms;
  provided that if you redistribute the Apple Software in its entirety and
  without modifications, you must retain this notice and the following
- text and disclaimers in all such redistributions of the Apple Software. 
- Neither the name, trademarks, service marks or logos of Apple Inc. 
+ text and disclaimers in all such redistributions of the Apple Software.
+ Neither the name, trademarks, service marks or logos of Apple Inc.
  may be used to endorse or promote products derived from the Apple
  Software without specific prior written permission from Apple.  Except
  as expressly stated in this notice, no other rights or licenses, express
  or implied, are granted by Apple herein, including but not limited to
  any patent rights that may be infringed by your derivative works or by
- other works in which the Apple Software may be incorporated. 
- 
+ other works in which the Apple Software may be incorporated.
+
  The Apple Software is provided by Apple on an "AS IS" basis.  APPLE
  MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
  THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS
  FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND
  OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
- 
+
  IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL
  OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
@@ -43,26 +43,26 @@
  AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
  STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE
  POSSIBILITY OF SUCH DAMAGE.
- 
- Copyright (C) 2006-2007 Apple Inc. All Rights Reserved. 
- */ 
+
+ Copyright (C) 2006-2007 Apple Inc. All Rights Reserved.
+ */
 
 /*
  This file is part of Mac Eve Tools.
- 
+
  Mac Eve Tools is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
- 
+
  Mac Eve Tools is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with Mac Eve Tools.  If not, see <http://www.gnu.org/licenses/>.
- 
+
  Copyright Matt Tyson, 2009.
  */
 
@@ -104,10 +104,10 @@
 	[infoIcon release];
 	[truncateStyle release];
 	[formatter release];
-	
+
 	[skill release];
 	[group release];
-	
+
 	[super dealloc];
 }
 
@@ -116,10 +116,10 @@
 	skillBook = [[NSImage imageNamed:@"skill.png"]retain];
 	skillBookV = [[NSImage imageNamed:@"skillv.png"]retain];
 	infoIcon = [[NSImage imageNamed:@"info.png"]retain];
-	
+
 	truncateStyle = [[NSMutableParagraphStyle defaultParagraphStyle]mutableCopy];
 	[truncateStyle setLineBreakMode:NSLineBreakByTruncatingTail];
-	
+
 	formatter = [[NSNumberFormatter alloc]init];
 	[formatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
 	[formatter setNumberStyle:NSNumberFormatterDecimalStyle];
@@ -150,10 +150,10 @@
 		cell->infoIcon = [infoIcon retain];
 		cell->truncateStyle = [truncateStyle retain];
 		cell->formatter = [formatter retain];
-		
+
 		cell->skill = nil;
 		cell->group = nil;
-		
+
 		//leave the other values as junk data, they will be overwritten later
 	}
 	return cell;
@@ -179,7 +179,7 @@
 		[skill release];
 	}
 	skill = [s retain];
-	
+
 	skillLevel = [skill skillLevel];
 }
 
@@ -225,7 +225,7 @@
     NSRect result = bounds;
     result.origin.y += VERTICAL_PADDING_FOR_IMAGE;
     result.origin.x += PADDING_BEFORE_IMAGE;
-    if (skillBook != nil) { 
+    if (skillBook != nil) {
         // Take the actual image and center it in the result
         result.size = [skillBook size];
         CGFloat widthCenter = IMAGE_SIZE - NSWidth(result);
@@ -244,7 +244,7 @@
 
 
 // Level 4 etc (text string) bounding box
--(NSRect) skillTimeLeftRect:(const NSRect*)bounds 
+-(NSRect) skillTimeLeftRect:(const NSRect*)bounds
 			   skillBoxRect:(const NSRect*)skillBoxRect
 				  topString:(NSAttributedString*)topStr
 {
@@ -257,7 +257,7 @@
 
 
 //2d 20h 38m 15s etc (text string) bounding box
--(NSRect) skillTimeLeftRect:(const NSRect*)bounds 
+-(NSRect) skillTimeLeftRect:(const NSRect*)bounds
 			   skillBoxRect:(const NSRect*)skillBoxRect
 			   bottomString:(NSAttributedString*)topStr
 {
@@ -278,7 +278,7 @@
 {
 	NSRect skillBlock;
 	/*maybe i should have done this in reverse and used a switch statment?*/
-		
+
 	if(skillLevel > 0){
 		skillBlock = NSMakeRect(bounds.origin.x + 1.5,
 								bounds.origin.y + 1.5,
@@ -307,7 +307,7 @@
 		[self setColourForLevel:4];
 		[NSBezierPath fillRect:skillBlock];
 	}
-	
+
 	if(skillLevel > 4){
 		skillBlock = NSMakeRect(skillBlock.origin.x + 1.0 + BLOCK_WIDTH,
 								skillBlock.origin.y,
@@ -328,19 +328,19 @@
 	Give the location of the rect for drawing the skill
 	box rectangle
  */
--(NSRect) skillBoxRect:(const NSRect*)bounds 
+-(NSRect) skillBoxRect:(const NSRect*)bounds
 			  infoRect:(const NSRect*)infoRect
 			   yOffset:(CGFloat)yOffset
 {
 	NSRect result;
-	
+
 	result.origin.x = infoRect->origin.x - PROGRESS_ZONE_WIDTH - BOX_RIGHT_PADDING;
-	
+
 	result.size.width = BOX_WIDTH;
 	result.size.height = BOX_HEIGHT;
-	
+
 	result.origin.y = bounds->origin.y + (bounds->size.height / 2.0) - (PROGRESS_ZONE_HEIGHT / 2.0) - yOffset;
-	
+
 	return result;
 }
 
@@ -350,14 +350,14 @@
 					yOffset:(CGFloat)yOffset
 {
 	NSRect result;
-	
+
 	result.origin.x = infoRect->origin.x - PROGRESS_ZONE_WIDTH - BOX_RIGHT_PADDING;
-	
+
 	result.size.width = PROGRESS_WIDTH;
 	result.size.height = PROGRESS_HEIGHT;
-	
+
 	result.origin.y = (bounds->origin.y + (bounds->size.height / 2.0) - 0.5) + yOffset;
-	
+
 	return result;
 }
 
@@ -370,39 +370,39 @@
 	 one pixel blank around each block.
 	 one pixel border around the lot
 	 total size is 48 * 10
-	 
+
 	 progress bar is 2 pixels. one pixel gap, one pixel border
 	 48 x 6
-	 
+
 	 text should be 10 pixels to the left of the box
 	*/
-	
+
 	/*
 	NSRect progressBorder = bounds;
 	progressBorder.origin.y += 5.0 + BOX_HEIGHT;
 	progressBorder.size.height = PROGRESS_HEIGHT;
 	[NSBezierPath strokeRect:progressBorder];
 	*/
-	
+
 	[[NSColor blackColor]set];
 	[NSBezierPath strokeRect:bounds];
 	[self drawSkillProgressLevels:bounds];
-	
+
 }
 
 -(void) drawSkillProgressBar:(NSRect)bounds
 {
 	/*
-	 draw the inner portion of the progress bar.  
+	 draw the inner portion of the progress bar.
 	 we cut off a pixel either side to make the border effect
 	 */
 	[[NSColor blackColor]set];
 	[NSBezierPath strokeRect:bounds];
-	
+
 	bounds.origin.y += 1.5;
 	bounds.origin.x += 1.5;
 	bounds.size.height -= 3.0;
-	
+
 	[self drawSkillCompletionProgress:bounds];
 }
 
@@ -411,7 +411,7 @@
     NSRect result = bounds;
     result.origin.y += VERTICAL_PADDING_FOR_IMAGE;
     result.origin.x = result.size.width - INFO_RIGHT_PADDING - [infoIcon size].width;
-    if (infoIcon != nil) { 
+    if (infoIcon != nil) {
         // Take the actual image and center it in the result
         result.size = [infoIcon size];
         CGFloat widthCenter = IMAGE_SIZE - NSWidth(result);
@@ -428,8 +428,8 @@
 	return result;
 }
 
-- (NSRect)upperRectForBounds:(const NSRect*)bounds 
-				   andString:(NSAttributedString*)title 
+- (NSRect)upperRectForBounds:(const NSRect*)bounds
+				   andString:(NSAttributedString*)title
 {
     NSRect result = *bounds;
     // The x origin is easy
@@ -456,7 +456,7 @@
 {
 	NSString *str;
 	NSMutableAttributedString *astr;
-	
+
 	//Skill points and points to next level
 	if(skillLevel == 5){
 		str = [NSString stringWithFormat:@"SP: %@",
@@ -474,14 +474,14 @@
 	return astr;
 }
 
--(void) drawSubtitleInRect:(NSRect)bounds 
+-(void) drawSubtitleInRect:(NSRect)bounds
 				 theString:(NSAttributedString*)astr
 {
 	[astr drawInRect:bounds];
 }
 
-- (NSRect)rectForSubTitleBasedOnTitleRect:(NSRect)titleRect 
-								 inBounds:(NSRect)bounds 
+- (NSRect)rectForSubTitleBasedOnTitleRect:(NSRect)titleRect
+								 inBounds:(NSRect)bounds
 								forString:(NSAttributedString*)subTitle {
    // NSAttributedString *subTitle = [self attributedSubTitle];
 	if (subTitle != nil) {
@@ -500,11 +500,11 @@
 
 -(void) drawGroupInterior:(NSRect)bounds inView:(NSView*)controlView
 {
-	NSString *str = 
+	NSString *str =
 	[NSString stringWithFormat:NSLocalizedString(@"  %@  -  skills: %lu,  points: %@", nil),
 		[group groupName],[group skillCount],
 		[formatter stringFromNumber:[NSNumber numberWithInteger:[group groupSPTotal]]]];
-	
+
 	NSMutableAttributedString *astr = [[[NSMutableAttributedString alloc]initWithString:str]autorelease];
 	NSRect strRect = [self titleRectForBounds:bounds];
 	[astr drawInRect:strRect];
@@ -519,24 +519,24 @@
 	Draws the "Level x" string next to the progress boxes
 	returns the location at which it starts drawing.
  */
--(CGFloat) drawTrainingToLevel:(CGFloat)xFinishPoint 
+-(CGFloat) drawTrainingToLevel:(CGFloat)xFinishPoint
 					yBaseline:(CGFloat)yBaseline
 {
 	NSString *str;
 	NSMutableAttributedString *astr;
-		
+
 	/*draw the training to level;*/
 	str = [NSString stringWithFormat:@"Level %ld",skillLevel];
 	astr = [[[NSMutableAttributedString alloc]initWithString:str]autorelease];
-	
+
 	NSRange strrange = NSMakeRange(0,[str length]);
 	[astr addAttribute:NSFontAttributeName value:[NSFont systemFontOfSize:10.0] range:strrange];
-	
+
 	NSSize strSize = [astr size];
-	
+
 	NSRect bounds = NSMakeRect(xFinishPoint - strSize.width, yBaseline, strSize.width, strSize.height);
 	[astr drawInRect:bounds];
-	
+
 	return bounds.origin.x;
 }
 
@@ -552,14 +552,14 @@
 		NSRange strrange = NSMakeRange(0,[timeStr length]);
 		[timeStr addAttribute:NSFontAttributeName value:[NSFont systemFontOfSize:10.0] range:strrange];
 	}
-	
+
 	if(timeStr != nil){
 		NSSize strSize = [timeStr size];
 		bounds = NSMakeRect(xFinishPoint - strSize.width, yBaseline, strSize.width, strSize.height);
 		[timeStr drawInRect:bounds];
 		return bounds.origin.x;
 	}
-	
+
 	return xFinishPoint;
 }
 
@@ -570,34 +570,34 @@
 	NSMutableAttributedString *astr = nil;
 	NSImage *book = [skill skillLevel] == 5 ? skillBookV : skillBook;
 	NSRange strrange;
-	
+
 	[book setFlipped:[controlView isFlipped]];
 	[infoIcon setFlipped:[controlView isFlipped]];
-	
+
 	NSRect imageRect = [self imageRectForBounds:bounds];
 	[book drawInRect:imageRect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
-	
-	//draw info icon	
+
+	//draw info icon
 	NSRect infoRect = [self infoButtonRect:bounds];
 	[self drawInfoIcon:infoRect];
-	
+
 	/*DRAW SKILL TIME LEFT & PROGRESS BOXES*/
-	
+
 	/*skill box recctangle*/
 	NSRect skillBoxRect = [self skillBoxRect:&bounds infoRect:&infoRect yOffset:3.5];
 	[self drawSkillProgressBoxes:skillBoxRect];
-	
+
 	NSRect skillProgressRect = [self skillProgressRect:&bounds infoRect:&infoRect yOffset:7.0];
 	[self drawSkillProgressBar:skillProgressRect];
-	
+
 	/*Draw the Level X string, next to the progress boxes*/
 	CGFloat topMaxX = [self drawTrainingToLevel:skillBoxRect.origin.x - 3.5 yBaseline:skillBoxRect.origin.y - 1.0];
-	
+
 	CGFloat bottomMaxX = [self drawTimeLeftString:skillBoxRect.origin.x - 3.5 yBaseline:skillBoxRect.origin.y + 15.0];
-	
+
 	/*FINISHED DRAWING SKILL PROGRESS BOXES*/
-	
-	
+
+
 	/*DRAW SKILL NAME AND SKILL POINTS*/
 	//Skill name and rank
 	NSString *skillName = [skill skillName];
@@ -606,39 +606,39 @@
 	}
 	str = [NSString stringWithFormat:@"%@ (%ldx)",[skill skillName],[skill skillRank]];
 	astr = [[[NSMutableAttributedString alloc]initWithString:str]autorelease];
-	/*this needs to be calculated with regard to the skill progress boxes*/  
+	/*this needs to be calculated with regard to the skill progress boxes*/
 	//Skill name rect (upper rect)
 	NSRect upperRect = [self upperRectForBounds:&bounds andString:astr];
-	
+
 	/*clamp width so it does not run over topMaxX*/
-	
+
 	if(upperRect.size.width > (topMaxX - upperRect.origin.x))
 	{
 		upperRect.size.width = topMaxX - upperRect.origin.x;
 		strrange = NSMakeRange(0,[astr length]);
 		/*this will get created once for every cell that is drawn. fix later;*/
 
-		
-		[astr addAttribute:NSParagraphStyleAttributeName value:truncateStyle range:strrange];		
+
+		[astr addAttribute:NSParagraphStyleAttributeName value:truncateStyle range:strrange];
 	}
-	
+
 	[astr drawInRect:upperRect];
-	
+
 	//Skill point display rect (subtitle rect)
 	astr = [self buildSubtitleString];
-	
+
 
 	//Skill points subtitle block
 	NSRect subRect = [self rectForSubTitleBasedOnTitleRect:upperRect inBounds:bounds forString:astr];
-	
+
 	if(subRect.size.width > (bottomMaxX - subRect.origin.x)){
-		
+
 		subRect.size.width = bottomMaxX - subRect.origin.x;
-		
+
 		strrange = NSMakeRange(0,[astr length]);
 		[astr addAttribute:NSParagraphStyleAttributeName value:truncateStyle range:strrange];
 	}
-	
+
 	[self drawSubtitleInRect:subRect theString:astr];
 }
 
@@ -658,14 +658,14 @@
     return YES;
 }
 
-- (BOOL)trackMouse:(NSEvent *)theEvent 
-			inRect:(NSRect)cellFrame 
-			ofView:(NSView *)controlView 
-	  untilMouseUp:(BOOL)flag 
+- (BOOL)trackMouse:(NSEvent *)theEvent
+			inRect:(NSRect)cellFrame
+			ofView:(NSView *)controlView
+	  untilMouseUp:(BOOL)flag
 {
-	
+
     [self setControlView:controlView];
-	
+
     NSRect infoButtonRect = [self infoButtonRect:cellFrame];
     while ([theEvent type] != NSLeftMouseUp) {
         // This is VERY simple event tracking. We simply check to see if the mouse is in the "i" button or not and dispatch entered/exited mouse events
@@ -681,9 +681,9 @@
         // Note that we process mouse entered and exited events and dispatch them to properly handle updates
         theEvent = [[controlView window] nextEventMatchingMask:(NSLeftMouseUpMask | NSLeftMouseDraggedMask | NSMouseEnteredMask | NSMouseExitedMask)];
     }
-	
-    // Another way of implementing the above code would be to keep an NSButtonCell as an ivar, and simply call trackMouse:inRect:ofView:untilMouseUp: on it, if the tracking area was inside of it. 
-	
+
+    // Another way of implementing the above code would be to keep an NSButtonCell as an ivar, and simply call trackMouse:inRect:ofView:untilMouseUp: on it, if the tracking area was inside of it.
+
     if (iMouseDownInInfoButton) {
         // Send the action, and redisplay
         iMouseDownInInfoButton = NO;
@@ -692,27 +692,27 @@
             [NSApp sendAction:skillInfoButtonAction to:[self target] from:[self controlView]];
         }
     }
-	
+
     // We return YES since the mouse was released while we were tracking. Not returning YES when you processed the mouse up is an easy way to introduce bugs!
     return YES;
 }
 
 // Mouse movement tracking -- we have a custom NSOutlineView subclass that automatically lets us add mouseEntered:/mouseExited: support to any cell!
-- (void)addTrackingAreasForView:(NSView *)controlView 
-						 inRect:(NSRect)cellFrame 
-				   withUserInfo:(NSDictionary *)userInfo 
+- (void)addTrackingAreasForView:(NSView *)controlView
+						 inRect:(NSRect)cellFrame
+				   withUserInfo:(NSDictionary *)userInfo
 				  mouseLocation:(NSPoint)mouseLocation
 {
     NSRect infoButtonRect = [self infoButtonRect:cellFrame];
-	
+
     NSTrackingAreaOptions options = NSTrackingEnabledDuringMouseDrag | NSTrackingMouseEnteredAndExited | NSTrackingActiveAlways;
-	
+
     BOOL mouseIsInside = NSMouseInRect(mouseLocation, infoButtonRect, [controlView isFlipped]);
     if (mouseIsInside) {
         options |= NSTrackingAssumeInside;
         [controlView setNeedsDisplayInRect:cellFrame];
     }
-	
+
     // We make the view the owner, and it delegates the calls back to the cell after it is properly setup for the corresponding row/column in the outlineview
     NSTrackingArea *area = [[NSTrackingArea alloc] initWithRect:infoButtonRect options:options owner:controlView userInfo:userInfo];
     [controlView addTrackingArea:area];
@@ -730,15 +730,15 @@
 }
 
 - (NSUInteger)hitTestForEvent:(NSEvent *)event inRect:(NSRect)cellFrame ofView:(NSView *)controlView {
-	
+
     NSPoint point = [controlView convertPoint:[event locationInWindow] fromView:nil];
-	
+
     // How about the info button?
     NSRect infoButtonRect = [self infoButtonRect:cellFrame];
     if (NSMouseInRect(point, infoButtonRect, [controlView isFlipped])) {
         return NSCellHitContentArea | NSCellHitTrackableArea;
-    } 
-	
+    }
+
     return NSCellHitNone;
 }
 

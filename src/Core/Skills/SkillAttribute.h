@@ -21,7 +21,7 @@
 @property (nonatomic,readonly) CGFloat valueFloat;
 @property (nonatomic,readonly) BOOL isInt;
 
--(SkillAttribute*) initWithAttributeID:(NSInteger)attrID 
+-(SkillAttribute*) initWithAttributeID:(NSInteger)attrID
 							  intValue:(NSInteger)valInt
 							floatValue:(CGFloat)valFloat
 							   valType:(BOOL)type;

@@ -19,7 +19,7 @@
 @interface CertClass : NSObject {
 	NSInteger classID;
 	NSString *certClassName;
-	
+
 	NSArray *certArray; //Array of cert objects beloning to this class.
 }
 
@@ -32,7 +32,7 @@
 +(CertClass*) createCertClass:(NSInteger)cID desc:(NSString*)cDesc;
 
 
-/*this is used as part of the class construction, 
+/*this is used as part of the class construction,
  it is not to be called from anywhere else*/
 -(void) setCertArray:(NSArray*)certArray;
 
