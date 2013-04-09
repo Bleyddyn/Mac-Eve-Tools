@@ -158,7 +158,7 @@
 		C9FF47CA10550BA60044BBAC /* SkillDetailsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FF478210550BA60044BBAC /* SkillDetailsWindowController.m */; };
 		C9FF48D91055151F0044BBAC /* GlobalData.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FF48D81055151F0044BBAC /* GlobalData.m */; };
 		C9FF4A3A10552A180044BBAC /* ReleaseNotes.txt in Resources */ = {isa = PBXBuildFile; fileRef = C9FF4A3910552A180044BBAC /* ReleaseNotes.txt */; };
-		C9FF4A7A105532B60044BBAC /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = C9FF4A79105532B60044BBAC /* Credits.html */; };
+		C9FF4A7A105532B60044BBAC /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = C9FF4A79105532B60044BBAC /* Credits.rtf */; };
 		C9FF4A80105536C00044BBAC /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = C9FF4A7F105536C00044BBAC /* dsa_pub.pem */; };
 /* End PBXBuildFile section */
 
@@ -449,7 +449,7 @@
 		C9FF48D71055151F0044BBAC /* GlobalData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalData.h; sourceTree = "<group>"; };
 		C9FF48D81055151F0044BBAC /* GlobalData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalData.m; sourceTree = "<group>"; };
 		C9FF4A3910552A180044BBAC /* ReleaseNotes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReleaseNotes.txt; sourceTree = "<group>"; };
-		C9FF4A79105532B60044BBAC /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
+		C9FF4A79105532B60044BBAC /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		C9FF4A7F105536C00044BBAC /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -534,7 +534,7 @@
 				C985429D11C46898000E3B43 /* MET-icon.icns */,
 				C985427B11C466F9000E3B43 /* MET-logo.png */,
 				C9FF4A7F105536C00044BBAC /* dsa_pub.pem */,
-				C9FF4A79105532B60044BBAC /* Credits.html */,
+				C9FF4A79105532B60044BBAC /* Credits.rtf */,
 				C9FF4A3910552A180044BBAC /* ReleaseNotes.txt */,
 				8D1107310486CEB800E47090 /* Mac_Eve_Tools-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -986,11 +986,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-<<<<<<< HEAD
-				LastUpgradeCheck = 0420;
-=======
 				LastUpgradeCheck = 0440;
->>>>>>> fbbc27de397d7a8b4d3f5da5072a9e302f1e88c0
 				ORGANIZATIONNAME = "Sebastian Kruemling";
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Mac Eve Tools" */;
@@ -1035,7 +1031,7 @@
 				C9D902E011211A720047B2C2 /* SkillPlan.xib in Resources */,
 				C9D9028A112116270047B2C2 /* SkillDetails.xib in Resources */,
 				C9FF4A3A10552A180044BBAC /* ReleaseNotes.txt in Resources */,
-				C9FF4A7A105532B60044BBAC /* Credits.html in Resources */,
+				C9FF4A7A105532B60044BBAC /* Credits.rtf in Resources */,
 				C9FF4A80105536C00044BBAC /* dsa_pub.pem in Resources */,
 				C9D9030211211C020047B2C2 /* MainMenu.xib in Resources */,
 				C9D902D8112119650047B2C2 /* ShipDetails.xib in Resources */,
