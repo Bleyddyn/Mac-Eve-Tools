@@ -48,3 +48,7 @@ dwsync.xml
 ###################
 *.komodoproject
 .komodotools
+
+=======
+src/Mac Eve Tools.xcodeproj/xcuserdata/
+src/Mac Eve Tools.xcodeproj/project.xcworkspace/

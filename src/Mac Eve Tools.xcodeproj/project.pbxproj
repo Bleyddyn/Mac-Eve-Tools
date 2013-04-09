@@ -986,6 +986,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = "Sebastian Kruemling";
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Mac Eve Tools" */;
@@ -1319,7 +1320,6 @@
 					"\"$(SRCROOT)/Linked Frameworks\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1371,9 +1371,8 @@
 				);
 				PER_ARCH_CFLAGS_i386 = "-fsingle-precision-constant";
 				PER_ARCH_CFLAGS_ppc = "-fsingle-precision-constant";
-				PREBINDING = NO;
 				PRODUCT_NAME = MacEveApi;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1400,9 +1399,8 @@
 				);
 				PER_ARCH_CFLAGS_i386 = "-fsingle-precision-constant";
 				PER_ARCH_CFLAGS_ppc = "-fsingle-precision-constant";
-				PREBINDING = NO;
 				PRODUCT_NAME = MacEveApi;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1428,9 +1426,8 @@
 				);
 				PER_ARCH_CFLAGS_i386 = "-fsingle-precision-constant";
 				PER_ARCH_CFLAGS_ppc = "-fsingle-precision-constant";
-				PREBINDING = NO;
 				PRODUCT_NAME = "";
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1459,7 +1456,6 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = Package;
 				ZERO_LINK = NO;
 			};
@@ -1480,7 +1476,6 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = Languages;
 				ZERO_LINK = NO;
 			};
@@ -1508,7 +1503,6 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = Package;
 				ZERO_LINK = NO;
 			};
