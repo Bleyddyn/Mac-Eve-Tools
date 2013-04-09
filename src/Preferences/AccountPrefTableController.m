@@ -30,7 +30,7 @@
 
 - (void) savePreferences {
 	if (self.accounts != nil) {
-		NSLog(@"Saving Accounts");
+		//NSLog(@"Saving Accounts");
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSData *archive = [NSKeyedArchiver archivedDataWithRootObject:self.accounts];
 		[defaults setObject:archive forKey:UD_ACCOUNTS];

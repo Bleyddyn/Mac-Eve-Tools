@@ -1,3 +1,20 @@
+Release 16.22 (25/12/2011)
+	Fixed HTML descriptions not showing properly (Applied TIC Albul's patch)
+	Fixed Databases not automatically updating (should be, thanks TIC Albul)
+
+Release 16.21 (22/12/2011)
+	ERROR: Database doesn't automatically update.
+	Added "Rebuild database" button in the menu
+	Changed image URL (applied TIC Albul's patch)
+	Changed database download to dropbox (origin is from TIC Albul) - Crucible database
+
+Release 16.19 (16/12/2011)
+	Changed the "Need an API key?" url
+	Fixed preferences
+
+Release 16.18 (15/12/2011)
+	Changed to vCode API
+
 Release 16.17 (22/01/2011)
 	Support incursion character portraits.
 	Incursion 1.1.0 database.

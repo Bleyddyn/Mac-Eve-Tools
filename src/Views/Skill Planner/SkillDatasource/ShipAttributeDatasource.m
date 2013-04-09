@@ -184,7 +184,21 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			return [item displayName];
 		}
 		if([[tableColumn identifier]isEqualToString:@"ATTR_VALUE"]){
-			return [self renderValue: item];
+			NSMutableString *str = [[[NSMutableString alloc]init]autorelease];
+			
+			if([item valueInt] != NSIntegerMax){
+				[str appendFormat:@"%ld", (long) [item valueInt]];
+			}else{
+				[str appendFormat:@"%.2f",(double)[item valueFloat]];
+			}
+			
+			NSString *unit = [item unitDisplay];
+			
+			if(unit != nil){
+				[str appendFormat:@" %@",unit];
+			}
+			
+			return str;
 		}
 	}
 

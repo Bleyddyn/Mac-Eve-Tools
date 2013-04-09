@@ -68,7 +68,7 @@
 			NSString *skillName = getNodeText(cur_node);
 			Skill *s = [st skillForName:skillName];
 			if(s == nil){
-				NSLog(@"nil skill ptr for %@",skillName);
+				//NSLog(@"nil skill ptr for %@",skillName);
 				return NO;
 			}
 			typeID = [s typeID];
@@ -93,7 +93,7 @@
 	xmlNode *entries = findChildNode(root_node,(xmlChar*)"Entries");
 
 	if(entries == NULL){
-		NSLog(@"NULL entries pointer");
+		//NSLog(@"NULL entries pointer");
 		return NO;
 	}
 
@@ -166,14 +166,14 @@
 
 	file = gzopen([filePath fileSystemRepresentation], "rb");
 	if(file == NULL){
-		NSLog(@"Failed to open '%@'",filePath);
+		//NSLog(@"Failed to open '%@'",filePath);
 		return NO;
 	}
 
 	char *buffer = (char*) malloc(chunkSize);
 
 	if(buffer == NULL){
-		NSLog(@"Failed to malloc %d bytes",chunkSize);
+		//NSLog(@"Failed to malloc %d bytes",chunkSize);
 		gzclose(file);
 		return NO;
 	}
@@ -201,21 +201,21 @@
 	xmlDoc *doc = xmlReadMemory([data bytes], (int)[data length],NULL, NULL, 0);
 
 	if(doc == NULL){
-		NSLog(@"Failed to parse XML plan file");
+		//NSLog(@"Failed to parse XML plan file");
 		return NO;
 	}
 
 	BOOL rc = [self readXmlData:doc intoPlan:plan];
 
 	if(!rc){
-		NSLog(@"Failed to import plan.  Attempting import using old format.");
-
+		//NSLog(@"Failed to import plan.  Attempting import using old format.");
+		
 		rc = [self readOldEvemonPlan:doc intoPlan:plan];
 
 		if(rc){
-			NSLog(@"Success using old evemon format");
+			//NSLog(@"Success using old evemon format");
 		}else{
-			NSLog(@"Failure using old evemon format");
+			//NSLog(@"Failure using old evemon format");
 		}
 	}
 
@@ -237,7 +237,7 @@
 	}else if([[filePath pathExtension]caseInsensitiveCompare:@"xml"] == NSOrderedSame){
 		planData = [NSData dataWithContentsOfFile:filePath];
 	}else{
-		NSLog(@"Unknown file %@",filePath);
+		//NSLog(@"Unknown file %@",filePath);
 	}
 
 	BOOL rc = [self readData:planData intoPlan:plan];
@@ -310,14 +310,14 @@
 	fp = gzopen([filePath fileSystemRepresentation],"wb9");
 
 	if(fp == NULL){
-		NSLog(@"Error writing file");
+		//NSLog(@"Error writing file");
 		return NO;
 	}
 
 	rc = gzwrite(fp, [data bytes], (unsigned int)[data length]);
 
 	if(rc != [data length]){
-		NSLog(@"error writing plan?");
+		//NSLog(@"error writing plan?");
 	}
 
 	gzclose(fp);

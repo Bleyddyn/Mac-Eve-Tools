@@ -46,7 +46,6 @@
 #import <Sparkle/Sparkle.h>
 #endif
 
-
 #pragma mark MainController
 
 #define WINDOW_SAVE_NAME @"MainWindowSave"
@@ -173,7 +172,7 @@
 {
 	NSString *str = @"Tranquility";
 	if(playerCount > 0){
-		str = [str stringByAppendingFormat:@" (%ld)",playerCount];
+		str = [str stringByAppendingFormat:@" (%ld)", (long) playerCount];
 	}
 	[serverName setStringValue:str];
 }
@@ -201,8 +200,8 @@
 
 -(void) appWillTerminate:(NSNotification*)notification
 {
-	NSLog(@"Shutting down");
-
+	//NSLog(@"Shutting down");	
+	
 	[monitor stopMonitoring];
 	[[self window]saveFrameUsingName:WINDOW_SAVE_NAME];
 
@@ -277,6 +276,7 @@
 												  object:nil];
 	}else{
 		/*database version is current - launch app normally*/
+		[[[DBManager alloc]init] checkForUpdate];
 		[self performSelector:@selector(launchAppFinal:) withObject:nil];
 	}
 }
@@ -501,8 +501,8 @@
 
 -(void) awakeFromNib
 {
-	NSLog(@"Awoken from nib");
-
+	//NSLog(@"Awoken from nib");
+	
 	[NSDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehavior10_4];
 
 	/* setting default preferences values */
@@ -517,18 +517,20 @@
 	[prefDefaults setObject:[@"~/Library/Application Support/MacEveApi" stringByExpandingTildeInPath] forKey:UD_ROOT_PATH];
 	[prefDefaults setObject:[[@"~/Library/Application Support/MacEveApi" stringByExpandingTildeInPath] stringByAppendingFormat:@"/database.sqlite"] forKey:UD_ITEM_DB_PATH];
 	[prefDefaults setObject:@"http://api.eve-online.com" forKey:UD_API_URL];
-<<<<<<< HEAD
-	[prefDefaults setObject:@"http://image.eveonline.com/Character/%@_256.jpg" forKey:UD_PICTURE_URL];
-=======
 	[prefDefaults setObject:@"http://image.eveonline.com/Character/" forKey:UD_PICTURE_URL];
 
->>>>>>> 6231d5e63ea437d1bba22ff4b873ff9ef03029d7
-	[prefDefaults setObject:@"http://mtyson.id.au/MacEveApi-appcast.xml" forKey:UD_UPDATE_FEED_URL];
-	[prefDefaults setObject:@"http://www.mtyson.id.au/MacEveApi/MacEveApi-database.xml" forKey:UD_DB_UPDATE_URL];
-	[prefDefaults setObject:@"http://www.mtyson.id.au/MacEveApi/database.sql.bz2" forKey:UD_DB_SQL_URL];
-	[prefDefaults setObject:@"http://www.mtyson.id.au/MacEveApi/images" forKey:UD_IMAGE_URL];
-	[prefDefaults setObject:[NSNumber numberWithInt:8] forKey:UD_DATABASE_MIN_VERSION];
+//	[prefDefaults setObject:@"http://mtyson.id.au/MacEveApi-appcast.xml" forKey:UD_UPDATE_FEED_URL];
+//	[prefDefaults setObject:@"http://www.mtyson.id.au/MacEveApi/MacEveApi-database.xml" forKey:UD_DB_UPDATE_URL];
+//	[prefDefaults setObject:@"http://www.mtyson.id.au/MacEveApi/database.sql.bz2" forKey:UD_DB_SQL_URL];
+//	[prefDefaults setObject:@"http://www.mtyson.id.au/MacEveApi/images" forKey:UD_IMAGE_URL];
+//	[prefDefaults setObject:[NSNumber numberWithInt:8] forKey:UD_DATABASE_MIN_VERSION];
 
+	[prefDefaults setObject:@"about:blank" forKey:UD_UPDATE_FEED_URL];
+	[prefDefaults setObject:@"http://dl.dropbox.com/u/612254/EVE/MAT/MacEveApi-database.xml" forKey:UD_DB_UPDATE_URL];
+	[prefDefaults setObject:@"http://dl.dropbox.com/u/612254/EVE/MAT/database.sql.bz2" forKey:UD_DB_SQL_URL];
+	[prefDefaults setObject:@"http://image.eveonline.com/" forKey:UD_IMAGE_URL];
+	[prefDefaults setObject:[NSNumber numberWithInt:9] forKey:UD_DATABASE_MIN_VERSION];
+	 	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:prefDefaults];
 	[prefDefaults release];
 
@@ -605,9 +607,9 @@
 	if(currentController != nil){
 		[currentController setCharacter:currentCharacter];
 	}
-
-	NSLog(@"Current character is %@",[currentCharacter characterName]);
-
+	
+	//NSLog(@"Current character is %@",[currentCharacter characterName]);
+	
 	[[self window]setTitle:[NSString stringWithFormat:@"Mac Eve Tools - %@",[currentCharacter characterName]]];
 }
 
@@ -623,7 +625,7 @@
 	//Get the id for the current character, find the new object in the character manager.
 	Character *character = [characterManager characterById:[currentCharacter characterId]];
 	if(character == nil){
-		NSLog(@"ERROR: Couldn't find character %lu.  Can't update.",[currentCharacter characterId]);
+		//NSLog(@"ERROR: Couldn't find character %lu.  Can't update.",[currentCharacter characterId]);
 		return;
 	}
 	[self setCurrentCharacter:character];
@@ -635,9 +637,9 @@
 -(void) batchUpdateOperationDone:(NSArray*)errors
 {
 	// All characters have been updated.
-	NSLog(@"Finished batch update operation");
 
-
+	//NSLog(@"Finished batch update operation");
+	
 	[statusString setHidden:YES];
 	[fetchCharButton setEnabled:YES];
 	[charButton setEnabled:YES];
@@ -784,9 +786,23 @@
 	}
 }
 
--(IBAction) checkForDatabase:(id)sender
+-(IBAction) rebuildDatabase:(id)sender
 {
-	//[dbManager performCheck];
+	NSError *nerror = nil;
+	[[NSFileManager defaultManager] removeItemAtPath:[[NSUserDefaults standardUserDefaults] stringForKey:UD_ITEM_DB_PATH] error:&nerror];
+	if(nerror != nil) {
+		NSLog(@"Unable to remove database: error %@", nerror);
+		return;
+	}
+	NSBundle *bPath = [NSBundle mainBundle];
+	NSString *rPath = [bPath executablePath];
+	NSTask *bTask = [[NSTask alloc] init];
+	
+	[bTask setLaunchPath:rPath];
+	[bTask launch];
+	[bTask release];
+	[NSApp terminate: nil];
+	exit(1);
 }
 
 -(void) serverStatusUpdate:(NSNotification*)notification

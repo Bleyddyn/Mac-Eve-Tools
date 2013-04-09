@@ -69,13 +69,13 @@ static Config *sharedSingletonCfg = nil;
 }
 
 
--(unsigned long)retainCount {
+-(NSUInteger)retainCount {
     return UINT_MAX;  //denotes an object that cannot be release
 }
 
 
--(void)release {
-    //do nothing
+-(oneway void)release {
+    //do nothing    
 }
 
 
@@ -104,7 +104,7 @@ static Config *sharedSingletonCfg = nil;
 
 	[str appendFormat:@"%@%@",[[NSUserDefaults standardUserDefaults] stringForKey:UD_API_URL],xmlPage];
 	if(accountId && apiKey){
-		[str appendFormat:@"?userID=%@&apiKey=%@",accountId,apiKey];
+		[str appendFormat:@"?keyID=%@&vCode=%@",accountId,apiKey];
 		if(characterId){
 			[str appendFormat:@"&characterID=%@",characterId];
 		}
@@ -179,7 +179,7 @@ static Config *sharedSingletonCfg = nil;
 	doc = xmlReadFile([path fileSystemRepresentation],NULL,0);
 
 	if(doc == NULL){
-		NSLog(@"NULL pointer for xmlFileOpen(%@)",path);
+		//NSLog(@"NULL pointer for xmlFileOpen(%@)",path);
 		return NO;
 	}
 
@@ -193,15 +193,15 @@ static Config *sharedSingletonCfg = nil;
 
 	xmlNode *accountRowsetNode = findChildNode(root,(xmlChar*)"rowset");
 	if(accountRowsetNode == NULL){
-		NSLog(@"Could not parse config file");
-		xmlFreeDoc(doc);
+		//NSLog(@"Could not parse config file");
+		xmlFreeDoc(doc);		
 		return NO;
 	}
 	/*should be the <rowset name="accounts"> node here*/
 
 	NSString *rowsetName = findAttribute(accountRowsetNode,(xmlChar*)"name");
 	if(![rowsetName isEqualToString:@"accounts"]){
-		NSLog(@"invalid XML");
+		//NSLog(@"invalid XML");
 		xmlFreeDoc(doc);
 		return NO;
 	}
@@ -232,7 +232,7 @@ static Config *sharedSingletonCfg = nil;
 
 		xmlNode *charRowsetNode = findChildNode(accountNode,(xmlChar*)"rowset");
 		if(charRowsetNode == NULL){
-			NSLog(@"Rowset node is null for account %@",acctName);
+			//NSLog(@"Rowset node is null for account %@",acctName);
 			[acct release];
 			continue;
 		}
@@ -306,11 +306,11 @@ static Config *sharedSingletonCfg = nil;
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSData *archive = [defaults objectForKey:UD_ACCOUNTS];
 		NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:archive];
-
-	/* clearing mutable array and add new array via add method..
-	 Init a new Array with the array causes a memory leak
-	 releasing the previous list to fix the leak causes
-	 EXC_BAD_ACCESS because somewhere is an access to the old released list*/
+	
+        /* clearing mutable array and add new array via add method..
+           Init a new Array with the array causes a memory leak
+           releasing the previous list to fix the leak causes
+           EXC_BAD_ACCESS because somewhere is an access to the old released list */
 		if (self.accounts != NULL) {
 			[self.accounts removeAllObjects];
 		}
@@ -397,8 +397,10 @@ static Config *sharedSingletonCfg = nil;
 
 -(NSString*) pathForImageType:(NSInteger)typeID
 {
-	NSMutableString *url = [NSString stringWithFormat:@"%@/images/types/256_256/%ld.png", [[NSUserDefaults standardUserDefaults] stringForKey:UD_ROOT_PATH],typeID];
+//	NSMutableString *url = [NSString stringWithFormat:@"%@/images/types/256_256/%ld.png", [[NSUserDefaults standardUserDefaults] stringForKey:UD_ROOT_PATH],typeID];
 
+	NSMutableString *url = [NSString stringWithFormat:@"%@/Render/%ld_256.png", [[NSUserDefaults standardUserDefaults] stringForKey:UD_ROOT_PATH], (long) typeID];
+	
 	return url;
 }
 
@@ -407,8 +409,10 @@ static Config *sharedSingletonCfg = nil;
 	NSMutableString *url = [NSMutableString string];
 
 	[url appendFormat:@"%@", [[NSUserDefaults standardUserDefaults] stringForKey:UD_IMAGE_URL]];
-	[url appendFormat:@"/types/256_256/%ld.png",typeID];
+	//[url appendFormat:@"/types/256_256/%ld.png",typeID];
 
+	[url appendFormat:@"/Render/%ld_256.png", (long) typeID];
+	
 	return url;
 }
 
@@ -417,15 +421,17 @@ static Config *sharedSingletonCfg = nil;
 	NSMutableString *url = [NSMutableString string];
 
 	[url appendFormat:@"%@", [[NSUserDefaults standardUserDefaults] stringForKey:UD_IMAGE_URL]];
-	[url appendFormat:@"/icons/%d_%d/%s.png",(int)size,(int)size,icon];
+	//[url appendFormat:@"/icons/%d_%d/%s.png",(int)size,(int)size,icon];
 
+	[url appendFormat:@"/Type/%@_%d.png",icon,(int)size];
+	
 	return url;
 }
 
 -(enum DatabaseLanguage) dbLanguage
 {
 	/*if no key is set, zero is the default, which is english.*/
-	return [[NSUserDefaults standardUserDefaults] integerForKey:UD_DATABASE_LANG];
+	return (enum DatabaseLanguage) [[NSUserDefaults standardUserDefaults] integerForKey:UD_DATABASE_LANG];
 
 }
 -(void) setDbLanguage:(enum DatabaseLanguage)lang

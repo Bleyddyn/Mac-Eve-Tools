@@ -526,7 +526,7 @@
 	NSMutableAttributedString *astr;
 
 	/*draw the training to level;*/
-	str = [NSString stringWithFormat:@"Level %ld",skillLevel];
+	str = [NSString stringWithFormat:@"Level %ld", (long) skillLevel];
 	astr = [[[NSMutableAttributedString alloc]initWithString:str]autorelease];
 
 	NSRange strrange = NSMakeRange(0,[str length]);
@@ -602,9 +602,9 @@
 	//Skill name and rank
 	NSString *skillName = [skill skillName];
 	if(skillName == nil){
-		NSLog(@"nil skill name");
+		//NSLog(@"nil skill name");
 	}
-	str = [NSString stringWithFormat:@"%@ (%ldx)",[skill skillName],[skill skillRank]];
+	str = [NSString stringWithFormat:@"%@ (%ldx)", [skill skillName], (long) [skill skillRank]];
 	astr = [[[NSMutableAttributedString alloc]initWithString:str]autorelease];
 	/*this needs to be calculated with regard to the skill progress boxes*/
 	//Skill name rect (upper rect)

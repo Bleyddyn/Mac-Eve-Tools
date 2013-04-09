@@ -48,6 +48,9 @@
 								   userInfo:nil
 									repeats:YES];
 	[self checkServerStatus];
+#else
+	// only check once if running in debug
+	[self checkServerStatus];
 #endif
 }
 
@@ -88,7 +91,7 @@
 	NSInteger length = [data length];
 
 	if(length == 0){
-		NSLog(@"Zero bytes returned for Server Status data");
+		//NSLog(@"Zero bytes returned for Server Status data");
 		return NO;
 	}
 
@@ -153,9 +156,8 @@
 	[self parseXmlData:xmlData];
 	[xmlData setLength:0];
 
-	NSLog(@"Tranquility: %@ (%ld)",
-		  status == ServerUp ? @"online" : @"offline",
-		  numPlayers);
+	
+	//NSLog(@"Tranquility: %@ (%ld)", status == ServerUp ? @"online" : @"offline", numPlayers);
 	[self notifyListeners];
 }
 
@@ -164,7 +166,7 @@
 	/*error fetching URL*/
 	[xmlData setLength:0];
 	status = ServerUnknown;
-	NSLog(@"Error fetching server status (%@)",[error localizedDescription]);
+	//NSLog(@"Error fetching server status (%@)",[error localizedDescription]);
 	[self notifyListeners];
 }
 

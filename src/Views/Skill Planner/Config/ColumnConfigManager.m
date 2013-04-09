@@ -128,7 +128,7 @@
 		columnList = [ary mutableCopy];
 	}else{
 		//Column list has been built from defaults.
-		columnList = [[self buildDefaultColumnList]retain];
+		columnList = [[self buildDefaultColumnList] mutableCopy];
 	}
 }
 
@@ -164,7 +164,7 @@
 			return pcol;
 		}
 	}
-	NSLog(@"%@ not found in columnList",identifier);
+	//NSLog(@"%@ not found in columnList",identifier);
 	return nil;
 }
 

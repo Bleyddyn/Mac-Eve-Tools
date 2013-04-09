@@ -88,7 +88,7 @@
 
 		BOOL rc = [self parseCharacterXml:path];
 		if(!rc){
-			NSLog(@"Failed to parse character sheet");
+			//NSLog(@"Failed to parse character sheet");
 		}
 
 		/*if there are no XML sheets in path, then the character cannot be created*/
@@ -148,7 +148,7 @@
 -(NSString*) stringForKey:(NSString*)key
 {
 	if(data == nil){
-		NSLog(@"data is nil for character %@",characterName);
+		//NSLog(@"data is nil for character %@",characterName);
 		return nil;
 	}
 	return [data valueForKey:key];
@@ -157,7 +157,7 @@
 -(NSInteger) integerForKey:(NSString*)key
 {
 	if(data == nil){
-		NSLog(@"data is nil for character %@",characterName);
+		//NSLog(@"data is nil for character %@",characterName);
 		return -1;
 	}
 	return [[self stringForKey:key]integerValue];
@@ -289,7 +289,7 @@
 -(void) removeSkillPlan:(SkillPlan*)plan
 {
 	if(![db deleteSkillPlan:plan]){
-		NSLog(@"Failed to delete plan from database");
+		//NSLog(@"Failed to delete plan from database");
 		return;
 	}
 	[skillPlans removeObject:plan];
@@ -312,7 +312,7 @@
 	/*enforce plan name uniqueness*/
 	for(SkillPlan *sp in skillPlans){
 		if([[sp planName] isEqualToString:newPlanName]){
-			NSLog(@"Could not add skill to plan");
+			//NSLog(@"Could not add skill to plan");
 			return NO;
 		}
 	}
@@ -338,7 +338,7 @@
 {
 	/*check that the skill plan belongs to this character*/
 	if([skillPlans indexOfObject:plan] == NSNotFound){
-		NSLog(@"Error: attempting to save a skill plan that does not belong to this character");
+		//NSLog(@"Error: attempting to save a skill plan that does not belong to this character");
 		return;
 	}
 
@@ -349,7 +349,7 @@
 {
 	/*check that the skill plan belongs to this character*/
 	if([skillPlans indexOfObject:plan] == NSNotFound){
-		NSLog(@"Error: attempting to save a skill plan that does not belong to this character");
+		//NSLog(@"Error: attempting to save a skill plan that does not belong to this character");
 		return NO;
 	}
 

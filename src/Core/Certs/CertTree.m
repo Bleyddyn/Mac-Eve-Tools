@@ -32,7 +32,7 @@
 /*
 -(CertTree*) initWithXml:(NSString*)xmlPath
 {
-	NSLog(@"Certs from XML has been removed. use the database");
+	//NSLog(@"Certs from XML has been removed. use the database");
 	[self doesNotRecognizeSelector:_cmd];
 }
  */
@@ -62,8 +62,8 @@
 				  andDict:(NSDictionary*)dict
 {
 	if((self = [super init])){
-		certCategories = [certCats retain];
-		allCerts = [dict retain];
+		certCategories = [certCats mutableCopy];
+		allCerts = [dict mutableCopy];
 	}
 	return self;
 }

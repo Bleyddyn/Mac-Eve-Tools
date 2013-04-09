@@ -53,7 +53,7 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-	NSLog(@"Received Response");
+	//NSLog(@"Received Response");
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -63,8 +63,9 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-	NSLog(@"Conection failed with error %@!",[error localizedDescription]);
 
+	//NSLog(@"Conection failed with error %@!",[error localizedDescription]);
+	
 	[delegate xmlDidFailWithError:error xmlPath:savePath xmlDocName:docName];
 	[delegate xmlDocumentFinished:NO xmlPath:nil xmlDocName:docName];
 
@@ -76,12 +77,13 @@
 {
 	BOOL rc = NO;
 
-	NSLog(@"Validating (%@)",savePath);
+	
+	//NSLog(@"Validating (%@)",savePath);
 	if([delegate xmlValidateData:xmlData xmlPath:savePath xmlDocName:docName]){
 		rc = [self writeData:xmlData toFile:savePath];
-		NSLog(@"Writing (%@)",savePath);
+		//NSLog(@"Writing (%@)",savePath);
 	}else{
-		NSLog(@"Validation failed (%@)",savePath);
+		//NSLog(@"Validation failed (%@)",savePath);
 	}
 	[delegate xmlDocumentFinished:rc xmlPath:savePath xmlDocName:docName];
 
@@ -95,9 +97,9 @@
 	NSFileManager *fm = [NSFileManager defaultManager];
 	if(! [fm fileExistsAtPath:[file stringByDeletingLastPathComponent] isDirectory:nil]){
 		if(![fm createDirectoryAtPath:[file stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil]){
-			NSLog(@"Could not create directory %@",[file stringByDeletingLastPathComponent]);
+			//NSLog(@"Could not create directory %@",[file stringByDeletingLastPathComponent]);
 		}else{
-			NSLog(@"Created directory %@",[file stringByDeletingLastPathComponent]);
+			//NSLog(@"Created directory %@",[file stringByDeletingLastPathComponent]);
 		}
 	}
 
@@ -105,9 +107,9 @@
 	BOOL rc = [data writeToFile:file atomically:NO];
 
 	if(!rc){
-		NSLog(@"Failed to write file %@",file);
+		//NSLog(@"Failed to write file %@",file);
 	}else{
-		NSLog(@"Wrote %lu bytes to %@",[data length],file);
+		//NSLog(@"Wrote %lu bytes to %@",[data length],file);
 	}
 
 	return rc;
@@ -188,7 +190,7 @@
 	data = [NSURLConnection sendSynchronousRequest:request returningResponse:&resp error:&err];
 
 	if(err != nil){
-		NSLog(@"Error downloading (%@) %@",fullDocUrl,[err localizedDescription]);
+		//NSLog(@"Error downloading (%@) %@",fullDocUrl,[err localizedDescription]);
 		return NO;
 	}
 

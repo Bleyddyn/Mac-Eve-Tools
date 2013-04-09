@@ -82,12 +82,31 @@
 	[[wc window]makeKeyAndOrderFront:nil];
 }
 
+-(BOOL) isHTMLstring
+{
+	BOOL match = NO;
+	NSString *candidate = [ship typeDescription];
+	NSString *checkRegex = @"<br>";
+	NSPredicate *checkTest = [NSPredicate predicateWithFormat:@"SELF contains[cd] %@", checkRegex];
+	match = match | [checkTest evaluateWithObject:candidate];
+	return match;
+}
+
 -(void) setLabels
 {
 	[shipName setStringValue:[ship typeName]];
 	[shipName sizeToFit];
 
-	[shipDescription setString:[ship typeDescription]];
+	if ([self isHTMLstring]) {
+		NSString *shipDescriptionInitial = [ship typeDescription];
+		NSData *shipDescriptionHtml = [shipDescriptionInitial dataUsingEncoding:NSUTF8StringEncoding];
+		NSAttributedString *textToBeInserted = [[[NSAttributedString alloc]
+												initWithHTML:shipDescriptionHtml documentAttributes:nil] autorelease];
+		[[shipDescription textStorage] setAttributedString:textToBeInserted];
+	}
+	else {
+		[shipDescription setString:[ship typeDescription]];
+	}
 }
 
 -(BOOL) displayImage
@@ -123,8 +142,8 @@
 	NSString *imageUrl = [[Config sharedInstance] urlForImageType:[ship typeID]] ;
 	NSString *filePath = [[Config sharedInstance] pathForImageType:[ship typeID]];
 
-	NSLog(@"Downloading %@ to %@",imageUrl,filePath);
-
+	//NSLog(@"Downloading %@ to %@",imageUrl,filePath);
+	
 	/*image does not exist. download it and display it when it's done.*/
 	NSURL *url = [NSURL URLWithString:imageUrl];
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -271,8 +290,8 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 
 -(void) download:(NSURLDownload *)download didFailWithError:(NSError *)error
 {
-	NSLog(@"Error downloading image (%@): %@",[[download request]URL], error);
-
+	//NSLog(@"Error downloading image (%@): %@",[[download request]URL], error);
+	
 	@synchronized(self){
 		[down release];
 		down = nil;

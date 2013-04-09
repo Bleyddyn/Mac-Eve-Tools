@@ -32,7 +32,7 @@
 -(CCPCategory*) init
 {
 	if((self = [super init])){
-		groups = [[NSMutableDictionary alloc]init];
+		groups = [[NSArray alloc] init];
 	}
 	return self;
 }

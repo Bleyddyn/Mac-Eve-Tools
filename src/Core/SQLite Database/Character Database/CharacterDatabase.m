@@ -139,7 +139,8 @@
 
 		[self commitTransaction];
 
-		NSLog(@"Succesfully upgraded character database");
+		
+		//NSLog(@"Succesfully upgraded character database");
 		return YES;
 	}
 	return NO;
@@ -159,7 +160,7 @@
 	rc = sqlite3_get_table(db, existenceTest, &results, &rows, &cols, &errormsg);
 
 	if(rows != 1){
-		NSLog(@"Database does not exist");
+		//NSLog(@"Database does not exist");
 		status = NO;
 		return NO;
 	}
@@ -206,7 +207,7 @@
 	if(!rc){
 		rc = [self createDatabase];
 		if(!rc){
-			NSLog(@"error initialising database database");
+			//NSLog(@"error initialising database database");
 			return NO;
 		}
 	}
@@ -225,13 +226,13 @@
 		if([sp dirty]){
 			rc = [self deleteSkillPlanPrivate:sp];
 			if(!rc){
-				NSLog(@"error deleting skill plan %@",[sp planName]);
+				//NSLog(@"error deleting skill plan %@",[sp planName]);
 				[self rollbackTransaction];
 				return NO;
 			}
 			rc = [self writeSkillPlanPrivate:sp];
 			if(!rc){
-				NSLog(@"error writing skill plan %@",[sp planName]);
+				//NSLog(@"error writing skill plan %@",[sp planName]);
 				[self rollbackTransaction];
 				return NO;
 			}
@@ -246,7 +247,7 @@
 			[sp setDirty:NO];
 		}
 	}else{
-		NSLog(@"error comming transaction");
+		//NSLog(@"error comming transaction");
 	}
 	return YES;
 }
@@ -269,7 +270,7 @@
 	[self beginTransaction];
 
 	if(![self deleteSkillPlanPrivate:plan]){
-		NSLog(@"error deleting plan %@",[plan planName]);
+		//NSLog(@"error deleting plan %@",[plan planName]);
 		[self rollbackTransaction];
 		return NO;
 	}
@@ -287,7 +288,7 @@
 	[self beginTransaction];
 
 	if(![self writeSkillPlanPrivate:plan]){
-		NSLog(@"error writing plan %@",[plan planName]);
+		//NSLog(@"error writing plan %@",[plan planName]);
 		[self rollbackTransaction];
 		[self closeDatabase];
 		return NO;
@@ -329,7 +330,7 @@
 	rc = sqlite3_prepare_v2(db, select_skill_plan_overview,(int)sizeof(select_skill_plan_overview)
 							,&read_overview_stmt, NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"sqlite error\n");
+		//NSLog(@"sqlite error\n");
 		if(read_overview_stmt != NULL){
 			sqlite3_finalize(read_overview_stmt);
 		}
@@ -373,7 +374,7 @@
 	[self closeDatabase];
 
 	if(planId == -1){
-		NSLog(@"Duplicate plan name %@",planName);
+		//NSLog(@"Duplicate plan name %@",planName);
 		return nil;
 	}
 

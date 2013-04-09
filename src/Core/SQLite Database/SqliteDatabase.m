@@ -47,7 +47,7 @@
 	if(db == NULL){
 		int rc  = sqlite3_open(path,&db);
 		if(rc != SQLITE_OK){
-			NSLog(@"%@ error: %s",[self className],sqlite3_errmsg(db));
+			//NSLog(@"%@ error: %s",[self className],sqlite3_errmsg(db));
 			[self closeDatabase];
 		}
 	}
@@ -58,7 +58,7 @@
 		int rc;
 
 		if((rc = sqlite3_close(db)) != SQLITE_OK){
-			NSLog(@"%@ error: (%d) %s",[self className],rc,sqlite3_errmsg(db));
+			//NSLog(@"%@ error: (%d) %s",[self className],rc,sqlite3_errmsg(db));
 		}
 		db = NULL;
 	}
@@ -129,7 +129,7 @@
 -(void) logError:(char*)errmsg
 {
 	if(errmsg != NULL){
-		NSLog(@"SQL Error: %s",errmsg);
+		//NSLog(@"SQL Error: %s",errmsg);
 		sqlite3_free(errmsg);
 	}
 }

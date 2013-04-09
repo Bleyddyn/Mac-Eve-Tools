@@ -46,37 +46,38 @@
 	BOOL rc = NO;
 
 	xmlPath = [path stringByAppendingFormat:@"/%@",[XMLAPI_CHAR_SHEET lastPathComponent]];
-	NSLog(@"Parsing %@",xmlPath);
 
+	//NSLog(@"Parsing %@",xmlPath);
+	
 	/*Parse CharacterSheet.xml.aspx*/
 	doc = xmlReadFile([xmlPath fileSystemRepresentation],NULL,0);
 	if(doc == NULL){
-		NSLog(@"Failed to read %@",xmlPath);
+		//NSLog(@"Failed to read %@",xmlPath);
 		return NO;
 	}
 	rc = [self parseXmlSheet:doc];
 	xmlFreeDoc(doc);
 
 	if(!rc){
-		NSLog(@"Failed to parse %@",xmlPath);
+		//NSLog(@"Failed to parse %@",xmlPath);
 		return NO;
 	}
 
 
 	/*parse the skill in training.*/
 	xmlPath = [path stringByAppendingFormat:@"/%@",[XMLAPI_CHAR_TRAINING lastPathComponent]];
-	NSLog(@"Parsing %@",xmlPath);
-
+	//NSLog(@"Parsing %@",xmlPath);
+	
 	doc = xmlReadFile([xmlPath fileSystemRepresentation],NULL,0);
 	if(doc == NULL){
-		NSLog(@"Failed to read %@",xmlPath);
+		//NSLog(@"Failed to read %@",xmlPath);
 		return NO;
 	}
 	rc = [self parseXmlTraningSheet:doc];
 	xmlFreeDoc(doc);
 
 	if(!rc){
-		NSLog(@"Failed to parse %@",xmlPath);
+		//NSLog(@"Failed to parse %@",xmlPath);
 		return NO;
 	}
 
@@ -85,14 +86,14 @@
 	xmlPath = [path stringByAppendingFormat:@"/%@",[XMLAPI_CHAR_QUEUE lastPathComponent]];
 	doc = xmlReadFile([xmlPath fileSystemRepresentation],NULL,0);
 	if(doc == NULL){
-		NSLog(@"Failed to read %@",xmlPath);
+		//NSLog(@"Failed to read %@",xmlPath);
 		return NO;
 	}
 	rc = [self parseXmlQueueSheet:doc];
 	xmlFreeDoc(doc);
 
 	if(!rc){
-		NSLog(@"Failed to parse %@",xmlPath);
+		//NSLog(@"Failed to parse %@",xmlPath);
 		return NO;
 	}
 
@@ -128,7 +129,7 @@
 	xmlNode *result = findChildNode(root_node,(xmlChar*)"error");
 
 	if(result != NULL){
-		NSLog(@"%@",getNodeText(result));
+		//NSLog(@"%@",getNodeText(result));
 		rc = NO;
 	}
 
@@ -235,7 +236,7 @@
 		//NSLog(@"%@ %@ %@",typeID, skillPoints, level);
 		Skill *temp = [master skillForIdInteger:[typeID integerValue]];
 		if(temp == nil){
-			NSLog(@"Error: cannot find skill %@ in skill tree! - skipping skill",typeID);
+			//NSLog(@"Error: cannot find skill %@ in skill tree! - skipping skill",typeID);
 			continue;
 		}
 		Skill *s = [temp copy];
@@ -273,8 +274,8 @@
 		if(xmlErrorMessage != NULL){
 			errorMessage[CHAR_ERROR_TRAININGSHEET] = [[NSString stringWithString:getNodeText(xmlErrorMessage)]retain];
 			error[CHAR_ERROR_TRAININGSHEET] = YES;
-			NSLog(@"EVE error: %@",errorMessage[CHAR_ERROR_TRAININGSHEET]);
-		}
+			//NSLog(@"EVE error: %@",errorMessage[CHAR_ERROR_TRAININGSHEET]);
+		}		
 		return NO;
 	}
 
@@ -299,11 +300,11 @@
 		NSString *level = findAttribute(cur_node,(xmlChar*)"level");
 
 		if(type == nil){
-			NSLog(@"Error parsing skill plan. typeID is nil");
+			//NSLog(@"Error parsing skill plan. typeID is nil");
 			return NO;
 		}
 		if(type == nil){
-			NSLog(@"Error parsing skill plan. typeID is nil");
+			//NSLog(@"Error parsing skill plan. typeID is nil");
 			return NO;
 		}
 
@@ -323,13 +324,13 @@
 
 	result = findChildNode(root_node,(xmlChar*)"result");
 	if(result == NULL){
-		NSLog(@"Failed to find result tag");
+		//NSLog(@"Failed to find result tag");
 		xmlNode *xmlErrorMessage = findChildNode(root_node,(xmlChar*)"error");
 		if(xmlErrorMessage != NULL){
 			errorMessage[CHAR_ERROR_TRAININGSHEET] = [[NSString stringWithString:getNodeText(xmlErrorMessage)]retain];
 			error[CHAR_ERROR_TRAININGSHEET] = YES;
-			NSLog(@"EVE error: %@",errorMessage[CHAR_ERROR_TRAININGSHEET]);
-		}
+			//NSLog(@"EVE error: %@",errorMessage[CHAR_ERROR_TRAININGSHEET]);
+		}		
 		return NO;
 	}
 
@@ -387,13 +388,13 @@
 
 	result = findChildNode(root_node,(xmlChar*)"result");
 	if(result == NULL){
-		NSLog(@"Could not get result tag");
-
+		//NSLog(@"Could not get result tag");
+		
 		xmlNode *xmlErrorMessage = findChildNode(root_node,(xmlChar*)"error");
 		if(xmlErrorMessage != NULL){
 			errorMessage[CHAR_ERROR_CHARSHEET] = [[NSString stringWithString:getNodeText(xmlErrorMessage)]retain];
 			error[CHAR_ERROR_CHARSHEET] = YES;
-			NSLog(@"EVE error: %@",errorMessage[CHAR_ERROR_CHARSHEET]);
+			//NSLog(@"EVE error: %@",errorMessage[CHAR_ERROR_CHARSHEET]);
 		}
 		return NO;
 	}
@@ -631,14 +632,14 @@
 -(void) xmlDidFailWithError:(NSError*)xmlErrorMessage xmlPath:(NSString*)path xmlDocName:(NSString*)docName
 {
 	assert(0);
-	NSLog(@"Connection failed! (%@)",[xmlErrorMessage localizedDescription]);
+	//NSLog(@"Connection failed! (%@)",[xmlErrorMessage localizedDescription]);
 }
 
 -(void) xmlDocumentFinished:(BOOL)status xmlPath:(NSString*)path xmlDocName:(NSString*)docName;
 {
 	assert(0);
 	if(status == NO){
-		NSLog(@"Failed to download XML %@",docName);
+		//NSLog(@"Failed to download XML %@",docName);
 		return;
 	}
 
@@ -648,7 +649,7 @@
 		xmlDoc *doc = xmlReadFile([path fileSystemRepresentation],NULL,0);
 
 		if(doc == NULL){
-			NSLog(@"Error reading %@",path);
+			//NSLog(@"Error reading %@",path);
 		}else{
 			rc = [self parseXmlTraningSheet:doc];
 			xmlFreeDoc(doc);
@@ -657,15 +658,15 @@
 		xmlDoc *doc = xmlReadFile([path fileSystemRepresentation],NULL,0);
 
 		if(doc == NULL){
-			NSLog(@"Error reading %@",path);
+			//NSLog(@"Error reading %@",path);
 		}else{
 			rc = [self parseXmlSheet:doc];
 			xmlFreeDoc(doc);
-
-			NSLog(@"%@ finished update procedure",characterName);
+			
+			//NSLog(@"%@ finished update procedure",characterName);		
 			for(SkillPlan *plan in skillPlans){
 				if([plan purgeCompletedSkills] > 0){
-					NSLog(@"Purging plan %@",[plan planName]);
+					//NSLog(@"Purging plan %@",[plan planName]);
 					/*we prob don't need to post this notification anymore*/
 					[[NSNotificationCenter defaultCenter]
 					 postNotificationName:CHARACTER_SKILL_PLAN_PURGED
@@ -683,14 +684,14 @@
 		xmlDoc *doc = xmlReadFile([path fileSystemRepresentation],NULL,0);
 
 		if(doc == NULL){
-			NSLog(@"Error reading %@",path);
+			//NSLog(@"Error reading %@",path);
 		}else{
 			rc = [self parseXmlQueueSheet:doc];
 			xmlFreeDoc(doc);
 		}
 
 	}else{
-		NSLog(@"Unknown callback %@",docName);
+		//NSLog(@"Unknown callback %@",docName);
 		assert(0);
 	}
 }

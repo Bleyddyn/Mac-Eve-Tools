@@ -60,17 +60,10 @@
 //Download the character portrait.
 -(NSOperation*) buildPortraitOperation:(CharacterTemplate*)template
 {
-<<<<<<< HEAD
 	NSString *pictureUrl = [NSString stringWithFormat:
     [[NSUserDefaults standardUserDefaults] stringForKey:UD_PICTURE_URL],
 		[template characterId]];
 	
-=======
-	NSString *pictureUrl = [NSString stringWithFormat:@"%@%@_256.jpg",
-							[[NSUserDefaults standardUserDefaults] stringForKey:UD_PICTURE_URL],
-							[template characterId]];
-
->>>>>>> 6231d5e63ea437d1bba22ff4b873ff9ef03029d7
 	GenericDownloadOperation *op;
 
 	op = [[[GenericDownloadOperation alloc]init]autorelease];
@@ -132,10 +125,10 @@
 	if(! [fm fileExistsAtPath:pendingDir isDirectory:nil]){
 		if(![fm createDirectoryAtPath: pendingDir
 		  withIntermediateDirectories:YES attributes:nil error:nil]){
-			NSLog(@"Could not create directory %@",pendingDir);
+			//NSLog(@"Could not create directory %@",pendingDir);
 			return nil;
 		}else{
-			NSLog(@"Created directory %@",pendingDir);
+			//NSLog(@"Created directory %@",pendingDir);
 		}
 	}
 
@@ -243,7 +236,8 @@
 {
 	[self buildCharacterDict];
 
-	NSLog(@"Finished downloading characters");
+	//NSLog(@"Finished downloading characters");
+
 	if(sortedArray != nil){
 		[sortedArray release];
 	}
@@ -298,8 +292,9 @@
 	if(templateArray != nil){
 		[templateArray release];
 	}
-	templateArray = [tarray retain];
 
+	templateArray = [tarray mutableCopy];
+		
 	NSInteger i = 0;
 	BOOL rc = NO;
 	NSMutableDictionary *charDict = [[NSMutableDictionary alloc]init];
@@ -367,9 +362,9 @@
 	}
 
 	/*fallback, find the first active character*/
-
-	NSLog(@"Primary character not set, finding first active");
-
+	
+	//NSLog(@"Primary character not set, finding first active");
+	
 	for(CharacterTemplate *t in templateArray){
 		if([t active]){
 			if(characterDictionary != nil){
@@ -392,7 +387,7 @@
 			}
 		}
 	}
-	NSLog(@"Character %lu not found",characterId);
+	//NSLog(@"Character %lu not found",characterId);
 	return nil;
 }
 
@@ -439,9 +434,9 @@
 	if(![[NSFileManager defaultManager]fileExistsAtPath:path]){
 		return;
 	}
-
-	NSLog(@"Deleting portrait %@",path);
-
+	
+	//NSLog(@"Deleting portrait %@",path);
+	
 	[[NSFileManager defaultManager]removeItemAtPath:path error:NULL];
 
 	[NSAlert alertWithMessageText:NSLocalizedString(@"Portrait will be refetched on character update",)
