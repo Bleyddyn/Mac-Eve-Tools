@@ -2,8 +2,8 @@
 
 DBEXPORT=database.sql
 
-DBVERSION=8
-DBEXPANSION="Incursion 1.1.0"
+DBVERSION=9
+DBEXPANSION="Retribution 1.1.0"
 
 VERQUERY="INSERT INTO version VALUES ($DBVERSION,'$DBEXPANSION');"
 
@@ -12,9 +12,11 @@ VERQUERY="INSERT INTO version VALUES ($DBVERSION,'$DBEXPANSION');"
 rm -f tempdb.db
 rm -f rows.sql
 
-/bin/bash dumprows.sh rows.sql
+#/bin/bash dumprows.sh rows.sql
+sqlite3 retribution11.sqlite .dump > ${DBEXPORT}
 
-/bin/cat tables.sql rows.sql post.sql > $DBEXPORT
+#/bin/cat tables.sql rows.sql post.sql > $DBEXPORT
+/bin/cat tables.sql post.sql >> $DBEXPORT
 echo "$VERQUERY" >> $DBEXPORT
 /usr/bin/bzip2 < $DBEXPORT > $DBEXPORT.bz2
 /usr/bin/sqlite3 tempdb.db < $DBEXPORT 
@@ -35,7 +37,7 @@ XML="<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 
 echo $XML > MacEveApi-database.xml
 
-rm -f $DBEXPORT
+#rm -f $DBEXPORT
 rm -f tempdb.db
 rm -f rows.sql
 

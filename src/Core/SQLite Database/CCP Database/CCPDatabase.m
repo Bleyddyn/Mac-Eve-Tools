@@ -128,7 +128,7 @@
 -(CCPCategory*) category:(NSInteger)categoryID
 {
 	const char query[] =
-		"SELECT categoryID, categoryName, graphicID FROM invCategories WHERE categoryID = ? "
+		"SELECT categoryID, categoryName, iconID FROM invCategories WHERE categoryID = ? "
 		"ORDER BY categoryName;";
 	sqlite3_stmt *read_stmt;
 	int rc;
@@ -184,7 +184,7 @@
 
 -(CCPGroup*) group:(NSInteger)groupID
 {
-	const char query[] = "SELECT groupID, categoryID, groupName, graphicID FROM invGroups WHERE groupID = ?;";
+	const char query[] = "SELECT groupID, categoryID, groupName, iconID FROM invGroups WHERE groupID = ?;";
 	sqlite3_stmt *read_stmt;
 	CCPGroup *group = nil;
 	int rc;
@@ -253,7 +253,7 @@
 -(NSArray*) groupsInCategory:(NSInteger)categoryID
 {
 	const char query[] =
-		"SELECT groupID, categoryID, groupName, graphicID "
+		"SELECT groupID, categoryID, groupName, iconID "
 		"FROM invGroups WHERE categoryID = ? "
 		"ORDER BY groupName;";
 	sqlite3_stmt *read_stmt;
@@ -348,8 +348,9 @@
 
 -(NSArray*) typesInGroup:(NSInteger)groupID
 {
+    // had to hard code the radius (as 100) because I'm not sure where it's been moved in the latest db schema
 	const char query[] =
-		"SELECT typeID, groupID, graphicID, raceID, marketGroupID,radius, mass, "
+		"SELECT typeID, groupID, iconID, raceID, marketGroupID, 100, mass, "
 		"volume, capacity,basePrice, typeName, description "
 		"FROM invTypes "
 		"WHERE groupID = ? "
@@ -489,7 +490,7 @@
 -(NSDictionary*) typeAttributesForTypeID:(NSInteger)typeID
 {
 	const char query[] =
-		"SELECT at.graphicID, at.attributeID, at.displayName, un.displayName, ta.valueInt, ta.valueFloat "
+		"SELECT at.iconID, at.attributeID, at.displayName, un.displayName, ta.valueInt, ta.valueFloat "
 		"FROM dgmTypeAttributes ta, dgmAttributeTypes at, eveUnits un "
 		"WHERE at.attributeID = ta.attributeID "
 		"AND un.unitID = at.unitID "
@@ -559,7 +560,7 @@
 {
 	const char query[] =
 	/*
-		"SELECT at.graphicID, at.displayName, ta.valueInt, "
+		"SELECT at.iconID, at.displayName, ta.valueInt, "
 			"ta.valueFloat, at.attributeID, un.displayName "
 		"FROM metAttributeTypes at, dgmTypeAttributes ta, eveUnits un "
 		"WHERE at.attributeID = ta.attributeID "
@@ -1201,4 +1202,7 @@
 	return attrDict;
 }
 
+#pragma mark AttributeTypes
+
+// write code to duplicate the dump_attrs.py script in dbscripts
 @end
