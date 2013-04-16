@@ -47,6 +47,10 @@
 
 #import <sqlite3.h>
 
+@interface CCPDatabase()
+-(BOOL)insertAttributeTypes:(NSString *)queryString number:(int)attrNum;
+-(void)buildAttributeTypes;
+@end
 
 @implementation CCPDatabase
 
@@ -58,6 +62,8 @@
 		[self openDatabase];
 		tran_stmt = NULL;
 		lang = [[Config sharedInstance]dbLanguage];
+        if( db )
+            [self buildAttributeTypes];
 	}
 	return self;
 }
@@ -568,19 +574,19 @@
 		"AND typeID = ? "
 		"AND at.displayType = ?;";*/
 
-	"SELECT at.graphicID, COALESCE(at.displayName,at.attributeName), ta.valueInt, "
+	"SELECT at.iconID, COALESCE(at.displayName,at.attributeName), ta.valueInt, "
 		"ta.valueFloat, at.attributeID, un.displayName "
 	"FROM dgmTypeAttributes ta, metAttributeTypes at LEFT OUTER JOIN eveUnits un ON at.unitID = un.unitID "
 	"WHERE at.attributeID = ta.attributeID "
 	"AND typeID = ? "
-	"AND at.displayType = ?;";
+	"AND at.typeGroupID = ?;";
 
 	sqlite3_stmt *read_stmt;
 	int rc;
 
 	rc = sqlite3_prepare_v2(db, query, (int)sizeof(query), &read_stmt, NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: query error",__func__);
+		NSLog(@"%s: query error: %s",__func__, sqlite3_errmsg(db) );
 		return nil;
 	}
 
@@ -1205,4 +1211,168 @@
 #pragma mark AttributeTypes
 
 // write code to duplicate the dump_attrs.py script in dbscripts
+/*
+ def dumpAttribute(conn,query,attrNum):
+ cursor = conn.cursor()
+ cursor.execute(query)
+ 
+ rowcount = int(cursor.rowcount)
+ 
+ conn.query("BEGIN;");
+ 
+ for i in range (0,rowcount):
+ row = cursor.fetchone()
+ 
+ row1 = ""
+ row2 = ""
+ 
+ if row[1] == None:
+ row1 = "NULL"
+ else:
+ row1 = row[1]
+ 
+ if row[2] == None:
+ row2 = "NULL"
+ else:
+ row2 = row[2]
+ 
+ insertQuery = "INSERT INTO metAttributeTypes VALUES (" + str(row[0]) + "," + str(row1) + "," \
+ + str(row2) + ",'" + str(row[3]) + "','"+ str(row[4])+"'," + str(attrNum) + ");"
+ 
+ #   print insertQuery
+ 
+ conn.query(insertQuery)
+ 
+ conn.query("COMMIT;")
+ cursor.close()
+*/
+/*
+ const char insert_skill[] = "INSERT INTO skill_plan VALUES (?,?,?,?);";
+ sqlite3_stmt *insert_skill_stmt;
+ BOOL success = YES;
+ int rc;
+ 
+ NSInteger skillCount = [plan skillCount];
+ 
+ rc = sqlite3_prepare_v2(db,insert_skill,(int)sizeof(insert_skill),&insert_skill_stmt,NULL);
+ 
+ rc = sqlite3_bind_int64(insert_skill_stmt,1,planId);
+ 
+ for(NSInteger i = 0; i< skillCount; i++){
+ SkillPair *sp = [plan skillAtIndex:i];
+ rc = sqlite3_bind_nsint(insert_skill_stmt,2,i);
+ rc = sqlite3_bind_nsint(insert_skill_stmt,3,[[sp typeID]integerValue]);
+ rc = sqlite3_bind_nsint(insert_skill_stmt,4,[sp skillLevel]);
+ 
+ if((rc = sqlite3_step(insert_skill_stmt)) != SQLITE_DONE){
+ //NSLog(@"sqlite error inserting skill plan");
+ success = NO;
+ break;
+ }
+ sqlite3_reset(insert_skill_stmt);
+ }
+ 
+ sqlite3_finalize(insert_skill_stmt);
+
+ */
+-(BOOL)insertAttributeTypes:(NSString *)queryString number:(int)attrNum
+{
+	sqlite3_stmt *read_stmt;
+	int rc;
+    
+	rc = sqlite3_prepare_v2( db, [queryString UTF8String], (int)[queryString length], &read_stmt, NULL );
+	if( rc != SQLITE_OK )
+    {
+		[self logError:"Error preparing Attribute type query"];
+		return NO;
+	}
+    
+	NSMutableDictionary *attrDict = [NSMutableDictionary dictionary];
+    const char insert_attr[] = "INSERT INTO metAttributeTypes VALUES (?,?,?,?,?,?)";
+    sqlite3_stmt *insert_attr_stmt;
+
+    rc = sqlite3_prepare_v2( db, insert_attr, (int)sizeof(insert_attr), &insert_attr_stmt, NULL);
+
+	sqlite3_bind_nsint( insert_attr_stmt, 6, attrNum );
+    
+	while( sqlite3_step(read_stmt) == SQLITE_ROW )
+    {
+		NSInteger attrID = sqlite3_column_nsint(read_stmt,0);
+		NSInteger unitID = sqlite3_column_nsint(read_stmt,1);
+		NSInteger iconID = sqlite3_column_nsint(read_stmt,2);
+		NSString *displayName = sqlite3_column_nsstr(read_stmt,3);
+		NSString *attrName = sqlite3_column_nsstr(read_stmt,4);
+        
+        rc = sqlite3_bind_nsint( insert_attr_stmt, 1, attrID );
+        rc = sqlite3_bind_nsint( insert_attr_stmt, 2, unitID );
+        rc = sqlite3_bind_nsint( insert_attr_stmt, 3, iconID );
+        rc = sqlite3_bind_text( insert_attr_stmt, 4, [displayName UTF8String], (int)[displayName length], NULL );
+        rc = sqlite3_bind_text( insert_attr_stmt, 5, [attrName UTF8String], (int)[attrName length], NULL );
+        
+        if( (rc = sqlite3_step(insert_attr_stmt)) != SQLITE_DONE )
+        {
+            //NSLog(@"sqlite error inserting skill plan");
+            return NO;
+        }
+        sqlite3_reset(insert_attr_stmt);
+	}
+
+    sqlite3_finalize(insert_attr_stmt);
+	sqlite3_finalize(read_stmt);
+    
+	return attrDict;
+
+}
+
+-(void)buildAttributeTypes
+{
+    NSString *queryFormat = @"SELECT attributeID, unitID, iconID, displayName, attributeName FROM dgmAttributeTypes WHERE attributeID IN %@;";
+    NSString *drones = @"(283,1271)";
+    NSString *structure = @"(9,113,111,109,110)";
+    NSString *armour = @"(265,267,268,269,270)";
+    NSString *shield = @"(263,349,271,272,273,274,479)";
+    NSString *capacitor = @"(482,55)";
+    NSString *targeting = @"(76,192,208,209,210,211,552)";
+    NSString *propulsion = @"(37)";;
+    NSString *fitting = @"(12,13,14,101,102,1154,1547,1132,11,48)";
+
+    char *errmsg;
+    int rc;
+    
+	[self beginTransaction];
+    
+    // First see if the table exists and has data in it. If so, return.
+    
+    rc = sqlite3_exec(db, "DROP TABLE IF EXISTS metAttributeTypes;", NULL, NULL, &errmsg);
+	if(rc != SQLITE_OK)
+    {
+		[self logError:errmsg];
+		[self rollbackTransaction];
+		return;
+	}
+
+	rc = sqlite3_exec(db, "CREATE TABLE metAttributeTypes (attributeID INTEGER, unitID INTEGER, iconID INTEGER, displayName VARCHAR(100), attributeName VARCHAR(100), typeGroupID INTEGER);", NULL, NULL, &errmsg);
+	if(rc != SQLITE_OK)
+    {
+		[self logError:errmsg];
+		[self rollbackTransaction];
+		return;
+	}
+
+    [self insertAttributeTypes:[NSString stringWithFormat:queryFormat, drones] number:1];
+    [self insertAttributeTypes:[NSString stringWithFormat:queryFormat, structure] number:2];
+    [self insertAttributeTypes:[NSString stringWithFormat:queryFormat, armour] number:3];
+    [self insertAttributeTypes:[NSString stringWithFormat:queryFormat, shield] number:4];
+    [self insertAttributeTypes:[NSString stringWithFormat:queryFormat, capacitor] number:5];
+    [self insertAttributeTypes:[NSString stringWithFormat:queryFormat, targeting] number:6];
+    [self insertAttributeTypes:[NSString stringWithFormat:queryFormat, propulsion] number:7];
+    [self insertAttributeTypes:[NSString stringWithFormat:queryFormat, fitting] number:9];
+    
+    NSString *otherAttributes = @"SELECT attributeID, unitID, iconID, displayName, attributeName "
+                                "FROM dgmAttributeTypes WHERE attributeID NOT IN "
+                                "(SELECT attributeID FROM metAttributeTypes);";
+    [self insertAttributeTypes:otherAttributes number:8];
+    
+    [self commitTransaction];
+}
 @end
