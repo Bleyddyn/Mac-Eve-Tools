@@ -129,7 +129,7 @@
 -(void) logError:(char*)errmsg
 {
 	if(errmsg != NULL){
-		//NSLog(@"SQL Error: %s",errmsg);
+		NSLog(@"SQL Error: %s",errmsg);
 		sqlite3_free(errmsg);
 	}
 }

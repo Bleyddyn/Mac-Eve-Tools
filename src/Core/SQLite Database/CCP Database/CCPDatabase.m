@@ -142,7 +142,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: sqlite error\n",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -183,7 +183,7 @@
 
 -(NSInteger) groupCount:(NSInteger)categoryID
 {
-	//NSLog(@"Insert code here");
+    [self logError:(char *)[[NSString stringWithFormat:@"%s: Not yet implemented", __func__] UTF8String]];
 	return 0;
 }
 
@@ -197,7 +197,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: sqlite error\n",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -247,7 +247,7 @@
 	if((rc == SQLITE_DONE) || (rc == SQLITE_ROW)){
 		result = sqlite3_column_nsstr(tran_stmt,0); //returns an empty string on failure.
 	}else{
-		//NSLog(@"Sqlite error - %s",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 	}
 
 	sqlite3_reset(tran_stmt);
@@ -267,7 +267,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: sqlite error\n",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -309,13 +309,12 @@
 -(NSInteger) typeCount:(NSInteger)groupID
 {
 	//const char query[] = "SELECT COUNT(*) FROM invTypes WHERE typeID = ?;";
-	//NSLog(@"Insert code here");
 	return 0;
 }
 
 -(CCPType*) type:(NSInteger)typeID
 {
-	//NSLog(@"Insert code here");
+    [self logError:(char *)[[NSString stringWithFormat:@"%s: Not yet implemented", __func__] UTF8String]];
 	return nil;
 }
 
@@ -366,7 +365,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: sqlite error\n",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -390,7 +389,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: sqlite error\n",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -422,7 +421,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: sqlite error\n",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return NO;
 	}
 
@@ -452,7 +451,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: sqlite error\n",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return -1;
 	}
 
@@ -478,7 +477,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query), &read_stmt, NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: sqlite error\n",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return -1;
 	}
 
@@ -507,7 +506,7 @@
 
 	rc = sqlite3_prepare_v2(db, query, (int)sizeof(query), &read_stmt, NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: SQLite error",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -586,7 +585,7 @@
 
 	rc = sqlite3_prepare_v2(db, query, (int)sizeof(query), &read_stmt, NULL);
 	if(rc != SQLITE_OK){
-		NSLog(@"%s: query error: %s",__func__, sqlite3_errmsg(db) );
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error: %s", __func__, sqlite3_errmsg(db)] UTF8String]];
 		return nil;
 	}
 
@@ -656,7 +655,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: Query error",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -710,7 +709,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: Query error",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -754,7 +753,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: Query error",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -817,7 +816,7 @@
 
 	rc = sqlite3_prepare_v2(db, query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: Query error",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -866,7 +865,7 @@
 
 	rc = sqlite3_prepare_v2(db, query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: Query error",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -945,20 +944,20 @@
 
 	rc = sqlite3_prepare_v2(db,skill_query,(int)sizeof(skill_query),&skill_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: Query error",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return NO;
 	}
 
 	rc = sqlite3_prepare_v2(db,skill_attr_query,(int)sizeof(skill_attr_query),&skillattr_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: Query error",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		sqlite3_finalize(skillattr_stmt);
 		return NO;
 	}
 
 	rc = sqlite3_prepare_v2(db, attr_query, (int)sizeof(attr_query), &attr_stmt, NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: Query error",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		sqlite3_finalize(skillattr_stmt);
 		sqlite3_finalize(skill_stmt);
 		return NO;
@@ -1078,7 +1077,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: Query error",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -1121,7 +1120,7 @@
 
 	rc = sqlite3_prepare_v2(db, query, (int)sizeof(query), &read_stmt, NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: Query error - %s",__func__,sqlite3_errmsg(db));
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error: %s", __func__, sqlite3_errmsg(db)] UTF8String]];
 		return nil;
 	}
 
@@ -1182,7 +1181,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-		//NSLog(@"%s: Query error",__func__);
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
 		return nil;
 	}
 
@@ -1210,71 +1209,6 @@
 
 #pragma mark AttributeTypes
 
-// write code to duplicate the dump_attrs.py script in dbscripts
-/*
- def dumpAttribute(conn,query,attrNum):
- cursor = conn.cursor()
- cursor.execute(query)
- 
- rowcount = int(cursor.rowcount)
- 
- conn.query("BEGIN;");
- 
- for i in range (0,rowcount):
- row = cursor.fetchone()
- 
- row1 = ""
- row2 = ""
- 
- if row[1] == None:
- row1 = "NULL"
- else:
- row1 = row[1]
- 
- if row[2] == None:
- row2 = "NULL"
- else:
- row2 = row[2]
- 
- insertQuery = "INSERT INTO metAttributeTypes VALUES (" + str(row[0]) + "," + str(row1) + "," \
- + str(row2) + ",'" + str(row[3]) + "','"+ str(row[4])+"'," + str(attrNum) + ");"
- 
- #   print insertQuery
- 
- conn.query(insertQuery)
- 
- conn.query("COMMIT;")
- cursor.close()
-*/
-/*
- const char insert_skill[] = "INSERT INTO skill_plan VALUES (?,?,?,?);";
- sqlite3_stmt *insert_skill_stmt;
- BOOL success = YES;
- int rc;
- 
- NSInteger skillCount = [plan skillCount];
- 
- rc = sqlite3_prepare_v2(db,insert_skill,(int)sizeof(insert_skill),&insert_skill_stmt,NULL);
- 
- rc = sqlite3_bind_int64(insert_skill_stmt,1,planId);
- 
- for(NSInteger i = 0; i< skillCount; i++){
- SkillPair *sp = [plan skillAtIndex:i];
- rc = sqlite3_bind_nsint(insert_skill_stmt,2,i);
- rc = sqlite3_bind_nsint(insert_skill_stmt,3,[[sp typeID]integerValue]);
- rc = sqlite3_bind_nsint(insert_skill_stmt,4,[sp skillLevel]);
- 
- if((rc = sqlite3_step(insert_skill_stmt)) != SQLITE_DONE){
- //NSLog(@"sqlite error inserting skill plan");
- success = NO;
- break;
- }
- sqlite3_reset(insert_skill_stmt);
- }
- 
- sqlite3_finalize(insert_skill_stmt);
-
- */
 -(BOOL)insertAttributeTypes:(NSString *)queryString number:(int)attrNum
 {
 	sqlite3_stmt *read_stmt;
@@ -1311,7 +1245,7 @@
         
         if( (rc = sqlite3_step(insert_attr_stmt)) != SQLITE_DONE )
         {
-            //NSLog(@"sqlite error inserting skill plan");
+            [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
             return NO;
         }
         sqlite3_reset(insert_attr_stmt);
@@ -1324,6 +1258,8 @@
 
 }
 
+// Build the metAttributeTypes table.
+// This used to be handled by the dump_attrs.py script.
 -(void)buildAttributeTypes
 {
     NSString *queryFormat = @"SELECT attributeID, unitID, iconID, displayName, attributeName FROM dgmAttributeTypes WHERE attributeID IN %@;";
@@ -1339,9 +1275,12 @@
     char *errmsg;
     int rc;
     
-	[self beginTransaction];
-    
     // First see if the table exists and has data in it. If so, return.
+	NSInteger cnt = [self performCount:"SELECT COUNT(*) FROM metAttributeTypes;"];
+    if( cnt > 0 )
+        return;
+    
+	[self beginTransaction];
     
     rc = sqlite3_exec(db, "DROP TABLE IF EXISTS metAttributeTypes;", NULL, NULL, &errmsg);
 	if(rc != SQLITE_OK)
