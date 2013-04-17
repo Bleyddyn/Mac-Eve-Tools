@@ -63,7 +63,10 @@
 		tran_stmt = NULL;
 		lang = [[Config sharedInstance]dbLanguage];
         if( db )
+        {
             [self buildAttributeTypes];
+            [self buildTypePrerequisites];
+        }
 	}
 	return self;
 }
@@ -1221,7 +1224,6 @@
 		return NO;
 	}
     
-	NSMutableDictionary *attrDict = [NSMutableDictionary dictionary];
     const char insert_attr[] = "INSERT INTO metAttributeTypes VALUES (?,?,?,?,?,?)";
     sqlite3_stmt *insert_attr_stmt;
 
@@ -1254,7 +1256,7 @@
     sqlite3_finalize(insert_attr_stmt);
 	sqlite3_finalize(read_stmt);
     
-	return attrDict;
+	return YES;
 
 }
 
@@ -1313,5 +1315,142 @@
     [self insertAttributeTypes:otherAttributes number:8];
     
     [self commitTransaction];
+}
+
+-(NSInteger) performCount:(const char *)query
+{
+    sqlite3_stmt *countStatement;
+    NSInteger rows = 0;
+    int rc = sqlite3_prepare_v2( db, query, (int)strlen(query), &countStatement, NULL );
+	if( rc != SQLITE_OK )
+    {
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error: %s", __func__, sqlite3_errmsg(db)] UTF8String]];
+		return 0;
+	}
+    
+    if( sqlite3_step(countStatement) == SQLITE_ERROR )
+    {
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error: %s", __func__, sqlite3_errmsg(db)] UTF8String]];
+		return 0;
+    }
+    else
+    {
+        rows = sqlite3_column_nsint(countStatement, 0);
+    }
+    return rows;
+}
+
+-(void)buildTypePrerequisites
+{
+	int rc;
+    NSString *typeIDQuery = @"SELECT typeID FROM invTypes where published = 1 AND groupID IN (SELECT groupID FROM invGroups WHERE categoryID IN (6,7,8,16));";
+    sqlite3_stmt *typeIDStatement;
+//    NSString *skillQuery = @"SELECT taSkill.typeID, "
+//    "COALESCE(taSkill.valueInt,taSkill.valueFloat) as skillTypeID, "
+//    "COALESCE(taLevel.valueInt,taLevel.valueFloat) as skillLevel "
+//    "FROM "
+//    "dgmTypeAttributes taSkill JOIN dgmAttributeTypes atSkill ON (taSkill.attributeID = atSkill.attributeID), "
+//    "dgmTypeAttributes taLevel JOIN dgmAttributeTypes atLevel ON (taLevel.attributeID = atLevel.attributeID) "
+//    "WHERE taSkill.typeID = ? "
+//    "AND taSkill.typeID = taLevel.typeID "
+//    "AND atLevel.categoryID = atSkill.categoryID "
+//    "AND atSkill.attributeName GLOB \'requiredSkill[0-9]\' "
+//    "AND atLevel.attributeName GLOB \'requiredSkill[0-9]Level\' "
+//    "AND atLevel.attributeName GLOB atSkill.attributeName;";
+    NSString *skillQuery = @"SELECT taSkill.typeID, "
+    "COALESCE(taSkill.valueInt,taSkill.valueFloat) as skillTypeID, "
+    "COALESCE(taLevel.valueInt,taLevel.valueFloat) as skillLevel, "
+    "atLevel.attributeName, atSkill.attributeName "
+    "FROM "
+    "dgmTypeAttributes taSkill JOIN dgmAttributeTypes atSkill ON (taSkill.attributeID = atSkill.attributeID), "
+    "dgmTypeAttributes taLevel JOIN dgmAttributeTypes atLevel ON (taLevel.attributeID = atLevel.attributeID) "
+    "WHERE taSkill.typeID = ? "
+    "AND taSkill.typeID = taLevel.typeID "
+    "AND atLevel.categoryID = atSkill.categoryID "
+    "AND atSkill.attributeName GLOB \'requiredSkill[0-9]\' "
+    "AND atLevel.attributeName GLOB \'requiredSkill[0-9]Level\' ";
+    sqlite3_stmt *skillStatement;
+    
+    NSInteger cnt = [self performCount:"SELECT COUNT(*) FROM typePrerequisites;"];
+    if( cnt > 0 )
+        return;
+
+	rc = sqlite3_prepare_v2( db, [typeIDQuery UTF8String], (int)[typeIDQuery length], &typeIDStatement, NULL );
+	if( rc != SQLITE_OK )
+    {
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error: %s", __func__, sqlite3_errmsg(db)] UTF8String]];
+		return;
+	}
+    
+	rc = sqlite3_prepare_v2( db, [skillQuery UTF8String], (int)[skillQuery length], &skillStatement, NULL );
+	if( rc != SQLITE_OK )
+    {
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error: %s", __func__, sqlite3_errmsg(db)] UTF8String]];
+		return;
+	}
+
+    const char insert_attr[] = "INSERT INTO typePrerequisites VALUES (?,?,?,?);";
+    sqlite3_stmt *insert_attr_stmt;
+    rc = sqlite3_prepare_v2( db, insert_attr, (int)sizeof(insert_attr), &insert_attr_stmt, NULL);
+    if( rc != SQLITE_OK )
+    {
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error: %s", __func__, sqlite3_errmsg(db)] UTF8String]];
+		return;
+	}
+
+    [self beginTransaction];
+
+    int cntID = 0;
+	while( sqlite3_step(typeIDStatement) == SQLITE_ROW )
+    {
+		NSInteger typeID = sqlite3_column_nsint(typeIDStatement,0);
+        
+        if( !(cntID++ % 100) )
+        {
+            NSLog( @"typeID count %d, insert Count %ld", cntID, [self performCount:"SELECT COUNT(*) FROM typePrerequisites;"] );
+        }
+        
+        rc = sqlite3_bind_nsint( skillStatement, 1, typeID );
+        
+        int i = 0;
+        while( sqlite3_step(skillStatement) == SQLITE_ROW )
+        {
+            NSString *levelAttributeName = sqlite3_column_nsstr(skillStatement,3);
+            NSString *skillAttributeName = sqlite3_column_nsstr(skillStatement,4);
+            NSComparisonResult res = [levelAttributeName compare:skillAttributeName options:NSCaseInsensitiveSearch range:NSMakeRange(0, [skillAttributeName length])];
+            if( NSOrderedSame != res )
+                continue;
+            
+            NSInteger typeID2 = sqlite3_column_nsint(skillStatement,0);
+            NSInteger skillTypeID = sqlite3_column_nsint(skillStatement,1);
+            NSInteger skillLevel = sqlite3_column_nsint(skillStatement,2);
+
+            rc = sqlite3_bind_nsint( insert_attr_stmt, 1, typeID2 );
+            rc = sqlite3_bind_nsint( insert_attr_stmt, 2, skillTypeID );
+            rc = sqlite3_bind_nsint( insert_attr_stmt, 3, skillLevel );
+            rc = sqlite3_bind_nsint( insert_attr_stmt, 4, i );
+            
+            if( (rc = sqlite3_step(insert_attr_stmt)) != SQLITE_DONE )
+            {
+                [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
+                [self rollbackTransaction];
+                return;
+            }
+            ++i;
+            sqlite3_reset(insert_attr_stmt);
+            //sqlite3_clear_bindings(insert_attr_stmt);
+        }
+        
+        sqlite3_reset(skillStatement);
+        sqlite3_clear_bindings(skillStatement);
+	}
+    
+    sqlite3_finalize(insert_attr_stmt);
+    sqlite3_finalize(skillStatement);
+	sqlite3_finalize(typeIDStatement);
+    
+    [self commitTransaction];
+
+	return;
 }
 @end
