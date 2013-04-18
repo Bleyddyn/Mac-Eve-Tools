@@ -50,6 +50,7 @@
 @interface CCPDatabase()
 -(BOOL)insertAttributeTypes:(NSString *)queryString number:(int)attrNum;
 -(void)buildAttributeTypes;
+- (BOOL)updateCertRelationships;
 @end
 
 @implementation CCPDatabase
@@ -66,6 +67,7 @@
         {
             [self buildAttributeTypes];
             [self buildTypePrerequisites];
+            [self updateCertRelationships];
         }
 	}
 	return self;
@@ -853,6 +855,36 @@
 	return array;
 }
 
+// Not sure how, but my copy of the database had zeroes in the parentTypeID column instead of NULLS
+// So update them all.
+- (BOOL)updateCertRelationships
+{
+    NSInteger cnt = [self performCount:"SELECT COUNT(*) FROM crtRelationships WHERE parentTypeID = 0;"];
+    if( 0 == cnt )
+        return YES;
+
+    const char update[] = "UPDATE crtRelationships SET parentTypeID = NULL WHERE parentTypeID = 0;";
+	sqlite3_stmt *update_stmt;
+	int rc = sqlite3_prepare_v2( db, update,(int)sizeof(update),&update_stmt,NULL);
+    if( rc != SQLITE_OK )
+    {
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error: %s", __func__, sqlite3_errmsg(db)] UTF8String]];
+        sqlite3_finalize(update_stmt);
+		return NO;
+	}
+
+    rc = sqlite3_step(update_stmt);
+    if( rc != SQLITE_OK )
+    {
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error: %s", __func__, sqlite3_errmsg(db)] UTF8String]];
+        sqlite3_finalize(update_stmt);
+		return NO;
+	}
+    
+    sqlite3_finalize(update_stmt);
+
+    return YES;
+}
 /*
 	return an array of certificate categories.
 	this will be filled out completly;
@@ -866,6 +898,8 @@
 	NSMutableArray *array = [[[NSMutableArray alloc]init]autorelease];
 	int rc;
 
+    //[self updateCertRelationships]; // ignore the return value because some things still work even if it fails.
+    
 	rc = sqlite3_prepare_v2(db, query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
         [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
