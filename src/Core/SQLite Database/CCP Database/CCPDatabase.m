@@ -265,7 +265,7 @@
 {
 	const char query[] =
 		"SELECT groupID, categoryID, groupName, iconID "
-		"FROM invGroups WHERE categoryID = ? "
+		"FROM invGroups WHERE categoryID = ? AND published = 1 "
 		"ORDER BY groupName;";
 	sqlite3_stmt *read_stmt;
 	int rc;
@@ -364,6 +364,7 @@
 		"volume, capacity,basePrice, typeName, description "
 		"FROM invTypes "
 		"WHERE groupID = ? "
+		"AND published = 1 "
 		"ORDER BY typeName;";
 	sqlite3_stmt *read_stmt;
 	int rc;
@@ -954,6 +955,7 @@
 		"SELECT typeID, typeName, description "
 		"FROM invTypes "
 		"WHERE groupID = ? "
+		"AND published = 1 "
 		"ORDER BY typeName;";
 
 	//Find the primary and secondary skill attributes.
@@ -1107,6 +1109,7 @@
 		"SELECT groupID, groupName "
 		"FROM invGroups "
 		"WHERE categoryID = 16 "
+		"AND published = 1 "
 		"ORDER BY groupName;";
 
 	sqlite3_stmt *read_stmt;

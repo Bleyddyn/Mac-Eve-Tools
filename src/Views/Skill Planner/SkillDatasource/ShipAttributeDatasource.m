@@ -53,6 +53,17 @@
 	[self addAttribute:attrType groupName:@"Targeting"];
 
 	attrType = [db attributeForType:typeID groupBy:Other];
+    {
+        // A hack to at least have the ship's cargo capacity show
+        NSMutableArray *mutAttrType = (NSMutableArray *)attrType;
+        CCPTypeAttribute *ta = [CCPTypeAttribute createTypeAttribute:0
+															dispName:@"Capacity"
+														 unitDisplay:@"m3"
+														   graphicId:0
+															valueInt:NSIntegerMax
+														  valueFloat:[ship capacity]];
+        [mutAttrType addObject:ta];
+    }
 	[self addAttribute:attrType groupName:@"Other"];
 }
 
