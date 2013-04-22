@@ -10,10 +10,10 @@ CREATE INDEX "typePrerequisites_IX_typeID" ON "typePrerequisites" ("typeID");
 CREATE TABLE "metAttributeTypes" (
 	"attributeID" smallint(6) NOT NULL,
 	"unitID" tinyint(3),
-	"graphicID" smallint(6),
+	"iconID" smallint(6),
 	"displayName" varchar(32),
 	"attributeName" varchar(32),
-	"displayType" smallint(6),
+	"typeGroupID" smallint(6),
 	PRIMARY KEY ("attributeID")
 );
 

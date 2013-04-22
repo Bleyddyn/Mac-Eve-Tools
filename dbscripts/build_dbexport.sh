@@ -13,6 +13,8 @@ rm -f tempdb.db
 rm -f rows.sql
 
 #/bin/bash dumprows.sh rows.sql
+# Can be downloaded from: http://pozniak.pl/dbdump/ (I think)
+# Or here: http://www.fuzzwork.co.uk/dump/retribution-1.1-84566/eve.db.bz2
 sqlite3 retribution11.sqlite .dump > ${DBEXPORT}
 
 #/bin/cat tables.sql rows.sql post.sql > $DBEXPORT

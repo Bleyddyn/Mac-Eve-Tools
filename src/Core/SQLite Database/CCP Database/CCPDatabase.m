@@ -360,7 +360,7 @@
 {
     // had to hard code the radius (as 100) because I'm not sure where it's been moved in the latest db schema
 	const char query[] =
-		"SELECT typeID, groupID, iconID, raceID, marketGroupID, 100, mass, "
+		"SELECT typeID, groupID, 0, raceID, marketGroupID, 100, mass, "
 		"volume, capacity,basePrice, typeName, description "
 		"FROM invTypes "
 		"WHERE groupID = ? "
@@ -371,7 +371,7 @@
 
 	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
 	if(rc != SQLITE_OK){
-        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error", __func__] UTF8String]];
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error: %s", __func__, sqlite3_errmsg(db)] UTF8String]];
 		return nil;
 	}
 
@@ -860,6 +860,7 @@
 // So update them all.
 - (BOOL)updateCertRelationships
 {
+    return YES;
     NSInteger cnt = [self performCount:"SELECT COUNT(*) FROM crtRelationships WHERE parentTypeID = 0;"];
     if( 0 == cnt )
         return YES;
@@ -1319,23 +1320,30 @@
     if( cnt > 0 )
         return;
     
+    cnt = [self performCount:"SELECT count(*) FROM sqlite_master WHERE type='table' AND name='metAttributeTypes';;"];
+
 	[self beginTransaction];
     
+    /*
     rc = sqlite3_exec(db, "DROP TABLE IF EXISTS metAttributeTypes;", NULL, NULL, &errmsg);
 	if(rc != SQLITE_OK)
     {
 		[self logError:errmsg];
 		[self rollbackTransaction];
 		return;
-	}
-
-	rc = sqlite3_exec(db, "CREATE TABLE metAttributeTypes (attributeID INTEGER, unitID INTEGER, iconID INTEGER, displayName VARCHAR(100), attributeName VARCHAR(100), typeGroupID INTEGER);", NULL, NULL, &errmsg);
-	if(rc != SQLITE_OK)
+     }
+     */
+    
+    if( 0 == cnt )
     {
-		[self logError:errmsg];
-		[self rollbackTransaction];
-		return;
-	}
+        rc = sqlite3_exec(db, "CREATE TABLE metAttributeTypes (attributeID INTEGER, unitID INTEGER, iconID INTEGER, displayName VARCHAR(100), attributeName VARCHAR(100), typeGroupID INTEGER);", NULL, NULL, &errmsg);
+        if(rc != SQLITE_OK)
+        {
+            [self logError:errmsg];
+            [self rollbackTransaction];
+            return;
+        }
+    }
 
     [self insertAttributeTypes:[NSString stringWithFormat:queryFormat, drones] number:1];
     [self insertAttributeTypes:[NSString stringWithFormat:queryFormat, structure] number:2];
