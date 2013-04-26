@@ -564,7 +564,6 @@ static NSDictionary *masterSkillSet = nil;;
 	[character processAttributeSkills];
 
 	SkillTree *st = [[GlobalData sharedInstance]skillTree];
-	NSNumber *learning = [NSNumber numberWithInteger:GROUP_LEARNING];
 
 	//Starting date (Now)
 	NSDate *date = [[[NSDate alloc]init]autorelease];
@@ -576,36 +575,7 @@ static NSDictionary *masterSkillSet = nil;;
 		/*this should take into account amount completed?*/
 		trainingTime = [character trainingTimeInSeconds:[pair typeID] fromLevel:[pair skillLevel]-1 toLevel:[pair skillLevel]];
 
-		/*
-		 Is the skill we are training a learning skill?
-		 if so we must modify the character object to save the old attributes and store the new ones
-		 we apply the bonus after we have trained the skill in the queue
-
-		 Note that this modifies the characters internal attribute data. it must be reset
-		 when we are done.
-		 */
 		Skill *s = [st skillForId:[pair typeID]];
-		if([[s groupID]isEqualToNumber:learning]){
-
-			/*check to see what learning attribute bonus is applying here.*/
-
-			if([s attributeForID:BONUS_LEARNING] != nil){
-				[character modifyLearning:1];
-			}else if([s attributeForID:BONUS_INTELLIGENCE] != nil){
-				[character modifyAttribute:ATTR_INTELLIGENCE byLevel:1];
-			}else if([s attributeForID:BONUS_CHARISMA] != nil){
-				[character modifyAttribute:ATTR_CHARISMA byLevel:1];
-			}else if([s attributeForID:BONUS_PERCEPTION] != nil){
-				[character modifyAttribute:ATTR_PERCEPTION byLevel:1];
-			}else if([s attributeForID:BONUS_WILLPOWER] != nil){
-				[character modifyAttribute:ATTR_WILLPOWER byLevel:1];
-			}else if([s attributeForID:BONUS_MEMORY] != nil){
-				[character modifyAttribute:ATTR_MEMORY byLevel:1];
-			}
-
-			[character processAttributeSkills]; //calculate the new attribute total
-		}
-
 		NSInteger spPerHour = [character spPerHour:[s primaryAttr]
 										 secondary:[s secondaryAttr]];
 

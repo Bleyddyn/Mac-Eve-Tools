@@ -65,9 +65,7 @@
 
 	NSInteger baseAttributes[ATTR_TOTAL]; //base attribute levels before modification
 	NSInteger implantAttributes[ATTR_TOTAL]; //implants
-	NSInteger learningTotals[ATTR_TOTAL]; //the sum of all the learning skills.
 	NSInteger tempBonuses[ATTR_TOTAL]; //temporary values used when calculating an optimized training queue
-	NSInteger learningBonus; //bonus to the learning skill
 
 	CGFloat attributeTotals[ATTR_TOTAL]; //the total with all bonuses applied
 
@@ -95,8 +93,6 @@
 
 /*returns the attribute without the learning bonus applied*/
 -(NSInteger) attributeValue:(NSInteger)attr;
-/*return the learning bounus value*/
--(CGFloat) learningBonus;
 
 -(NSInteger) skillPointTotal;
 -(NSInteger) skillsAtV;
@@ -174,8 +170,6 @@
 -(void) modifyAttribute:(NSInteger)attribute  byLevel:(NSInteger)level;
 -(void) setAttribute:(NSInteger)attribute toLevel:(NSInteger)level;
 
--(void) modifyLearning:(NSInteger)level;
--(void) setLearning:(NSInteger)level;
 -(void) resetTempAttrBonus; //reset the bonuses back to the normal levels.
 
 /*calculate the final attribute totals*/

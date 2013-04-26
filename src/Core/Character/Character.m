@@ -364,12 +364,7 @@
 
 -(NSInteger) attributeValue:(NSInteger)attr
 {
-	return baseAttributes[attr] + implantAttributes[attr] + learningTotals[attr] + tempBonuses[attr];
-}
-
--(CGFloat) learningBonus
-{
-	return 0.02 * learningBonus;
+	return baseAttributes[attr] + implantAttributes[attr] + tempBonuses[attr];
 }
 
 -(NSDictionary*) skillSet
@@ -411,7 +406,6 @@
 -(void) resetTempAttrBonus
 {
 	memset(tempBonuses,0,sizeof(tempBonuses));
-	learningBonus = 0;
 	[self processAttributeSkills];
 }
 
@@ -425,29 +419,11 @@
 	tempBonuses[attribute] = level;
 }
 
--(void) modifyLearning:(NSInteger)level
-{
-	learningBonus += level;
-}
-
--(void) setLearning:(NSInteger)level
-{
-	learningBonus = level;
-}
-
 /*perform the final total*/
 -(void)processAttributeSkills
 {
 	for(NSInteger i = 0; i < ATTR_TOTAL; i++){
-		attributeTotals[i] = baseAttributes[i] + implantAttributes[i] + learningTotals[i] + tempBonuses[i];
-	}
-
-	/*Learning. type 3374. +2% per level to all skills*/
-	NSInteger level = [[skillTree skillForIdInteger:3374] skillLevel];
-	CGFloat bonus = (1.0+(0.02 * (level + learningBonus)));
-
-	for(NSInteger i = 0;i < ATTR_TOTAL; i++){
-		attributeTotals[i] *= bonus;
+		attributeTotals[i] = baseAttributes[i] + implantAttributes[i] + tempBonuses[i];
 	}
 }
 

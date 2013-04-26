@@ -457,10 +457,6 @@
 		}
 	}
 
-	/*
-		we have to look at the learning skills and apply those modifiers to the character attributes
-	 */
-	[self calculateLearningSkills];
 	/*sum all the values*/
 	[self processAttributeSkills];
 
@@ -474,67 +470,6 @@
 	}
 
 	return YES;
-}
-
--(void)calculateLearningSkills
-{
-	memset(learningTotals,0,sizeof(learningTotals));
-
-	/*find all the basic and advanced learning skills and apply them to the character attribute total*/
-	Skill *skill;
-	/*Analytical mind. type 3377. +1 int*/
-
-	skill = [skillTree skillForIdInteger:3377];
-	if(skill != nil){
-		learningTotals[ATTR_INTELLIGENCE] += [skill skillLevel];
-	}
-	/*Logic. type 12376. +1 int*/
-	skill = [skillTree skillForIdInteger:12376];
-	if(skill != nil){
-		learningTotals[ATTR_INTELLIGENCE] += [skill skillLevel];
-	}
-	/*Spatial Awareness. type 3379. +1 perc*/
-	skill = [skillTree skillForIdInteger:3379];
-	if(skill != nil){
-		learningTotals[ATTR_PERCEPTION] += [skill skillLevel];
-	}
-	/*Clarity. type 12387. +1 perc*/
-	skill = [skillTree skillForIdInteger:12387];
-	if(skill != nil){
-		learningTotals[ATTR_PERCEPTION] += [skill skillLevel];
-	}
-
-	/*Instant Recall. 3378.  +1 mem*/
-	skill = [skillTree skillForIdInteger:3378];
-	if(skill != nil){
-		learningTotals[ATTR_MEMORY] += [skill skillLevel];
-	}
-	/*Eidetic Memory. type 12385. +1 mem*/
-	skill = [skillTree skillForIdInteger:12385];
-	if(skill != nil){
-		learningTotals[ATTR_MEMORY] += [skill skillLevel];
-	}
-
-	/*Empathy. type 3376. +1 chr*/
-	skill = [skillTree skillForIdInteger:3376];
-	if(skill != nil){
-		learningTotals[ATTR_CHARISMA] += [skill skillLevel];
-	}
-	/*Presence. type 12383. +1 chr*/
-	skill = [skillTree skillForIdInteger:12383];
-	if(skill != nil){
-		learningTotals[ATTR_CHARISMA] += [skill skillLevel];
-	}
-	/*Iron Will. 3375. +1 will*/
-	skill = [skillTree skillForIdInteger:3375];
-	if(skill != nil){
-		learningTotals[ATTR_WILLPOWER] += [skill skillLevel];
-	}
-	/*Focus. type 12386. +1 will*/
-	skill = [skillTree skillForIdInteger:12386];
-	if(skill != nil){
-		learningTotals[ATTR_WILLPOWER] += [skill skillLevel];
-	}
 }
 
 /*base attributes before any modifiers are applied*/

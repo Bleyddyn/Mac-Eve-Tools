@@ -525,10 +525,11 @@
 //	[prefDefaults setObject:@"http://www.mtyson.id.au/MacEveApi/images" forKey:UD_IMAGE_URL];
 //	[prefDefaults setObject:[NSNumber numberWithInt:8] forKey:UD_DATABASE_MIN_VERSION];
 
+    // TODO: Some of these should be preferences
 	[prefDefaults setObject:@"about:blank" forKey:UD_UPDATE_FEED_URL];
 //	[prefDefaults setObject:@"http://dl.dropbox.com/u/612254/EVE/MAT/MacEveApi-database.xml" forKey:UD_DB_UPDATE_URL];
-	[prefDefaults setObject:@"http://localhost/~andrew/EVE/MacEveApi-database.xml" forKey:UD_DB_UPDATE_URL];
-	[prefDefaults setObject:@"http://localhost/~andrew/EVE/database.sql.bz2" forKey:UD_DB_SQL_URL];
+	[prefDefaults setObject:@"http://localhost/~salamon/MacEveApi-database.xml" forKey:UD_DB_UPDATE_URL];
+	[prefDefaults setObject:@"http://localhost/~salamon/database.sql.bz2" forKey:UD_DB_SQL_URL];
 //	[prefDefaults setObject:@"http://www.fuzzwork.co.uk/dump/retribution-1.0-82596/eve.sqlite.bz2" forKey:UD_DB_SQL_URL];
 	[prefDefaults setObject:@"http://image.eveonline.com/" forKey:UD_IMAGE_URL];
 	[prefDefaults setObject:[NSNumber numberWithInt:9] forKey:UD_DATABASE_MIN_VERSION];

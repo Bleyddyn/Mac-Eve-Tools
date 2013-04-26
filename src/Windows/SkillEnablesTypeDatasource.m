@@ -76,17 +76,6 @@
 	return [dskill objectAtIndex:index];
 }
 
--(NSInteger) outlineView:(NSOutlineView*)
-  numberOfChildrenOfItem:(id)item
-{
-	if(item == nil){
-		return [enabledTypes count];
-	}
-
-	return [item count];
-
-}
-
 - (id)outlineView:(NSOutlineView *)outlineView
 objectValueForTableColumn:(NSTableColumn *)tableColumn
 		   byItem:(id)item

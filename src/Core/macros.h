@@ -123,6 +123,7 @@ enum AttributeType {
 #define XMLAPI_WALLET_REF @"/eve/RefTypes.xml.aspx"
 #define XMLAPI_SERVER_STATUS @"/server/ServerStatus.xml.aspx"
 #define XMLAPI_CERT_TREE @"/eve/CertificateTree.xml.aspx"
+#define XMLAPI_CHAR_ORDERS @"/char/MarketOrders.xml.aspx"
 
 /*the portrait will be saved to this file in the characters directory*/
 #define PORTRAIT @"portrait.jpg"

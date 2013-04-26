@@ -146,7 +146,7 @@
 		double raw_val = (1.0 - [item valueFloat]) * 100;
 		double eps = 1e-6;
 		if (fabs(round(raw_val) - raw_val) < eps) {
-			[str appendFormat:@"%ld%%",(int)round(raw_val)];
+			[str appendFormat:@"%ld%%",(long)round(raw_val)];
 		}
 		else if (fabs(round(raw_val * 10) - raw_val * 10) < eps) {
 			[str appendFormat:@"%.1f%%",raw_val];
@@ -160,7 +160,7 @@
 		double raw_val = [item valueFloat] / 1000;
 		double eps = 1e-6;
 		if (fabs(round(raw_val) - raw_val) < eps) {
-			[str appendFormat:@"%ld",(int)round(raw_val)];
+			[str appendFormat:@"%ld",(long)round(raw_val)];
 		}
 		else if (fabs(round(raw_val * 10) - raw_val * 10) < eps) {
 			[str appendFormat:@"%.1f",raw_val];
@@ -195,21 +195,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			return [item displayName];
 		}
 		if([[tableColumn identifier]isEqualToString:@"ATTR_VALUE"]){
-			NSMutableString *str = [[[NSMutableString alloc]init]autorelease];
-			
-			if([item valueInt] != NSIntegerMax){
-				[str appendFormat:@"%ld", (long) [item valueInt]];
-			}else{
-				[str appendFormat:@"%.2f",(double)[item valueFloat]];
-			}
-			
-			NSString *unit = [item unitDisplay];
-			
-			if(unit != nil){
-				[str appendFormat:@" %@",unit];
-			}
-			
-			return str;
+            return [self renderValue: item];
 		}
 	}
 

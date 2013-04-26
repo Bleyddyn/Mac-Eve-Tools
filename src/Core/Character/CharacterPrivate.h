@@ -47,9 +47,6 @@
 
 -(void) addToDictionary:(const xmlChar*)xmlKey value:(NSString*)value;
 
-/*calculate the total learning skill*/
--(void)calculateLearningSkills;
-
 /*read the skill plans into the internal skill plan array*/
 -(NSInteger) readSkillPlans;
 /*write them out to the database*/
