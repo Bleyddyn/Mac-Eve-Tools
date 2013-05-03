@@ -166,6 +166,17 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn
 
 		return [NSString stringWithFormat:@"%ld%%",MIN(intPercent,100l)];
 	}
+    else if( [[aTableColumn identifier] isEqualToString:COL_PLAN_PRIMARY_ATTR] )
+    {
+        NSString *prim = strForAttrCode([s primaryAttr]);
+        return prim;
+    }
+    else if( [[aTableColumn identifier] isEqualToString:COL_PLAN_SECONDARY_ATTR] )
+    {
+        NSString *second = strForAttrCode([s secondaryAttr]);
+        return second;
+    }
+  
 	return nil;
 }
 

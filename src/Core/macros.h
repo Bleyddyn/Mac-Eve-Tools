@@ -112,7 +112,8 @@ enum AttributeType {
 #define COL_PLAN_BUTTONS @"BUTTONS"
 #define COL_PLAN_ATTRIBUTES @"ATTRIBUTES"
 #define COL_PLAN_POINTS COL_SKILL_POINTS
-
+#define COL_PLAN_PRIMARY_ATTR @"PRIMARYATTR"
+#define COL_PLAN_SECONDARY_ATTR @"SECONDARYATTR"
 
 /*XML Documents we are interested in downloading*/
 #define XMLAPI_CHAR_SHEET @"/char/CharacterSheet.xml.aspx"
