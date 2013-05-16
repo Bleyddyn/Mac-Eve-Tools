@@ -52,6 +52,7 @@ enum MTEveSkillCellMode
 
 /*call these to configure the cell*/
 @property (readwrite,nonatomic,retain) SkillGroup* group;
+@property (readwrite,nonatomic,retain) Skill *skill;
 
 @property (readwrite,nonatomic,assign) NSInteger timeLeft;
 @property (readwrite,nonatomic,assign) NSInteger currentSP;
@@ -59,9 +60,6 @@ enum MTEveSkillCellMode
 @property (readwrite,nonatomic,assign) SEL skillInfoButtonAction;
 @property (readwrite,nonatomic,assign) enum MTEveSkillCellMode mode;
 
-
--(Skill*) skill;
--(void) setSkill:(Skill*)s;
 
 -(CGFloat) percentCompleted;
 -(void) setPercentCompleted:(CGFloat)percentCompleted;

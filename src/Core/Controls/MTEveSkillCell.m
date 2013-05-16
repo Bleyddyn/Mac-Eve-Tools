@@ -154,6 +154,8 @@
 		cell->skill = nil;
 		cell->group = nil;
 
+        [cell setSkill:[self skill]];
+        [cell setGroup:[self group]];
 		//leave the other values as junk data, they will be overwritten later
 	}
 	return cell;
@@ -175,12 +177,12 @@
 
 -(void) setSkill:(Skill*)s
 {
-	if(skill != nil){
-		[skill release];
-	}
-	skill = [s retain];
-
-	skillLevel = [skill skillLevel];
+    if( skill != s )
+    {
+        [skill release];
+        skill = [s retain];
+        skillLevel = [skill skillLevel];
+    }
 }
 
 #define PADDING_BEFORE_IMAGE 5.0
@@ -504,7 +506,6 @@
 	[NSString stringWithFormat:NSLocalizedString(@"  %@  -  skills: %lu,  points: %@", nil),
 		[group groupName],[group skillCount],
 		[formatter stringFromNumber:[NSNumber numberWithInteger:[group groupSPTotal]]]];
-
 	NSMutableAttributedString *astr = [[[NSMutableAttributedString alloc]initWithString:str]autorelease];
 	NSRect strRect = [self titleRectForBounds:bounds];
 	[astr drawInRect:strRect];
@@ -600,10 +601,10 @@
 
 	/*DRAW SKILL NAME AND SKILL POINTS*/
 	//Skill name and rank
-	NSString *skillName = [skill skillName];
-	if(skillName == nil){
-		//NSLog(@"nil skill name");
-	}
+//	NSString *skillName = [skill skillName];
+//	if(skillName == nil){
+//		NSLog(@"nil skill name");
+//	}
 	str = [NSString stringWithFormat:@"%@ (%ldx)", [skill skillName], (long) [skill skillRank]];
 	astr = [[[NSMutableAttributedString alloc]initWithString:str]autorelease];
 	/*this needs to be calculated with regard to the skill progress boxes*/
