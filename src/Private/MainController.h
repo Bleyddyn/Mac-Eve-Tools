@@ -48,6 +48,7 @@
 	IBOutlet NSToolbarItem *charOverviewButton;
 	IBOutlet NSToolbarItem *charSheetButton;
 	IBOutlet NSToolbarItem *skillPlannerButton;
+	IBOutlet NSToolbarItem *marketViewButton;
 	IBOutlet NSProgressIndicator *loadingCycle;
 
 	NSMutableArray *viewControllers; /*all the controllers we can display*/

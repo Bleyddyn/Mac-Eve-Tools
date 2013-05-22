@@ -13,7 +13,7 @@
 	When a view is initialized it will be given this instance.
  */
 
-@protocol METInstance
+@protocol METInstance <NSObject>
 
 /*
  display a message on the toolbar
