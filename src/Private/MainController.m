@@ -515,7 +515,6 @@
 
 	NSMutableDictionary *prefDefaults = [[NSMutableDictionary alloc] init];
 
-		//NSData *data = ;
 	[prefDefaults setObject:[NSNumber numberWithBool:YES] forKey:UD_SUBMIT_STATS];
 	[prefDefaults setObject:[NSNumber numberWithBool:YES] forKey:UD_CHECK_FOR_UPDATES];
 	[prefDefaults setObject:[NSNumber numberWithInt:l_EN] forKey:UD_DATABASE_LANG];
@@ -547,9 +546,9 @@
 	/* Init window */
 
 	NSWindow *window = [self window];
-	[window setRepresentedFilename:WINDOW_SAVE_NAME];
 	[window setFrameAutosaveName:WINDOW_SAVE_NAME];
-
+    [window setReleasedWhenClosed:YES];
+    
 	[noCharsPanel setDefaultButtonCell:[noCharsButton cell]]; //alert if you don't have an account set up
 
 	[window setContentBorderThickness:30.0 forEdge:NSMinYEdge];

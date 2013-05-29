@@ -25,12 +25,14 @@
 
 #import "SkillSearchView.h"
 
-#import "SkillSearchCharacterDatasource.h"
-#import "SkillSearchShipDatasource.h"
-#import "SkillSearchCertDatasource.h"
 
 #import "PlanView2.h"
+
 @class PlanView2Datasource;
+@class 	SkillSearchCharacterDatasource;
+@class SkillSearchShipDatasource;
+@class SkillSearchCertDatasource;
+@class SkillSearchModuleDatasource;
 
 /*
 	This class is responsable for mananging the subviews that are used to build the skill planner interface,
@@ -56,7 +58,8 @@
 	SkillSearchCharacterDatasource *skillCharDatasource; /*this is one possible datasource for the SkillSearchView*/
 	SkillSearchShipDatasource *skillShipDatasource;
 	SkillSearchCertDatasource *skillCertDatasource;
-
+    SkillSearchModuleDatasource *skillItemDatasource;
+    
 	id<METInstance> mainApp;
 }
 

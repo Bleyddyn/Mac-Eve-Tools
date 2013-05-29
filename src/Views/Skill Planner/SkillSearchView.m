@@ -22,6 +22,7 @@
 #import "SkillDetailsWindowController.h"
 #import "ShipDetailsWindowController.h"
 #import "CertDetailsWindowController.h"
+#import "ModuleDetailsWindowController.h"
 #import "SkillPair.h"
 
 #import "Cert.h"
@@ -203,9 +204,22 @@ shouldEditTableColumn:(NSTableColumn *)tableColumn
 		[SkillDetailsWindowController displayWindowForTypeID:[(Skill *) item typeID]
 												forCharacter:[delegate character]];
 
-	}else if([item isKindOfClass:[CCPType class]]){
-		[ShipDetailsWindowController displayShip:item forCharacter:[delegate character]];
-	}else if([item isKindOfClass:[Cert class]]){
+	}
+    else if([item isKindOfClass:[CCPType class]])
+    {
+        CCPType *type = item;
+        
+        if ([type groupID] == 27)
+        {
+            [ShipDetailsWindowController displayShip:item forCharacter:[delegate character]];
+        }
+        else
+        {
+            [ModuleDetailsWindowController displayShip:item forCharacter:[delegate character]];
+        }
+    }
+    else if([item isKindOfClass:[Cert class]])
+     {
 		[CertDetailsWindowController displayWindowForCert:item character:[delegate character]];
 
 	}

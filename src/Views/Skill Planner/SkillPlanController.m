@@ -27,6 +27,7 @@
 #import "SkillSearchCharacterDatasource.h"
 #import "SkillSearchShipDatasource.h"
 #import "SkillSearchCertDatasource.h"
+#import "SkillSearchModuleDatasource.h"
 
 #import "METInstance.h"
 
@@ -162,6 +163,12 @@
 		[skillSearchView addDatasource:skillShipDatasource];
 	}
 
+    skillItemDatasource = [[SkillSearchModuleDatasource alloc] initWithCategory:DB_CATEGORY_MODULE];
+    if( skillItemDatasource != nil )
+    {
+        [skillSearchView addDatasource: skillItemDatasource];
+    }
+    
 	[skillView2 setDelegate:self];
 }
 
