@@ -67,6 +67,9 @@
 	IBOutlet AttributeModifierController *attributeModifier;
 	IBOutlet NSPanel *attributeModifierPanel;
 
+    IBOutlet NSPopUpButton *exportAccessory;
+    NSSavePanel *exportSavePanel;
+    
 	NSRect basePanelSize;
 
 	NSMutableArray *overviewColumns;
@@ -89,6 +92,8 @@
 -(IBAction) antiPlanButtonClick:(id)sender;
 
 -(IBAction) attributeModifierButtonClick:(id)sender;
+
+-(IBAction) exportFiletypeChanged:(id)sender;
 
 -(void) addSkillArrayToActivePlan:(NSArray*)skillArray;
 

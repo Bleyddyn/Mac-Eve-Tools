@@ -302,6 +302,30 @@
 	return data;
 }
 
+/*
+ Write a skill plan to an NSData buffer as plain text
+ */
+-(NSData*) writeTextToBuffer:(SkillPlan*)plan
+{
+    NSMutableString *planString = [NSMutableString string];
+    
+    //[planString appendFormat:@"Plan: %@\n", [plan planName]];
+    
+	NSInteger counter = [plan skillCount];
+    
+	for( NSInteger i = 0; i < counter; i++ )
+    {
+		SkillPair *sp = [plan skillAtIndex:i];
+		Skill *s = [st skillForId:[sp typeID]];
+        
+        [planString appendFormat:@"%@\t%ld\n", [s skillName], (long)[sp skillLevel]];
+	}
+        
+	NSData *data = [planString dataUsingEncoding:NSUTF8StringEncoding];
+    
+	return data;
+}
+
 -(BOOL) writeCompressed:(NSData*)data file:(NSString*)filePath
 {
 	gzFile *fp;
@@ -334,11 +358,20 @@
 		return NO;
 	}
 
-	if([[filePath pathExtension]isEqualToString:@"emp"]){
+	if( [[filePath pathExtension]isEqualToString:@"emp"] )
+    {
 		//write to a gzip compressed file
 		return [self writeCompressed:xmlPlan file:filePath];
-	}else if([[filePath pathExtension]isEqualToString:@"xml"]){
+	}
+    else if( [[filePath pathExtension]isEqualToString:@"xml"] )
+    {
 		//write to a normal xml file
+		return [xmlPlan writeToFile:filePath atomically:NO];
+	}
+    else if( [[filePath pathExtension]isEqualToString:@"txt"] )
+    {
+        xmlPlan = [self writeTextToBuffer:plan];
+		//write to a plain text file
 		return [xmlPlan writeToFile:filePath atomically:NO];
 	}
 

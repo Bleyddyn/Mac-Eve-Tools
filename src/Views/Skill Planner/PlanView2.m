@@ -622,17 +622,30 @@
 								  [character characterName],
 								  [plan planName]];
 
-	NSSavePanel *sp = [NSSavePanel savePanel];
+	exportSavePanel = [NSSavePanel savePanel];
 
-	[sp setAllowedFileTypes:[NSArray arrayWithObjects:@"emp",@"xml",nil]];
-	[sp setNameFieldStringValue:proposedFileName];
-	[sp setCanSelectHiddenExtension:YES];
-
-	if([sp runModal] == NSFileHandlingPanelOKButton){
+	[exportSavePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"emp",@"xml",@"txt",nil]];
+	[exportSavePanel setNameFieldStringValue:proposedFileName];
+	[exportSavePanel setCanSelectHiddenExtension:YES];
+    [exportAccessory selectItemAtIndex:0];
+    [exportSavePanel setAccessoryView:exportAccessory];
+    
+	if( [exportSavePanel runModal] == NSFileHandlingPanelOKButton )
+    {
 		EvemonXmlPlanIO *pio = [[EvemonXmlPlanIO alloc]init];
-		[pio write:plan toFile:[[sp URL]path]];
+		[pio write:plan toFile:[[exportSavePanel URL]path]];
 		[pio release];
 	}
+}
+
+-(IBAction) exportFiletypeChanged:(id)sender
+{
+	NSString *proposedFileName = [[exportSavePanel nameFieldStringValue] stringByDeletingPathExtension];
+    NSInteger tag = [[exportAccessory selectedItem] tag];
+    NSString *ext = [@[@"emp", @"xml", @"txt"] objectAtIndex:tag];
+    
+    proposedFileName = [proposedFileName stringByAppendingPathExtension:ext];
+    [exportSavePanel setNameFieldStringValue:proposedFileName];
 }
 
 -(IBAction) segmentedButtonClick:(id)sender
