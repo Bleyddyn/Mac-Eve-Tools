@@ -19,6 +19,7 @@
 *.swp
 *.vi
 *~
+*._*
 
 *.sass-cache
 # Folders to ignore

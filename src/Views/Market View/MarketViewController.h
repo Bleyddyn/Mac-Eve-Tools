@@ -11,8 +11,11 @@
 
 @class MarketOrders;
 
-@interface MarketViewController : NSViewController <METPluggableView>
+@interface MarketViewController : NSViewController <METPluggableView,NSTableViewDataSource>
 {
+    IBOutlet NSTableView *orderTable;
+    IBOutlet NSNumberFormatter *currencyFormatter;
+    
     Character *character;
     id<METInstance> app;
     MarketOrders *orders;

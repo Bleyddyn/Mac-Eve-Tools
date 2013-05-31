@@ -14,6 +14,7 @@
 //#import "CharacterDatabase.h"
 #import "Character.h"
 #import "CharacterTemplate.h"
+#import "MarketOrder.h"
 
 #import "XMLDownloadOperation.h"
 #import "XMLParseOperation.h"
@@ -34,9 +35,33 @@
 @synthesize orders;
 @synthesize xmlPath;
 @synthesize cachedUntil;
+@synthesize delegate;
+
+- (id)init
+{
+    if( self = [super init] )
+    {
+        orders = [[NSMutableArray alloc] init];
+        cachedUntil = [[NSDate distantPast] retain];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    [orders release];
+    [cachedUntil release];
+    [super dealloc];
+}
 
 - (IBAction)reload:(id)sender
 {
+    if( [cachedUntil isGreaterThan:[NSDate date]] )
+    {
+        NSLog( @"Skipping download of Market Orders because of Cached Until date" );
+        return;
+    }
+    
     CharacterTemplate *template = nil;
     NSUInteger chID = [[self character] characterId];
     
@@ -167,6 +192,8 @@
 		return NO;
 	}
 
+    [orders removeAllObjects];
+    
 	for( xmlNode *cur_node = rowset->children;
 		 NULL != cur_node;
 		 cur_node = cur_node->next)
@@ -178,23 +205,82 @@
         
 		if( xmlStrcmp(cur_node->name,(xmlChar*)"row") == 0 )
         {
-            NSMutableDictionary *tempOrder = [NSMutableDictionary dictionary];
+            MarketOrder *order = [[MarketOrder alloc] init];
+            
             for( xmlAttr *attr = cur_node->properties; attr; attr = attr->next )
             {
                 NSString *value = [NSString stringWithUTF8String:(const char*) attr->children->content];
                 if( xmlStrcmp(attr->name, (xmlChar *)"orderID") == 0 )
                 {
-                    [tempOrder setObject:[NSNumber numberWithUnsignedInteger:[value integerValue]] forKey:@"orderID"];
+                    [order setOrderID:[value integerValue]];
                 }
                 else if( xmlStrcmp(attr->name, (xmlChar *)"charID") == 0 )
                 {
-                    [tempOrder setObject:value forKey:@"charID"];
+                    [order setCharID:[value integerValue]];
+                }
+                else if( xmlStrcmp(attr->name, (xmlChar *)"stationID") == 0 )
+                {
+                    [order setStationID:[value integerValue]];
+                }
+                else if( xmlStrcmp(attr->name, (xmlChar *)"volEntered") == 0 )
+                {
+                    [order setVolEntered:[value integerValue]];
+                }
+                else if( xmlStrcmp(attr->name, (xmlChar *)"minVolume") == 0 )
+                {
+                    [order setMinVolume:[value integerValue]];
+                }
+                else if( xmlStrcmp(attr->name, (xmlChar *)"volRemaining") == 0 )
+                {
+                    [order setVolRemaining:[value integerValue]];
+                }
+                else if( xmlStrcmp(attr->name, (xmlChar *)"orderState") == 0 )
+                {
+                    NSInteger intValue = [value integerValue];
+                    OrderStateType stType = OrderStateUnknown;
+                    switch( intValue )
+                    {
+                        case 0: stType = OrderStateActive; break;
+                        case 1: stType = OrderStateClosed; break;
+                        case 2: stType = OrderStateExpired; break;
+                        case 3: stType = OrderStateCancelled; break;
+                        case 4: stType = OrderStatePending; break;
+                        case 5: stType = OrderStateCharacterDeleted; break;
+                        default: stType = OrderStateUnknown; break;
+
+                    }
+                    [order setOrderState:stType];
+                }
+                else if( xmlStrcmp(attr->name, (xmlChar *)"typeID") == 0 )
+                {
+                    [order setTypeID:[value integerValue]];
+                }
+                else if( xmlStrcmp(attr->name, (xmlChar *)"price") == 0 )
+                {
+                    [order setPrice:[value doubleValue]];
+                }
+                else if( xmlStrcmp(attr->name, (xmlChar *)"escrow") == 0 )
+                {
+                    [order setEscrow:[value doubleValue]];
+                }
+                else if( xmlStrcmp(attr->name, (xmlChar *)"bid") == 0 )
+                {
+                    if( [value isEqualToString:@"0"] )
+                        [order setBuy:NO];
+                    else
+                        [order setBuy:YES];
+                }
+                else if( xmlStrcmp(attr->name, (xmlChar *)"issued") == 0 )
+                {
+                    NSDate *issuedDate = [NSDate dateWithNaturalLanguageString:value];
+                    [order setIssued:issuedDate];
                 }
 
                 
 //                <row orderID="639587440" charID="118406849" stationID="60003760" volEntered="25" volRemaining="4" minVolume="1" orderState="0" typeID="26082" range="32767" accountKey="1000" duration="1" escrow="0.00" price="3399999.98" bid="0" issued="2008-02-03 22:35:54"/>
 
             }
+            [orders addObject:order];
         }
 	}
     
@@ -207,6 +293,11 @@
         NSDate *cacheDate = [NSDate dateWithNaturalLanguageString:dtString];
         [self setCachedUntil:cacheDate];
 
+    }
+    
+    if( [delegate respondsToSelector:@selector(ordersFinishedUpdating)] )
+    {
+        [delegate performSelector:@selector(ordersFinishedUpdating)];
     }
 	return YES;
 }

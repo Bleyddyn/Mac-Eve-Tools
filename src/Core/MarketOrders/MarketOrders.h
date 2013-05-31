@@ -13,9 +13,10 @@
 @interface MarketOrders : NSObject
 
 @property (retain) Character *character;
-@property (retain) NSArray *orders;
+@property (retain) NSMutableArray *orders;
 @property (readonly,retain) NSString *xmlPath;
 @property (readonly,retain) NSDate *cachedUntil;
+@property (readwrite,assign) id delegate;
 
 - (IBAction)reload:(id)sender;
 

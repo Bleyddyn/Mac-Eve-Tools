@@ -319,8 +319,39 @@
 
 -(CCPType*) type:(NSInteger)typeID
 {
-    [self logError:(char *)[[NSString stringWithFormat:@"%s: Not yet implemented", __func__] UTF8String]];
-	return nil;
+//	const char query[] =
+//    "SELECT typeName "
+//    "FROM invTypes "
+//    "WHERE typeID = ? "
+//    "AND published = 1 "
+//    "ORDER BY typeName;";
+	const char query[] =
+    "SELECT typeID, groupID, 0, raceID, marketGroupID, 100, mass, "
+    "volume, capacity,basePrice, typeName, description "
+    "FROM invTypes "
+    "WHERE typeID = ? "
+    "AND published = 1 ";
+	sqlite3_stmt *read_stmt;
+	int rc;
+    
+	rc = sqlite3_prepare_v2(db,query,(int)sizeof(query),&read_stmt,NULL);
+	if(rc != SQLITE_OK){
+        [self logError:(char *)[[NSString stringWithFormat:@"%s: sqlite error: %s", __func__, sqlite3_errmsg(db)] UTF8String]];
+		return nil;
+	}
+    
+	sqlite3_bind_nsint(read_stmt,1,typeID);
+    
+    NSMutableArray *array = [NSMutableArray array];
+    
+    [self parseTypesResults:array sqliteReadStmt:read_stmt];
+    
+	sqlite3_finalize(read_stmt);
+    
+    if( [array count] > 0 )
+        return [[[array objectAtIndex:0] retain] autorelease];
+    
+    return nil;
 }
 
 -(void) parseTypesResults:(NSMutableArray*)array sqliteReadStmt:(sqlite3_stmt*)read_stmt
